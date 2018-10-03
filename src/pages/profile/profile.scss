@@ -1,0 +1,17 @@
+page-profile {
+    .avatar-container{
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        z-index: 10;
+        text-align: center;
+        .avatar-img-container{
+            width: 80px;
+            height: 80px;
+            margin: auto;
+            overflow: hidden;
+            border: 2px solid;
+            border-color: color($colors, light);
+            border-radius: 50%;
+        }
+    }
+}

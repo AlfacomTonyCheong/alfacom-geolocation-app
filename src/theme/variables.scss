@@ -1,0 +1,133 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
+$font-path: "../assets/fonts";
+
+
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+
+
+@import "ionic.globals";
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+// “On” colors are primarily applied to text, iconography, and strokes. Sometimes, they are also applied to surfaces
+$on-colors: (
+  primary:     #f4f4f4,
+  primary-l:   #444,
+  secondary:   #f4f4f4,
+  secondary-l: #444,
+  background:  #444,
+  surface:     #444,
+  error:       #f4f4f4,
+);
+
+$colors: (
+  // primary:    #488aff,
+  // secondary:  #32db64,
+  danger:     #f53d3d,
+  light:      #f4f4f4,
+  dark:       #222,
+  transparent: transparent,
+  unfocused:   #aaa,
+
+  // Color palettes follow Material Design guidelines 
+  primary-l5: ( base: #E0F2F1, contrast: color($on-colors, primary-l)),
+  primary-l4: ( base: #B2DFDB, contrast: color($on-colors, primary-l)),
+  primary-l3: ( base: #80CBC4, contrast: color($on-colors, primary-l)),
+  primary-l2: ( base: #4DB6AC, contrast: color($on-colors, primary-l)),
+  primary-l1: ( base: #26A69A, contrast: color($on-colors, primary-l)),
+  primary:    ( base: #009688, contrast: color($on-colors, primary)),
+  primary-d1: ( base: #00897B, contrast: color($on-colors, primary)),
+  primary-d2: ( base: #00796B, contrast: color($on-colors, primary)),
+  primary-d3: ( base: #00695C, contrast: color($on-colors, primary)),
+  primary-d4: ( base: #004D40, contrast: color($on-colors, primary)),
+  primary-d5: ( base: #002b27, contrast: color($on-colors, primary)),
+
+  secondary-l2: ( base: #9acdf0, contrast: color($on-colors, secondary-l)),
+  secondary-l1: ( base: #4ea8e5, contrast: color($on-colors, secondary-l)),
+  secondary:    ( base: #1c8fdd, contrast: color($on-colors, secondary)),
+  secondary-d1: ( base: #0383da, contrast: color($on-colors, secondary)),
+  secondary-d2: ( base: #0275c4, contrast: color($on-colors, secondary)),
+  secondary-d3: ( base: #0268ae, contrast: color($on-colors, secondary)),
+  secondary-d4: ( base: #025b98, contrast: color($on-colors, secondary)),
+  secondary-d5: ( base: #014e82, contrast: color($on-colors, secondary)),
+  secondary-d6: ( base: #002741, contrast: color($on-colors, secondary)),
+
+  // Background color appears behind scrollable content.
+  background: (base: #f4f4f4, contrast: color($on-colors, background)),
+  // Surface color affects surfaces of components, such as cards, sheets, and menus.
+  surface:    (base: #ffffff, contrast: color($on-colors, surface)),
+  // Error color indicates error components.
+  error:      (base: #b00020, contrast: color($on-colors, error)),
+
+  on-primary: color($on-colors, primary),
+  on-primary-l: color($on-colors, primary-l),
+  on-secondary: color($on-colors, secondary),
+  on-secondary-l: color($on-colors, secondary-l),
+  on-background: color($on-colors, background),
+  on-surface: color($on-colors, surface),
+  on-error: color($on-colors, error),
+);
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/theming/overriding-ionic-variables/
+$list-text-color: color($colors, on-surface);
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+$card-ios-background-color: color($colors, surface);
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+// $spinner-md-crescent-color: #000;
+$item-md-detail-push-show: true;
+$card-md-background-color:  color($colors, surface);
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+$item-wp-detail-push-show: true;
+$card-wp-background-color:  color($colors, surface);
+
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/ionicons/
+
+@import "ionic.ionicons";
+
+
+// Fonts
+// --------------------------------------------------
+
+@import "roboto";
+@import "noto-sans";

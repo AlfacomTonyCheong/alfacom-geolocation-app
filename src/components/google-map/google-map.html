@@ -1,0 +1,48 @@
+<!-- Map Canvas -->
+<div id="map_canvas">
+</div>
+
+<!-- Loading Spinner -->
+<div *ngIf="isLoading" class="overlay">
+    <div class="spinner-container m-auto">
+        <ion-spinner large name="crescent"></ion-spinner>
+        <div class="spinner-text">Loading Map...</div>
+    </div>
+</div>
+
+<!-- Error Message -->
+<div *ngIf="errorStatus" class="overlay" [style.background-color]="'#fff'">
+    <div class="error-container m-auto">
+        <ion-icon large name="close-circle"></ion-icon>
+        <div class="m-l-xxl m-r-xxl">{{errorMessage}}</div>
+    </div>
+</div>
+
+<div class="control-bar" [style.bottom]="isPolygonCreatorActive ? '65px' : ''">
+    <!-- Place Search Controls  -->
+    <div class="control-container">
+        <div class="control-searchbar-container">
+            <ion-searchbar #searchbar item-start [(ngModel)]="placeSearchInput" placeholder="Search Places" animated></ion-searchbar>
+        </div>
+    </div>
+    <!-- <div class="control-container">
+        <div>Is Polygon within 111m of Point: {{isPointNearPolygon}}</div>
+        <button ion-button class="control-ui icon-only" (click)="checkPointNearPolygon()">
+            <div class="control-text">
+                <ion-icon name="refresh-circle"></ion-icon>
+            </div>
+        </button>
+    </div> -->
+    <!-- <div class="control-container">
+        <button ion-button class="control-ui icon-only">
+            <div class="control-text">
+                <ion-icon name="trash"></ion-icon>
+            </div>
+        </button>
+        <button ion-button class="control-ui icon-only">
+            <div class="control-text">
+                <ion-icon name="close-circle"></ion-icon>
+            </div>
+        </button>
+    </div> -->
+</div>

@@ -1,0 +1,12 @@
+page-home {
+    .location-canvas-container{
+        height: 100px;
+        overflow: hidden;
+    }
+    .card-button > button {
+        color: color($colors, unfocused);
+    }
+    .card-button.selected > button {
+        color: color($colors, primary);
+    }
+}

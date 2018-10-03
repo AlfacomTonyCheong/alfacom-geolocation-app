@@ -1,0 +1,9 @@
+<ion-header no-border>
+  <navbar [title]="pageTitle"></navbar>
+</ion-header>
+
+<ion-content>
+  <super-tabs tabsPlacement="bottom" [selectedTabIndex]="selectedTabIndex" (tabSelect)="onTabSelect($event)">
+    <super-tab *ngFor="let tabRoot of tabRoots" [root]="tabRoot.root" [title]="tabRoot.title" [icon]="tabRoot.icon"></super-tab>
+  </super-tabs>
+</ion-content>

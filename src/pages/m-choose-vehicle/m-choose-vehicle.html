@@ -1,0 +1,20 @@
+<div role="dialog" class="alert alert-ios" aria-labelledby="m-choose-vehicle-alert-hdr" aria-describedby="m-choose-vehicle-alert-subhdr"
+  style="z-index: 10000;">
+  <ion-backdrop disable-activated="" role="presentation" tappable="" style="opacity: 0.5; visibility: visible;"></ion-backdrop>
+  <div class="alert-wrapper" style="opacity: 1; transform: scale(1);">
+    <div class="alert-head">
+
+      <h2 class="alert-title" id="m-choose-vehicle-alert-hdr">X No vehicles</h2>
+
+      <h3 class="alert-sub-title" id="m-choose-vehicle-alert-subhdr">Please add a vehicle first.</h3>
+    </div>
+    <div class="alert-message" id="m-choose-vehicle-alert-msg"></div>
+
+    <div class="alert-button-group">
+      <button ion-button="alert-button" class="alert-button alert-button-ios alert-button-default alert-button-default-ios" (click)="closeModal()">
+        <span class="button-inner">Okay</span>
+        <div class="button-effect"></div>
+      </button>
+    </div>
+  </div>
+</div>

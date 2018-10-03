@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-item no-lines color="primary">
+    <div class="header-summary-container">
+      Total : RM 5.00
+    </div>
+
+    <div class="m-t-sm">
+      <button ion-button block color="light">
+        Park Now
+      </button>
+    </div>
+
+  </ion-item>
+</ion-header>
+
+<ion-content>
+  <ion-card [color]="myPosAddress? 'secondary' : 'surface'" class="card-button" [class.selected]="myPosAddress">
+    <button ion-item (click)="getLocation()" [attr.detail-none]="myPosAddress">
+      <ion-icon name="pin" item-start large></ion-icon>
+      {{myPosAddress ? myPosAddress : 'Choose Location'}}
+      <ion-icon *ngIf="myPosAddress" name="checkmark-circle-outline" item-end></ion-icon>
+    </button>
+  </ion-card>
+
+  <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
+    <button ion-item (click)="chooseVehicle()" [attr.detail-none]="chosenVehicle">
+      <ion-icon name="car" item-start large></ion-icon>
+      {{chosenVehicle ? chosenVehicle.plateNumber : 'Choose Vehicle'}}
+      <ion-icon *ngIf="chosenVehicle" name="checkmark-circle-outline" item-end></ion-icon>
+    </button>
+  </ion-card>
+
+  <ion-card [color]="chosenDuration? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenDuration">
+    <button ion-item (click)="chooseDuration()" [attr.detail-none]="chosenDuration">
+      <ion-icon name="time" item-start large></ion-icon>
+      {{chosenDuration ? getDurationLabel(chosenDuration) : 'Choose Duration'}}
+      <ion-icon *ngIf="chosenDuration" name="checkmark-circle-outline" item-end></ion-icon>
+    </button>
+  </ion-card>
+
+  <!-- Vehicle Card -->
+  <!-- <ion-card [color]="chosenVehicle? 'secondary' : 'surface'">
+    <ion-item no-lines [color]="chosenVehicle? 'secondary' : 'surface'">
+      <ion-icon name="car" item-start large></ion-icon>
+      Vehicle
+      <button ion-button item-end outline icon-left (click)="addVehicle(true)" [color]="chosenVehicle? 'light' : 'secondary'">
+        <ion-icon name="add"></ion-icon>
+        New
+      </button>
+    </ion-item>
+
+    <ion-card-content>
+      <button ion-button block (click)="chooseVehicle()" [color]="chosenVehicle? 'light' : 'primary'" [outline]="!chosenVehicle">
+        {{chosenVehicle ? chosenVehicle.plateNumber : 'Choose Vehicle'}}
+      </button>
+    </ion-card-content>
+  </ion-card> -->
+
+  <!-- Location Card -->
+  <!-- <ion-card style="position: relative;">
+    <div class="location-canvas-container">
+      <img src="https://ionicframework.com/dist/preview-app/www/assets/img/advance-card-map-madison.png">
+    </div>
+
+    <ion-fab right top>
+      <button ion-fab color="secondary">
+        <ion-icon name="locate"></ion-icon>
+      </button>
+    </ion-fab>
+
+    <ion-item>
+      <ion-icon name="pin" item-start large></ion-icon>
+      <h2>Museum of Football</h2>
+      <p>11 N. Way St, Madison, WI 53703</p>
+    </ion-item>
+
+    <ion-card-content>
+      <button ion-button block [outline]="!chosenLocation">
+        Choose Location
+      </button>
+    </ion-card-content>
+  </ion-card> -->
+
+  <!-- Duration Card -->
+  <!-- <ion-card [color]="chosenDuration? 'secondary' : 'surface'">
+    <ion-item no-lines [color]="chosenDuration? 'secondary' : 'surface'">
+      <ion-icon name="time" item-start large></ion-icon>
+      Duration
+    </ion-item>
+    <ion-card-content>
+      <button ion-button block (click)="chooseDuration()" [color]="chosenDuration? 'light' : 'primary'" [outline]="!chosenDuration">
+        {{chosenDuration ? getDurationLabel(chosenDuration) : 'Choose Duration'}}
+      </button>
+    </ion-card-content>
+  </ion-card> -->
+</ion-content>

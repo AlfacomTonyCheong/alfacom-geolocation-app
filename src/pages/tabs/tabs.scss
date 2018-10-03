@@ -1,0 +1,54 @@
+page-tabs{
+    super-tabs-toolbar > ion-toolbar.toolbar .tab-buttons-container .tab-buttons super-tab-button .title {
+      font-size: 1.0rem;
+    }
+
+    super-tab-button.selected > .button-effect {
+      display: block; // Enable button tap effect on super-tab-button
+    }
+
+    super-tab-button.title-and-icon.selected {
+      color: color($colors, primary);
+    }
+
+    #mask{
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background-color: #999;
+    }
+    
+    svg { overflow: hidden; } /*IE 9-11 requirement*/
+    
+    #feedback-animation-canvas {
+      position: absolute;
+      pointer-events:none;
+    }
+    
+    #content-container {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+
+    #content-container > div {
+      padding: 18px 9px;
+    }
+    
+    .hideScrollBar {
+      padding: 0 9px;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .color-green { background-color: #99cc33; }
+    .color-blue { background-color: #3399CC; }
+    .color-pink { background-color: #CC3399; }
+    .color-teal { background-color: #66CC99; }
+    .color-purple { background-color: #336699; }
+    .color-red { background-color: #FF3333; }
+    .color-yellow { background-color: #CCCC33; }
+    .color-orange { background-color: #FF6633; }
+}
