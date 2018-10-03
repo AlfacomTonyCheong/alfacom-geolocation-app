@@ -12,6 +12,8 @@ import { VehiclesProvider } from '../providers/vehicles/vehicles';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 
 import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { firebaseConfig } from './config';
 
 @NgModule({
@@ -22,6 +24,8 @@ import { firebaseConfig } from './config';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
     IonicStorageModule.forRoot(),
     SuperTabsModule.forRoot()
   ],

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, IonicPage, AlertController, ModalController } from 'ionic-angular';
 import { VehiclesProvider } from '../../providers/vehicles/vehicles';
 import { GeolocationOptions, Geolocation } from '@ionic-native/geolocation';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 
@@ -21,18 +21,23 @@ export class HomePage {
   myPosResults: string[];
   myPosAddress: string;
 
+  firebaseDoc;
+  firebaseCollection;
+
   constructor(
     public navCtrl: NavController,
     private vehiclesProvider: VehiclesProvider,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    private firebaseProvider: FirebaseProvider
   ) {
 
   }
 
   ionViewDidLoad(){
-
+    //this.firebaseDoc = this.firebaseProvider.getDocRef('temp/mANmENJSsGo6DZ0Xx8Hn').valueChanges();
+    //this.firebaseCollection = this.firebaseProvider.getCollectionRef('temp').valueChanges();
   }
 
   ionViewDidLeave(){

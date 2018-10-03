@@ -14,3 +14,136 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+/* Misc.
+-----------------------------------------------------------------*/
+ion-content[fullscreen=true]{
+	.fixed-content, .scroll-content{
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+}
+
+.actionbar-topleft{
+	position: fixed;
+	top: 0;
+	left: 0;	
+}
+
+ion-menu .menu-inner{
+	contain: layout style size;
+}
+
+.header-summary-container{
+	text-align: center;
+}
+
+
+
+/* Ionic Theme Override 
+-----------------------------------------------------------------*/
+.content-md, .content-ios, .content-wp {
+	background-color: color($colors, background);
+}
+
+/* Menu Notch
+-----------------------------------------------------------------*/
+.menu-notch{
+	position: fixed;
+	top: 50px;
+	width: 25px;
+	height: 56px;
+	background-color: rgba(0,0,0,0.2);
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	z-index: 10;
+	margin: 0;
+	font-size: 0.2rem;
+}
+
+.menu-inner .menu-notch{
+	right: -25px;
+}
+
+
+/* Spinner
+-----------------------------------------------------------------*/
+ion-spinner[small], ion-spinner[small] * {
+	width: 38px;
+	height: 38px;
+	//stroke: #fff !important; 
+}
+
+ion-spinner, ion-spinner * {
+	width: 50px;
+	height: 50px;
+	//stroke: #fff !important; 
+}
+
+ion-spinner[large], ion-spinner[large] * {
+	width: 62px;
+	height: 62px;
+	//stroke: #fff !important; 
+}
+
+
+/* Helper Class - Margins & Paddings
+-----------------------------------------------------------------*/
+$helperClass-sizes:
+	"none" 0,
+	"xxs" 1px,
+	"xs" 5px,
+	"sm" 10px,
+	"md" 15px,
+	"lg" 20px,
+	"xl" 30px,
+	"xxl" 40px,
+	"n-xxs" -1px,
+	"n-xs" -5px,
+	"n-sm" -10px,
+	"n-md" -15px,
+	"n-lg" -20px,
+	"n-xl" -30px,
+    "n-xxl" -40px,
+    "auto" auto;
+	
+@each $s in $helperClass-sizes{
+	.p-#{nth($s, 1)}{
+		padding: nth($s, 2);
+	}
+	.p-l-#{nth($s, 1)}{
+		padding-left: nth($s, 2);
+	}
+	.p-r-#{nth($s, 1)}{
+		padding-right: nth($s, 2);
+	}
+	.p-t-#{nth($s, 1)}{
+		padding-top: nth($s, 2);
+	}
+	.p-b-#{nth($s, 1)}{
+		padding-bottom: nth($s, 2);
+	}
+	.m-#{nth($s, 1)}{
+		margin: nth($s, 2);
+	}
+	.m-l-#{nth($s, 1)}{
+		margin-left: nth($s, 2);
+	}
+	.m-r-#{nth($s, 1)}{
+		margin-right: nth($s, 2);
+	}
+	.m-t-#{nth($s, 1)}{
+		margin-top: nth($s, 2);
+	}
+	.m-b-#{nth($s, 1)}{
+		margin-bottom: nth($s, 2);
+	}
+}
+
+/* Misc Utiliy Classes
+-----------------------------------------------------------------*/
+.clearfix::after{
+	display: block;
+    content: "";
+    clear: both;
+}
