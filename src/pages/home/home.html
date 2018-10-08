@@ -26,14 +26,6 @@
 </ion-header>
 
 <ion-content>
-  <ion-card [color]="myPosAddress? 'secondary' : 'surface'" class="card-button" [class.selected]="myPosAddress">
-    <button ion-item (click)="getLocation()" [attr.detail-none]="myPosAddress">
-      <ion-icon name="pin" item-start large></ion-icon>
-      {{myPosAddress ? myPosAddress : 'Choose Location'}}
-      <ion-icon *ngIf="myPosAddress" name="checkmark-circle-outline" item-end></ion-icon>
-    </button>
-  </ion-card>
-
   <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
     <button ion-item (click)="chooseVehicle()" [attr.detail-none]="chosenVehicle">
       <ion-icon name="car" item-start large></ion-icon>
@@ -49,6 +41,32 @@
       <ion-icon *ngIf="chosenDuration" name="checkmark-circle-outline" item-end></ion-icon>
     </button>
   </ion-card>
+
+  <ion-card [color]="myPosAddress? 'secondary' : 'surface'" class="card-button" [class.selected]="myPosAddress">
+    <button ion-item (click)="getLocation()" [attr.detail-none]="myPosAddress">
+      <ion-icon name="pin" item-start large></ion-icon>
+      {{myPosAddress ? myPosAddress : 'Choose Location'}}
+      <ion-icon *ngIf="myPosAddress" name="checkmark-circle-outline" item-end></ion-icon>
+    </button>
+    <div class="location-image-container" [class.expanded]="canvasSrc">
+      <img [src]="canvasSrc" />
+      
+    </div>
+  </ion-card>
+
+  <!--
+  <ion-card class="card-button">
+    <button ion-item (click)="initQuagga()" detail-none>
+      <ion-icon name="barcode" item-start large></ion-icon>
+      Barcode Scanner
+    </button>
+  </ion-card>
+  
+  <ion-card>
+    <div id="quaggaViewport"></div>
+  </ion-card>
+  -->
+
 
   <!-- Vehicle Card -->
   <!-- <ion-card [color]="chosenVehicle? 'secondary' : 'surface'">

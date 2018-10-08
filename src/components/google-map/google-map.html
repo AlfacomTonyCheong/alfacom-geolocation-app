@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div class="control-bar" [style.bottom]="isPolygonCreatorActive ? '65px' : ''">
+<div class="control-bar">
     <!-- Place Search Controls  -->
     <div class="control-container">
         <div class="control-searchbar-container">
@@ -46,3 +46,11 @@
         </button>
     </div> -->
 </div>
+
+<ion-fab bottom right>
+    <button ion-fab (click)="confirmLocation()" color="secondary-d2"><ion-icon name="navigate"></ion-icon></button>
+</ion-fab>
+
+<ion-fab bottom left class="hide-fab-btm-left" [class.show]="showRecenterFab">
+    <button ion-fab (click)="centerMapOnMarker()" color="dark"><ion-icon name="body"></ion-icon></button>
+</ion-fab>

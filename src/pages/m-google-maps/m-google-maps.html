@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons left>
+      <button ion-button icon-only class="disable-hover" (click)="closeModal()">
+        <ion-icon large name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      Choose Location
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-padding>
+  <google-map [callback]="closeModal"></google-map>
+</ion-content>

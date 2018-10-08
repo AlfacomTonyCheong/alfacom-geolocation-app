@@ -9,4 +9,12 @@ page-home {
     .card-button.selected > button {
         color: color($colors, primary);
     }
+    .location-image-container{
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in;
+    }
+    .location-image-container.expanded{
+        max-height: 600px;
+    }
 }

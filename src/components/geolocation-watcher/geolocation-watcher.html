@@ -1,0 +1,10 @@
+<!-- Generated template for the GeolocationWatcherComponent component -->
+<div #geolocationWatcher class="wrapper" *ngIf="locating">
+  <ion-item class="container" no-lines>
+    <ion-spinner small item-start *ngIf="loading"></ion-spinner>
+    <ion-icon item-start name="checkmark-circle-outline" *ngIf="!loading && success"></ion-icon>
+    <ion-icon item-start name="close" *ngIf="!loading && !success"></ion-icon>
+    {{text}}
+  </ion-item>
+</div>
+  

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, IonicPage, AlertController, ModalController } from 'ionic-angular';
+import { NavController, IonicPage, AlertController, ModalController, Events } from 'ionic-angular';
 import { VehiclesProvider } from '../../providers/vehicles/vehicles';
 import { GeolocationOptions, Geolocation } from '@ionic-native/geolocation';
-import { Subject, Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { first, takeUntil } from 'rxjs/operators';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
+
+import * as Quagga from 'quagga';
 
 @IonicPage()
 @Component({
@@ -24,25 +26,44 @@ export class HomePage {
   firebaseDoc;
   firebaseCollection;
 
+  canvasSrc;
+
   constructor(
     public navCtrl: NavController,
     private vehiclesProvider: VehiclesProvider,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
+    private events: Events,
     private geolocation: Geolocation,
     private firebaseProvider: FirebaseProvider
   ) {
 
   }
 
-  ionViewDidLoad(){
+  ionViewDidLoad() {
+    this.initParkingDetails();
+    //this.initGeolocationWatcher();
     //this.firebaseDoc = this.firebaseProvider.getDocRef('temp/mANmENJSsGo6DZ0Xx8Hn').valueChanges();
     //this.firebaseCollection = this.firebaseProvider.getCollectionRef('temp').valueChanges();
   }
 
-  ionViewDidLeave(){
+  ionViewDidLeave() {
+    this._unsubscribe();
+  }
+
+  _unsubscribe() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  initParkingDetails() {
+    this.events.subscribe('geolocationWatcher_update', (data) => {
+      this.myPosAddress = data.address;
+    })
+
+    this.events.subscribe('location_canvasImg', (url) => {
+      this.canvasSrc = url;
+    })
   }
 
   async addVehicle(selectAfterAdd?: boolean) {
@@ -177,48 +198,35 @@ export class HomePage {
   }
 
   async getLocation() {
-    let options: GeolocationOptions = {
-      enableHighAccuracy: true,
-      timeout: 10000
-    }
-    this.geolocation.getCurrentPosition(options).then((position: Position) => {
-      this.myPos = { lat: position.coords.latitude, lng: position.coords.longitude, accuracy: position.coords.accuracy };
-      console.log('Current Position: ' + JSON.stringify(this.myPos));
-      console.dir(position);
-      this.getMyPosAddress();
-    }).catch((error) => {
-      console.error('Error getting location: [' + error.code + '] ' + error.message);
-      // this.alertCurrentPositionError();
-    })
+    //this.events.publish('geolocationWatcher_start');
+    const modal = await this.modalCtrl.create('MGoogleMapsPage');
+    return await modal.present();
 
-    this.geolocation.watchPosition(options).takeUntil(this.unsubscribe$).subscribe((position: Position) => {
-      this.myPos = { lat: position.coords.latitude, lng: position.coords.longitude, accuracy: position.coords.accuracy };
-      // this.myPosMarker.setPosition(this.myPos);
-      console.log('My Position changed: ' + JSON.stringify(this.myPos));
-      this.getMyPosAddress();
-    });
   }
 
-  reverseGeocode(){
-    var geocoder = new google.maps.Geocoder;
-    geocoder.geocode({'location': {lat: this.myPos.lat, lng: this.myPos.lng}}, (results, status) => {
-      console.log('Geocode status: ' + status);
-      if(status.toString() === 'OK'){
-        console.dir(results);
-        this.myPosResults = [];
-        for(let result of results){
-          this.myPosResults.push(result.formatted_address);
-        }
+  initGeolocationWatcher() {
+    this.events.publish('geolocationWatcher_start');
+  }
+
+  async initQuagga() {
+    var quaggaOptions = {
+      inputStream: {
+        name: 'Live',
+        type: 'LiveStream',
+        target: document.querySelector('#quaggaViewport')
+      },
+      decoder: {
+        readers: ['code_128_reader']
       }
-    })
-  }
+    }
 
-  getMyPosAddress(){
-    var geocoder = new google.maps.Geocoder;
-    geocoder.geocode({'location': {lat: this.myPos.lat, lng: this.myPos.lng}}, (results, status) => {
-      console.log('Geocode status: ' + status);
-      if(status.toString() === 'OK'){
-        this.myPosAddress = results[0].formatted_address;
+    Quagga.init(quaggaOptions, function (error) {
+      if (error) {
+        console.error(error);
+      }
+      else {
+        console.log('[Quagga] Initialization finished. Ready to start.');
+        Quagga.start();
       }
     })
   }

@@ -56,7 +56,9 @@ google-map {
     .control-bar {
         position: fixed;
         left: 10px;
-        bottom: 30px;
+        right: 10px;
+        top: 60px;
+        max-width: 420px;
     }
 
     .control-searchbar-container{
@@ -64,7 +66,21 @@ google-map {
     }  
 }
 
-// Google Maps Place Search Autocomplete
-.pac-container{
-    margin-top: -225px;
+ion-fab[bottom] {
+    bottom: 20px;
 }
+
+ion-fab.hide-fab-btm-left{
+    margin-left: -100px;
+    opacity: 0;
+    transition: margin-left 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+ion-fab.hide-fab-btm-left.show{
+    margin-left: 0;
+    opacity: 1;
+}
+
+// Google Maps Place Search Autocomplete
+//.pac-container{
+//    margin-top: -225px;
+//}

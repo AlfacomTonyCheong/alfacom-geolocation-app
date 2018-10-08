@@ -1,0 +1,31 @@
+geolocation-watcher {
+    .wrapper{
+        position:absolute; 
+        bottom: 100px; 
+        right: 10px;
+        z-index: 100;       
+        width: 200px;
+    }
+    .container{
+        color: color($colors, light);
+        background-color: rgba(0,0,0,0.7);
+    }
+    ion-spinner, ion-spinner * {
+        stroke: #fff !important; 
+    }
+    .loading-toast .toast-message:before {
+        content: '\f267';
+        color: white;
+        display: inline-block;
+        font-family: "Ionicons";
+        font-style: normal;
+        font-weight: bolder;
+        font-variant: normal;
+        text-transform: none;
+        text-rendering: auto;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        padding-right: 10px;
+        font-size: 2rem;
+    }
+}
