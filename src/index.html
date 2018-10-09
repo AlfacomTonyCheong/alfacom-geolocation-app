@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
   <meta charset="UTF-8">
   <title>Ionic App</title>
@@ -20,22 +21,40 @@
 
   <!-- un-comment this code to enable service worker -->
   <script>
-    if ('serviceWorker' in navigator && ['localhost', '127'].indexOf(location.hostname) === -1) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('service worker installed'))
-        .catch(err => console.error('Error', err));
-    }
+    window.isUpdateAvailable = new Promise(function (resolve, reject) {
+      if ('serviceWorker' in navigator && ['localhost', '127'].indexOf(location.hostname) === -1) {
+        navigator.serviceWorker.register('service-worker.js')
+          .then((reg) => {
+            console.log('service worker installed');
+            reg.onupdatefound = () => {
+              const installingWorker = reg.installing;
+              installingWorking.onstatechange = () => {
+                switch (installingWorker.state) {
+                  case 'installed':
+                    if (navigator.serviceWorker.controller)
+                      resolve(true);
+                    else
+                      resolve(false);
+                    break;
+                }
+              }
+            }
+          })
+          .catch(err => console.error('[Service Worker] Error', err));
+      }
+    });
   </script>
 
   <link href="build/main.css" rel="stylesheet">
 
 </head>
+
 <body>
 
   <noscript>
     <p style="color:red;">This site requires <strong>Javascript</strong> to be enabled.</p>
   </noscript>
-  
+
   <!-- Ionic's root component and where the app will load -->
   <ion-app></ion-app>
 
@@ -51,4 +70,5 @@
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0&libraries=places,geometry"></script>
 </body>
+
 </html>
