@@ -1,11 +1,12 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
-import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
-import { Platform, AlertController, AlertOptions, ToastController, Toast, Events, ViewController } from 'ionic-angular';
+import { GeolocationOptions } from '@ionic-native/geolocation';
+import { AlertController, AlertOptions, ToastController, Toast, Events, ViewController } from 'ionic-angular';
 import { Subject } from 'rxjs/Subject';
 import { takeUntil } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ERROR_MESSAGES } from '../../app/messages';
 import { IMapPosition } from '../../interface/geolocation';
+import { IGoogleMapComponentOptions } from '../../interface/common';
 
 declare var google: any;
 
@@ -16,11 +17,16 @@ declare var google: any;
 export class GoogleMapComponent {
   private unsubscribe$ = new Subject();
 
+  @Input() callback;
+  @Input() canvasId;
+  @Input() options: IGoogleMapComponentOptions;
+
+
   mapOptions: google.maps.MapOptions = {
     backgroundColor: "#fff",
     center: { lat: 3.120455, lng: 101.612367 },
     zoom: 16,
-    clickableIcons: true,
+    clickableIcons: false,
     draggable: true,
     fullscreenControl: false,
     fullscreenControlOptions: {
@@ -78,8 +84,6 @@ export class GoogleMapComponent {
   mapDragListener: any;
   showRecenterFab: boolean;
 
-  @Input() callback;
-
   @ViewChild('searchbar', { read: ElementRef }) placeSearchBarRef: ElementRef;
   placeSearchBarInputElement: HTMLInputElement;
   isPlaceSearchActive: boolean;
@@ -118,6 +122,7 @@ export class GoogleMapComponent {
       //this.watchPosition();
       this.getPosition().subscribe(() => {
         this.setMyPosMarker();
+        this.panMapTo(this.myPos.latitude, this.myPos.longitude);
       }, (error) => {
         this.showToast(error);
       });
@@ -135,7 +140,7 @@ export class GoogleMapComponent {
 
       // Create map
       this.map = new google.maps.Map(
-        document.getElementById('map_canvas'),
+        document.getElementById(this.canvasId),
         this.mapOptions
       );
       this.infoWindow = new google.maps.InfoWindow();

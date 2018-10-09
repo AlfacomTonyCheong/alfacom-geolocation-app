@@ -1,5 +1,5 @@
 google-map {
-    #map_canvas{
+    .map-canvas{
         min-height: 100px;
         min-width: 100px;
         width: 100%;
@@ -54,10 +54,10 @@ google-map {
     }
 
     .control-bar {
-        position: fixed;
+        position: absolute;
         left: 10px;
         right: 10px;
-        top: 60px;
+        top: 5px;
         max-width: 420px;
     }
 

@@ -104,7 +104,7 @@ export class HomePage {
 
   async chooseVehicle() {
     let vehicleList = this.vehiclesProvider.getVehicleList();
-    if (vehicleList.length === 0) {
+    if (vehicleList && vehicleList.length === 0) {
       const alert = await this.alertCtrl.create({
         title: 'No vehicles',
         subTitle: 'Please add a vehicle first.',

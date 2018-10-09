@@ -1,5 +1,5 @@
 <!-- Map Canvas -->
-<div id="map_canvas">
+<div [id]="canvasId" class="map-canvas">
 </div>
 
 <!-- Loading Spinner -->
@@ -48,9 +48,10 @@
 </div>
 
 <ion-fab bottom right>
-    <button ion-fab (click)="confirmLocation()" color="secondary-d2"><ion-icon name="navigate"></ion-icon></button>
+    <button ion-fab (click)="confirmLocation()" color="secondary-d2"><ion-icon name="checkmark"></ion-icon></button>
 </ion-fab>
 
 <ion-fab bottom left class="hide-fab-btm-left" [class.show]="showRecenterFab">
-    <button ion-fab (click)="centerMapOnMarker()" color="dark"><ion-icon name="body"></ion-icon></button>
+    <button ion-fab (click)="centerMapOnMarker()" color="dark"><ion-icon name="locate"></ion-icon></button>
 </ion-fab>
+

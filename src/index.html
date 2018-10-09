@@ -21,7 +21,7 @@
 
   <!-- un-comment this code to enable service worker -->
   <script>
-    window.isUpdateAvailable = new Promise(function (resolve, reject) {
+    window.isUpdateAvailable = new Promise((resolve, reject) => {
       if ('serviceWorker' in navigator && ['localhost', '127'].indexOf(location.hostname) === -1) {
         navigator.serviceWorker.register('service-worker.js')
           .then((reg) => {
