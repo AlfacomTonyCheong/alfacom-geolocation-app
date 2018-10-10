@@ -244,7 +244,7 @@ export class GoogleMapComponent {
       map: this.map,
       animation: google.maps.Animation.DROP,
       title: 'You\'re Here!',
-      draggable: true
+      draggable: (this.options.marker? this.options.marker.draggable : false)
     });
     this.myPosMarker.addListener('click', () => {
       this.infoWindow.setContent(this.myPosMarker.getTitle());
@@ -292,14 +292,19 @@ export class GoogleMapComponent {
   }
 
   confirmLocation() {
-    if (this.myPos) {
-      this.panMapTo(this.myPos.latitude, this.myPos.longitude);
-      console.log('Confirm Location: ' + JSON.stringify(this.myPos));
-      this.events.publish('geolocationWatcher_start', this.myPos);
+    if (this.myPosMarker) {
+      var pos : IMapPosition ={
+        latitude: this.myPosMarker.getPosition().lat(),
+        longitude: this.myPosMarker.getPosition().lng(),
+        accuracy: 1000
+      };
+      this.panMapTo(pos.latitude, pos.longitude);
+      console.log('Confirm Location: ' + JSON.stringify(pos));
+      this.events.publish('geolocationWatcher_start', pos);
 
-      let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + this.myPos.latitude + ',' + this.myPos.longitude;
+      let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + pos.latitude + ',' + pos.longitude;
       canvasSrc += '&size=600x250&zoom=18&maptype=' + google.maps.MapTypeId.ROADMAP + '&key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0';
-      canvasSrc += '&markers=color:red|' + this.myPos.latitude + ',' + this.myPos.longitude;
+      canvasSrc += '&markers=color:red|' + pos.latitude + ',' + pos.longitude;
       this.events.publish('location_canvasImg', canvasSrc);
       this.callback && this.callback();
     }
@@ -494,7 +499,8 @@ export class GoogleMapComponent {
   }
 
   dragStart = (ev) => {
-    ev.preventDefault();
+    //ev.preventDefault();
+    ev.stopPropagation();
     console.log('dragstart');
     console.dir(ev);
 

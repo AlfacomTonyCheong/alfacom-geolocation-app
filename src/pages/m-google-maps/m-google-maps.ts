@@ -24,6 +24,9 @@ export class MGoogleMapsPage {
         searchbar: true,
         locationUpdate: true,
         recenter: true
+      },
+      marker: {
+        draggable: true
       }
     }
   }
