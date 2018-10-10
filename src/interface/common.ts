@@ -2,7 +2,7 @@ export interface IGoogleMapComponentOptions {
     controls?: {
         recenter?: boolean,
         locationUpdate?: boolean,
-        searchBar?: boolean,
+        searchbar?: boolean,
         complaint?: boolean,
     },
     marker?: {

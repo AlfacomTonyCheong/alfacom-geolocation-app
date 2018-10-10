@@ -33,6 +33,8 @@
     "ionic2-super-tabs": "github:AlfacomTonyCheong/ionic2-super-tabs",
     "ionicons": "3.0.0",
     "moment": "^2.22.2",
+    "ng-drag-drop": "^5.0.0",
+    "ngdraggable": "git+https://github.com/fatlinesofcode/ngDraggable.git",
     "promise-polyfill": "^8.1.0",
     "quagga": "^0.12.1",
     "rxjs": "^6.3.3",

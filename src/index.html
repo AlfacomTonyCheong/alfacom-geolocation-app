@@ -19,6 +19,11 @@
   <!-- cordova.js required for cordova apps (remove if not needed) -->
   <script src="cordova.js"></script>
 
+  <!-- tcheong 10 Oct 2018 -->
+  <!-- Polyfill that translates touch events into mouse eventss. -->
+  <!-- Enables draggables in touch devices. Import before main.js and polyfills.js -->
+  <script src="assets/js/DragDropTouch.js"></script>
+
   <!-- un-comment this code to enable service worker -->
   <script>
     window.isUpdateAvailable = new Promise((resolve, reject) => {

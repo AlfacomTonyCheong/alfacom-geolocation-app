@@ -16,6 +16,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { firebaseConfig } from './config';
 
+import { NgDragDropModule } from 'ng-drag-drop';
+
 @NgModule({
   declarations: [
     MyApp
@@ -27,7 +29,8 @@ import { firebaseConfig } from './config';
     AngularFirestoreModule,
     AngularFireAuthModule,
     IonicStorageModule.forRoot(),
-    SuperTabsModule.forRoot()
+    SuperTabsModule.forRoot(),
+    NgDragDropModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -36,10 +39,10 @@ import { firebaseConfig } from './config';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     Geolocation,
     VehiclesProvider,
     FirebaseProvider
   ]
 })
-export class AppModule {}
+export class AppModule { }

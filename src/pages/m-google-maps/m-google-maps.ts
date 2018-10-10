@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IGoogleMapComponentOptions } from '../../interface/common';
 
 /**
  * Generated class for the MGoogleMapsPage page.
@@ -15,7 +16,16 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 })
 export class MGoogleMapsPage {
 
+  options: IGoogleMapComponentOptions;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController) {
+    this.options = {
+      controls: {
+        searchbar: true,
+        locationUpdate: true,
+        recenter: true
+      }
+    }
   }
 
   ionViewDidLoad() {
