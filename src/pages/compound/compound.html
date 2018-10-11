@@ -1,3 +1,12 @@
+<style>
+  /* In order to place the tracking correctly */
+  canvas.drawing, canvas.drawingBuffer {
+      position: absolute;
+      left: 0;
+      top: 0;
+  }
+</style>
+
 <ion-header>
     <ion-item no-lines color="primary">
       <div class="header-summary-container">
@@ -20,11 +29,11 @@
 
         <ion-item>
             <ion-input type="text" placeholder="Compound/ Vehicle Number" [(ngModel)]="compoundNumber"></ion-input>
-            <button ion-button icon-only class="round-icon-btns" style="border-radius: 50%;width:35px;height:35px;margin: 0;" (click)="scan()" item-end>
+            <button ion-button icon-only class="round-icon-btns" id="scanBtn" style="border-radius: 50%;width:35px;height:35px;margin: 0;" (click)="scan()" item-end>
                 <ion-icon name="qr-scanner"></ion-icon>
             </button>
         </ion-item>
-            
+        <div id="scanner-container"></div>
     </ion-card>
     <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
         <ion-item>
@@ -45,85 +54,81 @@
             <span>{{scannedData.text}}</span>
         </div>
     </ion-card>
-    <!-- <ion-card [color]="chosenDuration? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenDuration">
-      <button ion-item (click)="getLocation()" [attr.detail-none]="chosenDuration">
-        <ion-icon name="pin" item-start large></ion-icon>
-        {{chosenDuration ? getDurationLabel(chosenDuration) : 'Choose Location'}}
-        <p>{{myPos? (myPos.lat + ' | ' + myPos.lng) : ''}}</p>
-        <p>{{myPos? myPos.accuracy : ''}}</p>
-        <ion-icon *ngIf="chosenDuration" name="checkmark-circle-outline" item-end></ion-icon>
-      </button>
-    </ion-card>
-  
-    <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
-      <button ion-item (click)="chooseVehicle()" [attr.detail-none]="chosenVehicle">
-        <ion-icon name="car" item-start large></ion-icon>
-        {{chosenVehicle ? chosenVehicle.plateNumber : 'Choose Vehicle'}}
-        <ion-icon *ngIf="chosenVehicle" name="checkmark-circle-outline" item-end></ion-icon>
-      </button>
-    </ion-card>
-  
-    <ion-card [color]="chosenDuration? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenDuration">
-      <button ion-item (click)="chooseDuration()" [attr.detail-none]="chosenDuration">
-        <ion-icon name="time" item-start large></ion-icon>
-        {{chosenDuration ? getDurationLabel(chosenDuration) : 'Choose Duration'}}
-        <ion-icon *ngIf="chosenDuration" name="checkmark-circle-outline" item-end></ion-icon>
-      </button>
-    </ion-card> -->
-  
-    <!-- Vehicle Card -->
-    <!-- <ion-card [color]="chosenVehicle? 'secondary' : 'surface'">
-      <ion-item no-lines [color]="chosenVehicle? 'secondary' : 'surface'">
-        <ion-icon name="car" item-start large></ion-icon>
-        Vehicle
-        <button ion-button item-end outline icon-left (click)="addVehicle(true)" [color]="chosenVehicle? 'light' : 'secondary'">
-          <ion-icon name="add"></ion-icon>
-          New
-        </button>
-      </ion-item>
-  
-      <ion-card-content>
-        <button ion-button block (click)="chooseVehicle()" [color]="chosenVehicle? 'light' : 'primary'" [outline]="!chosenVehicle">
-          {{chosenVehicle ? chosenVehicle.plateNumber : 'Choose Vehicle'}}
-        </button>
-      </ion-card-content>
-    </ion-card> -->
-  
-    <!-- Location Card -->
-    <!-- <ion-card style="position: relative;">
-      <div class="location-canvas-container">
-        <img src="https://ionicframework.com/dist/preview-app/www/assets/img/advance-card-map-madison.png">
-      </div>
-  
-      <ion-fab right top>
-        <button ion-fab color="secondary">
-          <ion-icon name="locate"></ion-icon>
-        </button>
-      </ion-fab>
-  
-      <ion-item>
-        <ion-icon name="pin" item-start large></ion-icon>
-        <h2>Museum of Football</h2>
-        <p>11 N. Way St, Madison, WI 53703</p>
-      </ion-item>
-  
-      <ion-card-content>
-        <button ion-button block [outline]="!chosenLocation">
-          Choose Location
-        </button>
-      </ion-card-content>
-    </ion-card> -->
-  
-    <!-- Duration Card -->
-    <!-- <ion-card [color]="chosenDuration? 'secondary' : 'surface'">
-      <ion-item no-lines [color]="chosenDuration? 'secondary' : 'surface'">
-        <ion-icon name="time" item-start large></ion-icon>
-        Duration
-      </ion-item>
-      <ion-card-content>
-        <button ion-button block (click)="chooseDuration()" [color]="chosenDuration? 'light' : 'primary'" [outline]="!chosenDuration">
-          {{chosenDuration ? getDurationLabel(chosenDuration) : 'Choose Duration'}}
-        </button>
-      </ion-card-content>
-    </ion-card> -->
+
+    <section id="container" class="container">
+      
+        <div class="controls">
+            <fieldset class="input-group">
+                <button class="stop" (click)="stopQuagga()">Stop</button>
+            </fieldset>
+            <fieldset class="reader-config-group">
+            <!--    <label>
+                    <span>Barcode-Type</span>
+                    <select name="decoder_readers">
+                        <option value="code_128" selected="selected">Code 128</option>
+                        <option value="code_39">Code 39</option>
+                        <option value="code_39_vin">Code 39 VIN</option>
+                        <option value="ean">EAN</option>
+                        <option value="ean_extended">EAN-extended</option>
+                        <option value="ean_8">EAN-8</option>
+                        <option value="upc">UPC</option>
+                        <option value="upc_e">UPC-E</option>
+                        <option value="codabar">Codabar</option>
+                        <option value="i2of5">I2of5</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Resolution (long side)</span>
+                    <select name="input-stream_constraints">
+                        <option value="320x240">320px</option>
+                        <option selected="selected" value="640x480">640px</option>
+                        <option value="800x600">800px</option>
+                        <option value="1280x720">1280px</option>
+                        <option value="1600x960">1600px</option>
+                        <option value="1920x1080">1920px</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Patch-Size</span>
+                    <select name="locator_patch-size">
+                        <option value="x-small">x-small</option>
+                        <option value="small">small</option>
+                        <option selected="selected" value="medium">medium</option>
+                        <option value="large">large</option>
+                        <option value="x-large">x-large</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Half-Sample</span>
+                    <input type="checkbox" checked="checked" name="locator_half-sample" />
+                </label>
+                <label>
+                    <span>Workers</span>
+                    <select name="numOfWorkers">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option selected="selected" value="4">4</option>
+                        <option value="8">8</option>
+                    </select>
+                </label>-->
+                <label>
+                    <span>Camera</span>
+                    <select name="input-stream_constraints" id="deviceSelection">
+                    </select>
+                </label>
+            </fieldset>
+        </div>
+        <div id="result_strip">
+            <ul class="thumbnails"></ul>
+        </div>
+        <div id="interactive" class="viewport"></div>
+    </section>
+
+
+    <script>
+      
+  </script>
   </ion-content>
+
+  

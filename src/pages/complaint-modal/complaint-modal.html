@@ -1,0 +1,77 @@
+
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>Complaints</ion-title>
+        <ion-buttons end>
+        <button ion-button (click)="closeModal()"><ion-icon ios="ios-close" md="md-close"></ion-icon></button>
+        </ion-buttons>
+    </ion-navbar>
+    
+</ion-header>
+<ion-content padding>
+    <!-- <ion-fab top right>
+        <button ion-fab (click)="closeModal()" style="width:30px;height:30px" color="info" >
+            <ion-icon ios="ios-close" md="md-close"></ion-icon>
+        </button>
+        
+    </ion-fab> -->
+        
+    <div id="main-container">
+        
+            <ion-slides #slides pager loop id="slides">
+                <ion-slide *ngFor="let c of categories">
+                        <div class="grid-container">
+                                <div class="gridChild" *ngFor="let icon of c">
+                                    <button [ngClass]="{'activated-button':selectedCategory == icon.Id}" ion-button icon-only item-end (click)="selectCategory(icon.Id)" class="round-icon-btns">
+                                        <img src={{icon.ImgUrl}}>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                </ion-slide>
+            </ion-slides>
+            <div class="line-horizontal"></div>
+                        
+            <ion-row id="complaint-form">
+                <ion-col col-8>
+                    <div id="img-container">
+                        <ion-fab bottom right>
+                            <button ion-fab  icon-only item-end class="round-icon-btns" (click)="triggerInput()" >
+                                <img src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/media-pict-camera.png">
+                            </button>
+                        </ion-fab>
+                        <!-- <button ion-button icon-only item-end class="round-icon-btns" (click)="triggerInput()">
+                            <img src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/media-pict-camera.png">
+                            
+                        </button> -->
+                        <input type='file' id="imgInput" multiple="multiple" accept="image/*"  (change)="readUrl($event)" style="display: none;">
+                        <ul>
+                            <li *ngFor="let c of captures">
+                                <img src="{{c}}" height="50" />
+                            </li>
+                        </ul>
+                    </div>
+                </ion-col>
+                <ion-col col-4>
+                    <textarea id="complaint-textarea" name="message"></textarea>
+                </ion-col>
+            </ion-row>
+        
+        
+    </div>
+    
+        
+</ion-content>
+<ion-footer >
+    <ion-toolbar>
+        <ion-segment [(ngModel)]="icons" color="secondary">
+            <ion-segment-button value="camera" (click)="closeModal()">
+                Cancel
+            </ion-segment-button>
+            <ion-segment-button value="bookmark">
+                Send
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-footer>
