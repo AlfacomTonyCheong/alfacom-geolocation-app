@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div *ngIf="options?.controls?.searchbar" class="control-bar" >
+<div *ngIf="options?.controls?.searchbar" class="control-bar">
     <!-- Place Search Controls  -->
     <div class="control-container">
         <div class="control-searchbar-container">
@@ -60,3 +60,36 @@
 <ion-fab *ngIf="options?.controls?.recenter" bottom left class="hide-fab-btm-left" [class.show]="showRecenterFab">
     <button ion-fab (click)="centerMapOnMarker()" color="dark"><ion-icon name="locate"></ion-icon></button>
 </ion-fab>
+
+<div [id]="canvasId + '_incident-info'" class="incident-wrapper">
+    <ion-card class="incident-container">
+        <ion-card-header ion-item>
+            <ion-icon item-right name="walk"></ion-icon>
+            Incident Header
+        </ion-card-header>
+        <ion-card-content>
+            <div class="block-with-text">
+                Incident Content and other information are displayed here.
+            </div>
+        </ion-card-content>
+        <ion-row>
+            <ion-col>
+                <button ion-button icon-start clear small>
+                    <ion-icon name="text"></ion-icon>
+                    <div>4 Comments</div>
+                </button>
+            </ion-col>
+            <ion-col>
+                <button ion-button icon-start clear small>
+                    <ion-icon name="thumbs-up"></ion-icon>
+                    <div>12 Likes</div>
+                </button>
+            </ion-col>
+            <ion-col center text-center>
+                <ion-note>
+                    11h ago
+                </ion-note>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+</div>

@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
 import { GeolocationOptions } from '@ionic-native/geolocation';
-import { AlertController, AlertOptions, ToastController, Toast, Events } from 'ionic-angular';
+import { AlertController, AlertOptions, ToastController, Toast, Events, ModalController } from 'ionic-angular';
 import { Observable, Subscription } from 'rxjs';
 import { ERROR_MESSAGES } from '../../app/messages';
 import { IMapPosition } from '../../interface/geolocation';
@@ -93,7 +93,8 @@ export class GoogleMapComponent {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private cdr: ChangeDetectorRef,
-    private events: Events
+    private events: Events,
+    private modalCtrl: ModalController
   ) {
   }
 
@@ -125,7 +126,7 @@ export class GoogleMapComponent {
         });
       })
     );
-    this.initMapClickEvent();
+    if(this.options.marker && this.options.marker.tapToPlace) this.initMapClickEvent();
   }
 
   initGoogleMap(pos?: IMapPosition) {
@@ -529,12 +530,45 @@ export class GoogleMapComponent {
     // ask Google to get the position, corresponding to a pixel on the map
     var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
     // set a new marker
-    var newMarker = new google.maps.Marker({
+    var newMarker: google.maps.Marker = new google.maps.Marker({
+      title: 'New Incident',
       map: this.map,
       position: pixelLatLng,
       label: 'I',
       animation: google.maps.Animation.DROP
     });
+
+    google.maps.event.addListener(newMarker, 'click', () => {
+      console.log('Marker Clicked: ' + newMarker.getTitle())
+      this.panMapTo(newMarker.getPosition().lat(), newMarker.getPosition().lng());
+      this.showRecenterFab = true;
+      //this.infoWindow.setContent(newMarker.getTitle());
+      //this.infoWindow.open(this.map, newMarker);
+
+      var incidentWrapper = document.getElementById(this.canvasId + '_incident-info');
+      incidentWrapper.classList.add('show');
+    })
+
+    this.openComplaintModal();
+    return true;
+  }
+
+  openComplaintModal(){
+    var modalPage = this.modalCtrl.create(
+      'ComplaintModalPage',
+      {
+        
+      },
+      {
+        showBackdrop: true,
+        enableBackdropDismiss: true
+      }
+    );
+    modalPage.present();
+
+    modalPage.onDidDismiss(data => {
+      console.log('dasd')
+    })
   }
 
   //===========================

@@ -64,57 +64,118 @@ google-map {
     .control-searchbar-container{
         display:flex;
     }  
+
+    ion-fab[bottom] {
+        bottom: 20px;
+    }
+    
+    ion-fab.hide-fab-btm-left{
+        margin-left: -100px;
+        opacity: 0;
+        transition: margin-left 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+    ion-fab.hide-fab-btm-left.show{
+        margin-left: 0;
+        opacity: 1;
+    }
+    
+    .incident-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0; 
+        overflow: hidden;
+        transition: margin-top 0.3s ease-out;
+        margin-top: -160px;
+        padding-bottom: 5px;
+        background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.5) 85%, rgba(0, 0, 0, 0) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.5) 85%, rgba(0, 0, 0, 0) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.5) 85%, rgba(0, 0, 0, 0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+    }
+    .incident-wrapper.show{
+        margin-top: 0;
+    }
+
+    .incident-wrapper > .incident-container {
+        max-height: 130px;
+        transition: max-height 0.5s ease-in-out;
+    }
+    
+    .incident-container > ion-card-content {
+        padding-bottom: 0;
+    }
+    
+
+    
+    // Show ellipsis when text exceed 2 lines
+    .block-with-text {
+        overflow: hidden;
+        position: relative; 
+        line-height: 1.8rem;
+        max-height: 3.6rem; 
+        text-align: justify;  
+        /* place for '...' */
+        //margin-right: -1em;
+        padding-right: 1em;
+    }
+    /* create the ... */
+    .block-with-text:before {
+        content: '...';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+    /* hide ... if we have text, which is less than or equal to max lines */
+    .block-with-text:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        width: 1em;
+        height: 1em;
+        margin-top: 0.2em;
+        background: color($colors, surface);
+    }
+
+    // Google Maps Place Search Autocomplete
+    //.pac-container{
+    //    margin-top: -225px;
+    //}
+    
+    
+    /* Draggable*/
+    
+    .drag-border {
+        border: #ff525b dashed 2px;
+    }
+    
+    .drag-handle {
+        cursor: move; /* fallback if grab cursor is unsupported */
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+    }
+    
+    .drag-handle:active { 
+        cursor: grabbing;
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;
+    }
+    
+    /* Droppable */
+    
+    .drag-hint-border {
+        border: #3c763d dashed 2px;
+    }
+    
+    .drag-over-border {
+        border: #fbbc05 dashed 2px;
+    }
+    
+    .drag-transit {
+        border: #3500FF dashed 2px;
+    }
+
+    
 }
 
-ion-fab[bottom] {
-    bottom: 20px;
-}
-
-ion-fab.hide-fab-btm-left{
-    margin-left: -100px;
-    opacity: 0;
-    transition: margin-left 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-ion-fab.hide-fab-btm-left.show{
-    margin-left: 0;
-    opacity: 1;
-}
-
-// Google Maps Place Search Autocomplete
-//.pac-container{
-//    margin-top: -225px;
-//}
-
-
-/* Draggable*/
-
-.drag-border {
-    border: #ff525b dashed 2px;
-}
-
-.drag-handle {
-    cursor: move; /* fallback if grab cursor is unsupported */
-    cursor: grab;
-    cursor: -moz-grab;
-    cursor: -webkit-grab;
-}
-
-.drag-handle:active { 
-    cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
-}
-
-/* Droppable */
-
-.drag-hint-border {
-    border: #3c763d dashed 2px;
-}
-
-.drag-over-border {
-    border: #fbbc05 dashed 2px;
-}
-
-.drag-transit {
-    border: #3500FF dashed 2px;
-}
