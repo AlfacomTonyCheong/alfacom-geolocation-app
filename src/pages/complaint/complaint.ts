@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,ModalController } from 'ionic-angular';
+import { IGoogleMapComponentOptions } from '../../interface/common';
 
 /**
  * Generated class for the ComplaintPage page.
@@ -13,21 +14,17 @@ import { IonicPage, NavController, NavParams,ModalController } from 'ionic-angul
   selector: 'page-complaint',
   templateUrl: 'complaint.html',
 })
-export class ComplaintPage  {
-  
-  // mainBtn:any = $(".st-button-main");
-  // panel:any = $(".st-panel");
-  // clicks:any = 0
-  // settings:any ={
-  //   openDuration: 600,
-  //   closeDuration: 200,
-  //   rotate: true
-  // };
- 
+export class ComplaintPage {
+  options: IGoogleMapComponentOptions;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl: ModalController) {
-    
-    
+    this.options = {
+      controls: {
+        recenter: true,
+        searchbar: true,
+        complaint: true
+      }
+    };
   }
 
   ionViewDidLoad() {

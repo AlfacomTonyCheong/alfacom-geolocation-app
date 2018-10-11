@@ -1,11 +1,8 @@
-<ion-content padding>
-        <ion-fab bottom right>
+<ion-content no-padding>
+    <google-map [options]="options" [canvasId]="'map_canvas_complaint'"></google-map>
+    <ion-fab bottom right>
             <button ion-fab (click)="openModal()" color="info" >
                 <ion-icon name="md-alert"></ion-icon>
             </button>
         </ion-fab>
-    
-    
-       
-    </ion-content>
-    
+</ion-content>

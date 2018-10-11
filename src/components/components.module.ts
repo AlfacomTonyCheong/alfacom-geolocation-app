@@ -3,12 +3,15 @@ import { GoogleMapComponent } from './google-map/google-map';
 import { IonicModule } from 'ionic-angular';
 import { NavbarComponent } from './navbar/navbar';
 import { GeolocationWatcherComponent } from './geolocation-watcher/geolocation-watcher';
+import { NgDragDropModule } from 'ng-drag-drop';
+
 @NgModule({
 	declarations: [GoogleMapComponent,
     NavbarComponent,
     GeolocationWatcherComponent],
 	imports: [
-		IonicModule
+		IonicModule,
+		NgDragDropModule
 	],
 	exports: [GoogleMapComponent,
     NavbarComponent,

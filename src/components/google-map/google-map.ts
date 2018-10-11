@@ -1,11 +1,10 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
-import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
-import { Platform, AlertController, AlertOptions, ToastController, Toast, Events, ViewController } from 'ionic-angular';
-import { Subject } from 'rxjs/Subject';
-import { takeUntil } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { GeolocationOptions } from '@ionic-native/geolocation';
+import { AlertController, AlertOptions, ToastController, Toast, Events } from 'ionic-angular';
+import { Observable, Subscription } from 'rxjs';
 import { ERROR_MESSAGES } from '../../app/messages';
 import { IMapPosition } from '../../interface/geolocation';
+import { IGoogleMapComponentOptions } from '../../interface/common';
 
 declare var google: any;
 
@@ -14,13 +13,17 @@ declare var google: any;
   templateUrl: 'google-map.html'
 })
 export class GoogleMapComponent {
-  private unsubscribe$ = new Subject();
+  @Input() callback;
+  @Input() canvasId;
+  @Input() options: IGoogleMapComponentOptions;
+
+  private _subs = new Subscription();
 
   mapOptions: google.maps.MapOptions = {
     backgroundColor: "#fff",
     center: { lat: 3.120455, lng: 101.612367 },
     zoom: 16,
-    clickableIcons: true,
+    clickableIcons: false,
     draggable: true,
     fullscreenControl: false,
     fullscreenControlOptions: {
@@ -65,6 +68,7 @@ export class GoogleMapComponent {
   myPosMarker: google.maps.Marker;
   infoWindow: google.maps.InfoWindow;
   geocoder: google.maps.Geocoder;
+  overlay: google.maps.OverlayView;
 
   showGeocoderResults: boolean;
   geocoderResults: google.maps.GeocoderResult[];
@@ -78,8 +82,6 @@ export class GoogleMapComponent {
   mapDragListener: any;
   showRecenterFab: boolean;
 
-  @Input() callback;
-
   @ViewChild('searchbar', { read: ElementRef }) placeSearchBarRef: ElementRef;
   placeSearchBarInputElement: HTMLInputElement;
   isPlaceSearchActive: boolean;
@@ -91,8 +93,7 @@ export class GoogleMapComponent {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private cdr: ChangeDetectorRef,
-    private events: Events,
-    private navParam: ViewController
+    private events: Events
   ) {
   }
 
@@ -108,20 +109,22 @@ export class GoogleMapComponent {
   disposeAll() {
     this.toast && this.toast.dismiss();
     this.clearWatchPosition();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this._subs.unsubscribe();
   }
 
   initMap() {
     this.isLoading = true;
-    this.initGoogleMap().pipe(takeUntil(this.unsubscribe$)).subscribe((result) => {
-      //this.watchPosition();
-      this.getPosition().subscribe(() => {
-        this.setMyPosMarker();
-      }, (error) => {
-        this.showToast(error);
-      });
-    });
+    this._subs.add(
+      this.initGoogleMap().subscribe((result) => {
+        //this.watchPosition();
+        this.getPosition().subscribe(() => {
+          this.setMyPosMarker();
+          this.panMapTo(this.myPos.latitude, this.myPos.longitude);
+        }, (error) => {
+          this.showToast(error);
+        });
+      })
+    );
     this.initMapClickEvent();
   }
 
@@ -135,11 +138,14 @@ export class GoogleMapComponent {
 
       // Create map
       this.map = new google.maps.Map(
-        document.getElementById('map_canvas'),
+        document.getElementById(this.canvasId),
         this.mapOptions
       );
       this.infoWindow = new google.maps.InfoWindow();
       this.geocoder = new google.maps.Geocoder();
+      this.overlay = new google.maps.OverlayView();
+      this.overlay.draw = function () { };
+      this.overlay.setMap(this.map);
 
       this.initCustomControls();
 
@@ -223,7 +229,7 @@ export class GoogleMapComponent {
   }
 
   setMyPosMarker() {
-    if(!this.myPosMarker)
+    if (!this.myPosMarker)
       this.initMapDragEvent();
 
     if (this.myPosMarker) {
@@ -238,7 +244,7 @@ export class GoogleMapComponent {
       map: this.map,
       animation: google.maps.Animation.DROP,
       title: 'You\'re Here!',
-      draggable: true
+      draggable: (this.options.marker? this.options.marker.draggable : false)
     });
     this.myPosMarker.addListener('click', () => {
       this.infoWindow.setContent(this.myPosMarker.getTitle());
@@ -255,6 +261,7 @@ export class GoogleMapComponent {
     //this.initControl_LocateMe();
     //this.initControl_PlaceMarker();
     this.initPlaceSearch();
+    this.initControl_DragAndDropPin_DragDrop();
   }
 
   showError(msg: string) {
@@ -262,15 +269,15 @@ export class GoogleMapComponent {
     this.errorMessage = msg;
   }
 
-  initMapDragEvent(){
-    this.mapDragListener = google.maps.event.addListener(this.map,'dragstart',() => {
+  initMapDragEvent() {
+    this.mapDragListener = google.maps.event.addListener(this.map, 'dragstart', () => {
       this.showRecenterFab = true;
       this.cdr.detectChanges();
       //google.maps.event.removeListener(this.mapDragListener);
     });
   }
 
-  initMapClickEvent(){
+  initMapClickEvent() {
     google.maps.event.addListener(this.map, 'click', (ev) => {
       console.log('clicked: ' + ev.latLng.lat() + ' | ' + ev.latLng.lng());
       this.myPos = {
@@ -284,17 +291,22 @@ export class GoogleMapComponent {
     });
   }
 
-  confirmLocation(){
-    if(this.myPos){
-      this.panMapTo(this.myPos.latitude, this.myPos.longitude);
-      console.log('Confirm Location: ' + JSON.stringify(this.myPos));
-      this.events.publish('geolocationWatcher_start', this.myPos);
+  confirmLocation() {
+    if (this.myPosMarker) {
+      var pos : IMapPosition ={
+        latitude: this.myPosMarker.getPosition().lat(),
+        longitude: this.myPosMarker.getPosition().lng(),
+        accuracy: 1000
+      };
+      this.panMapTo(pos.latitude, pos.longitude);
+      console.log('Confirm Location: ' + JSON.stringify(pos));
+      this.events.publish('geolocationWatcher_start', pos);
 
-      let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + this.myPos.latitude + ',' + this.myPos.longitude;
+      let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + pos.latitude + ',' + pos.longitude;
       canvasSrc += '&size=600x250&zoom=18&maptype=' + google.maps.MapTypeId.ROADMAP + '&key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0';
-      canvasSrc += '&markers=color:red|' +  this.myPos.latitude + ',' + this.myPos.longitude;
+      canvasSrc += '&markers=color:red|' + pos.latitude + ',' + pos.longitude;
       this.events.publish('location_canvasImg', canvasSrc);
-      this.callback();
+      this.callback && this.callback();
     }
   }
 
@@ -320,13 +332,15 @@ export class GoogleMapComponent {
     this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
   }
 
-  locateMe(){
-    this.getPosition().pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
-      this.setMyPosMarker();
-      this.panMapTo(this.myPos.latitude, this.myPos.longitude);
-    }, (errorMsg) => {
-      this.alertMessage(ERROR_MESSAGES.geolocation_errorTitle, errorMsg);
-    });
+  locateMe() {
+    this._subs.add(
+      this.getPosition().subscribe(() => {
+        this.setMyPosMarker();
+        this.panMapTo(this.myPos.latitude, this.myPos.longitude);
+      }, (errorMsg) => {
+        this.alertMessage(ERROR_MESSAGES.geolocation_errorTitle, errorMsg);
+      })
+    );
   }
 
   //===========================
@@ -351,12 +365,12 @@ export class GoogleMapComponent {
     this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
   }
 
-  centerMapOnMarker(){
-    if(this.myPosMarker){
+  centerMapOnMarker() {
+    if (this.myPosMarker) {
       let pos = this.myPosMarker.getPosition();
       this.panMapTo(pos.lat(), pos.lng());
       this.showRecenterFab = false;
-    }    
+    }
   }
 
   //===========================
@@ -381,13 +395,13 @@ export class GoogleMapComponent {
     this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
   }
 
-  placeMarkerAtCurrentPosition(){
+  placeMarkerAtCurrentPosition() {
     let pos = this.map.getCenter();
-    if(this.myPos){
+    if (this.myPos) {
       this.myPos.latitude = pos.lat();
       this.myPos.longitude = pos.lng();
     }
-    else{
+    else {
       this.myPos = {
         latitude: pos.lat(),
         longitude: pos.lng(),
@@ -472,6 +486,57 @@ export class GoogleMapComponent {
     })
 
   }
+
+  //===========================
+  // Drag & Drop Pin
+  //===========================
+  mouseStartDrag = [0, 0];
+  activePointPin = [23, 60]; // bottom center of the pin. Change this value if the pin is changed.
+  initControl_DragAndDropPin_DragDrop() {
+    console.log('init ng-drag-drop control');
+    //this.initTouchHandlers();
+    //var pin = document.getElementById('pin');
+  }
+
+  dragStart = (ev) => {
+    //ev.preventDefault();
+    ev.stopPropagation();
+    console.log('dragstart');
+    console.dir(ev);
+
+    var rect = ev.target.getBoundingClientRect();
+    var x = ev.pageX - rect.left;
+    var y = ev.pageY - rect.top;
+    this.mouseStartDrag = [x, y];
+  }
+
+  dragEnd = (ev) => {
+    console.log('dragend');
+    console.dir(ev);
+
+    var mapCanvas = document.getElementById(this.canvasId);
+    
+    var coordinatesOverDiv = [ev.clientX - mapCanvas.getBoundingClientRect().left, ev.clientY - mapCanvas.getBoundingClientRect().top];
+    console.log('coordsOverDiv: ' +  coordinatesOverDiv);
+    console.log('activePoint: ' + this.activePointPin);
+    console.log('mouseStart: ' + this.mouseStartDrag);
+    // we don't want the mouse position, we want the position of the active point on the pin.
+    coordinatesOverDiv = [
+      coordinatesOverDiv[0] + this.activePointPin[0] - this.mouseStartDrag[0],
+      coordinatesOverDiv[1] + this.activePointPin[1] - this.mouseStartDrag[1]
+    ];
+    console.log(coordinatesOverDiv);
+    // ask Google to get the position, corresponding to a pixel on the map
+    var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
+    // set a new marker
+    var newMarker = new google.maps.Marker({
+      map: this.map,
+      position: pixelLatLng,
+      label: 'I',
+      animation: google.maps.Animation.DROP
+    });
+  }
+
   //===========================
   // Misc
   //===========================
@@ -504,8 +569,8 @@ export class GoogleMapComponent {
     alert.present();
   }
 
-  async showToast(msg: string){
-    this.toast = this.toastCtrl.create({message: msg, position: 'bottom', duration: 3000});
+  async showToast(msg: string) {
+    this.toast = this.toastCtrl.create({ message: msg, position: 'bottom', duration: 3000 });
     await this.toast.present();
   }
 }
