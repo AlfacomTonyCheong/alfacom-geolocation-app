@@ -65,11 +65,11 @@
     <ion-card class="incident-container">
         <ion-card-header ion-item>
             <ion-icon item-right name="walk"></ion-icon>
-            Incident Header
+            {{selectedIncident?.category}}
         </ion-card-header>
         <ion-card-content>
             <div class="block-with-text">
-                Incident Content and other information are displayed here.
+                {{selectedIncident?.description}}
             </div>
         </ion-card-content>
         <ion-row>
@@ -85,7 +85,7 @@
                     <div>12 Likes</div>
                 </button>
             </ion-col>
-            <ion-col center text-center>
+            <ion-col align-self-center text-center>
                 <ion-note>
                     11h ago
                 </ion-note>

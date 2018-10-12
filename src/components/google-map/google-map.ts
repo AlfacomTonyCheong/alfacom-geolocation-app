@@ -82,12 +82,14 @@ export class GoogleMapComponent {
   mapDragListener: any;
   showRecenterFab: boolean;
 
+  incidentWrapper: HTMLElement;
+  selectedIncident: any;
+
   @ViewChild('searchbar', { read: ElementRef }) placeSearchBarRef: ElementRef;
   placeSearchBarInputElement: HTMLInputElement;
   isPlaceSearchActive: boolean;
   placeSearchInput: string;
   placeMarkers: google.maps.Marker[] = [];
-
 
   constructor(
     private alertCtrl: AlertController,
@@ -100,6 +102,7 @@ export class GoogleMapComponent {
 
   ngAfterViewInit() {
     this.placeSearchBarInputElement = this.placeSearchBarRef.nativeElement.querySelector('.searchbar-input');
+    this.incidentWrapper = document.getElementById(this.canvasId + '_incident-info');
     this.initMap();
   }
 
@@ -535,7 +538,11 @@ export class GoogleMapComponent {
       map: this.map,
       position: pixelLatLng,
       label: 'I',
-      animation: google.maps.Animation.DROP
+      animation: google.maps.Animation.DROP,
+      incidentData: {
+        category: 'Category is the Incident Header',
+        description: 'Incident description and other information are displayed here.'
+      }
     });
 
     google.maps.event.addListener(newMarker, 'click', () => {
@@ -545,8 +552,8 @@ export class GoogleMapComponent {
       //this.infoWindow.setContent(newMarker.getTitle());
       //this.infoWindow.open(this.map, newMarker);
 
-      var incidentWrapper = document.getElementById(this.canvasId + '_incident-info');
-      incidentWrapper.classList.add('show');
+      this.selectedIncident = newMarker['incidentData'];
+      this.incidentWrapper.classList.toggle('show');
     })
 
     this.openComplaintModal();

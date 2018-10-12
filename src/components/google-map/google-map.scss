@@ -85,6 +85,7 @@ google-map {
         left: 0;
         right: 0; 
         overflow: hidden;
+        max-width: 600px;
         transition: margin-top 0.3s ease-out;
         margin-top: -160px;
         padding-bottom: 5px;
@@ -101,7 +102,7 @@ google-map {
         max-height: 130px;
         transition: max-height 0.5s ease-in-out;
     }
-    
+
     .incident-container > ion-card-content {
         padding-bottom: 0;
     }
