@@ -129,7 +129,7 @@ export class GoogleMapComponent {
         });
       })
     );
-    if(this.options.marker && this.options.marker.tapToPlace) this.initMapClickEvent();
+    this.initMapClickEvent();
   }
 
   initGoogleMap(pos?: IMapPosition) {
@@ -533,8 +533,7 @@ export class GoogleMapComponent {
     // ask Google to get the position, corresponding to a pixel on the map
     var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
     // set a new marker
-    var newMarker: google.maps.Marker = new google.maps.Marker({
-      title: 'New Incident',
+    var newMarker = new google.maps.Marker({
       map: this.map,
       position: pixelLatLng,
       label: 'I',

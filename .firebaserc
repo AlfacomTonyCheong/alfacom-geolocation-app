@@ -1,20 +1,5 @@
 {
   "projects": {
     "default": "alfacom-geolocation-app"
-  },
-  "targets": {
-    "alfacom-geolocation-app": {
-      "hosting": {
-        "darien": [
-          "alfacom-geolocation-app-darien"
-        ],
-        "parkir": [
-          "parkir"
-        ],
-        "original": [
-          "alfacom-geolocation-app"
-        ]
-      }
-    }
   }
 }

@@ -64,6 +64,7 @@ google-map {
     .control-searchbar-container{
         display:flex;
     }  
+}
 
     ion-fab[bottom] {
         bottom: 20px;
@@ -108,75 +109,41 @@ google-map {
     }
     
 
-    
-    // Show ellipsis when text exceed 2 lines
-    .block-with-text {
-        overflow: hidden;
-        position: relative; 
-        line-height: 1.8rem;
-        max-height: 3.6rem; 
-        text-align: justify;  
-        /* place for '...' */
-        //margin-right: -1em;
-        padding-right: 1em;
-    }
-    /* create the ... */
-    .block-with-text:before {
-        content: '...';
-        position: absolute;
-        right: 0;
-        bottom: 0;
-    }
-    /* hide ... if we have text, which is less than or equal to max lines */
-    .block-with-text:after {
-        content: '';
-        position: absolute;
-        right: 0;
-        width: 1em;
-        height: 1em;
-        margin-top: 0.2em;
-        background: color($colors, surface);
-    }
+// Google Maps Place Search Autocomplete
+//.pac-container{
+//    margin-top: -225px;
+//}
 
-    // Google Maps Place Search Autocomplete
-    //.pac-container{
-    //    margin-top: -225px;
-    //}
-    
-    
-    /* Draggable*/
-    
-    .drag-border {
-        border: #ff525b dashed 2px;
-    }
-    
-    .drag-handle {
-        cursor: move; /* fallback if grab cursor is unsupported */
-        cursor: grab;
-        cursor: -moz-grab;
-        cursor: -webkit-grab;
-    }
-    
-    .drag-handle:active { 
-        cursor: grabbing;
-        cursor: -moz-grabbing;
-        cursor: -webkit-grabbing;
-    }
-    
-    /* Droppable */
-    
-    .drag-hint-border {
-        border: #3c763d dashed 2px;
-    }
-    
-    .drag-over-border {
-        border: #fbbc05 dashed 2px;
-    }
-    
-    .drag-transit {
-        border: #3500FF dashed 2px;
-    }
 
-    
+/* Draggable*/
+
+.drag-border {
+    border: #ff525b dashed 2px;
 }
 
+.drag-handle {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+.drag-handle:active { 
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Droppable */
+
+.drag-hint-border {
+    border: #3c763d dashed 2px;
+}
+
+.drag-over-border {
+    border: #fbbc05 dashed 2px;
+}
+
+.drag-transit {
+    border: #3500FF dashed 2px;
+}
