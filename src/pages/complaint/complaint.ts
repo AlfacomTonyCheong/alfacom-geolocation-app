@@ -47,7 +47,10 @@ export class ComplaintPage {
     modalPage.present();
 
     modalPage.onDidDismiss(data => {
-      console.log('dasd')
+      console.log(data)
+      if (data.submitted){
+        alert("Complaint successfully submitted!")
+      }
     })
   }
 }
