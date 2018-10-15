@@ -62,6 +62,7 @@ export class GoogleMapComponent {
     maximumAge: 5 * 60 * 1000
   }
 
+  mapCanvas: HTMLElement;
   map: google.maps.Map;
   isLoading: boolean;
   myPos: IMapPosition;
@@ -103,6 +104,7 @@ export class GoogleMapComponent {
   ngAfterViewInit() {
     this.placeSearchBarInputElement = this.placeSearchBarRef.nativeElement.querySelector('.searchbar-input');
     this.incidentWrapper = document.getElementById(this.canvasId + '_incident-info');
+    this.mapCanvas = document.getElementById(this.canvasId);
     this.initMap();
   }
 
@@ -248,7 +250,7 @@ export class GoogleMapComponent {
       map: this.map,
       animation: google.maps.Animation.DROP,
       title: 'You\'re Here!',
-      draggable: (this.options.marker? this.options.marker.draggable : false)
+      draggable: (this.options.marker ? this.options.marker.draggable : false)
     });
     this.myPosMarker.addListener('click', () => {
       this.infoWindow.setContent(this.myPosMarker.getTitle());
@@ -265,7 +267,7 @@ export class GoogleMapComponent {
     //this.initControl_LocateMe();
     //this.initControl_PlaceMarker();
     this.initPlaceSearch();
-    this.initControl_DragAndDropPin_DragDrop();
+    this.initControl_ComplaintPin();
   }
 
   showError(msg: string) {
@@ -297,7 +299,7 @@ export class GoogleMapComponent {
 
   confirmLocation() {
     if (this.myPosMarker) {
-      var pos : IMapPosition ={
+      var pos: IMapPosition = {
         latitude: this.myPosMarker.getPosition().lat(),
         longitude: this.myPosMarker.getPosition().lng(),
         accuracy: 1000
@@ -494,76 +496,142 @@ export class GoogleMapComponent {
   //===========================
   // Drag & Drop Pin
   //===========================
-  mouseStartDrag = [0, 0];
-  activePointPin = [23, 60]; // bottom center of the pin. Change this value if the pin is changed.
-  initControl_DragAndDropPin_DragDrop() {
-    console.log('init ng-drag-drop control');
-    //this.initTouchHandlers();
-    //var pin = document.getElementById('pin');
+  pinEle;
+  pinEleIsDragging: boolean;
+  pinEleMouseStartDrag = [0, 0];
+  pinEleCenter = [20, 20]; // Change this when size of pin is changed
+  pinEleActivePoint = [20, 40]; // Change this when size of pin is changed
+  pinEle_oriTop; pinEle_oriLeft;
+  initControl_ComplaintPin() {
+    this.pinEle = document.getElementById('complain-pin');
+
+    this.pinEle_oriTop = this.pinEle.style.top;
+    this.pinEle_oriLeft = this.pinEle.style.left;
+
+    this.pinEle.addEventListener('mousedown', this.PinDragStart);
+    this.pinEle.addEventListener('touchstart', this.PinDragStart);
+
   }
 
-  dragStart = (ev) => {
-    //ev.preventDefault();
-    ev.stopPropagation();
-    console.log('dragstart');
-    console.dir(ev);
-
-    var rect = ev.target.getBoundingClientRect();
-    var x = ev.pageX - rect.left;
-    var y = ev.pageY - rect.top;
-    this.mouseStartDrag = [x, y];
-  }
-
-  dragEnd = (ev) => {
-    console.log('dragend');
-    console.dir(ev);
-
-    var mapCanvas = document.getElementById(this.canvasId);
-    
-    var coordinatesOverDiv = [ev.clientX - mapCanvas.getBoundingClientRect().left, ev.clientY - mapCanvas.getBoundingClientRect().top];
-    console.log('coordsOverDiv: ' +  coordinatesOverDiv);
-    console.log('activePoint: ' + this.activePointPin);
-    console.log('mouseStart: ' + this.mouseStartDrag);
-    // we don't want the mouse position, we want the position of the active point on the pin.
-    coordinatesOverDiv = [
-      coordinatesOverDiv[0] + this.activePointPin[0] - this.mouseStartDrag[0],
-      coordinatesOverDiv[1] + this.activePointPin[1] - this.mouseStartDrag[1]
-    ];
-    console.log(coordinatesOverDiv);
-    // ask Google to get the position, corresponding to a pixel on the map
-    var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
-    // set a new marker
-    var newMarker = new google.maps.Marker({
-      map: this.map,
-      position: pixelLatLng,
-      label: 'I',
-      animation: google.maps.Animation.DROP,
-      incidentData: {
-        category: 'Category is the Incident Header',
-        description: 'Incident description and other information are displayed here.'
+  PinDragStart = (ev) => {
+    if (this.pinEle) {
+      console.log('DragStart');
+      var rect = this.pinEle.getBoundingClientRect();
+      if (ev instanceof TouchEvent) {
+        var x = ev.touches[0].pageX - rect.left;
+        var y = ev.touches[0].pageY - rect.top;
+        this.pinEleMouseStartDrag = [x, y];
+        this.pinEle.addEventListener('touchmove', this.PinDragMove);
+        this.pinEle.addEventListener('touchend', this.PinDragEnd);
+        this.pinEle.addEventListener('touchcancel', this.PinDragCancel);
       }
-    });
-
-    google.maps.event.addListener(newMarker, 'click', () => {
-      console.log('Marker Clicked: ' + newMarker.getTitle())
-      this.panMapTo(newMarker.getPosition().lat(), newMarker.getPosition().lng());
-      this.showRecenterFab = true;
-      //this.infoWindow.setContent(newMarker.getTitle());
-      //this.infoWindow.open(this.map, newMarker);
-
-      this.selectedIncident = newMarker['incidentData'];
-      this.incidentWrapper.classList.toggle('show');
-    })
-
-    this.openComplaintModal();
-    return true;
+      else if (ev instanceof MouseEvent) {
+        var x = ev.clientX - rect.left;
+        var y = ev.clientY - rect.top;
+        this.pinEleMouseStartDrag = [x, y];
+        this.mapCanvas.addEventListener('mousemove', this.PinDragMove);
+        this.mapCanvas.addEventListener('mouseup', this.PinDragEnd);
+        this.pinEle.addEventListener('mouseup', this.PinDragEnd);
+      }
+    }
   }
 
-  openComplaintModal(){
+  PinDragMove = (ev) => {
+    if (this.pinEle) {
+      console.log('DragMove');
+      var xPos, yPos;
+      if (ev instanceof TouchEvent) {
+        xPos = ev.touches[0].pageX - this.mapCanvas.getBoundingClientRect().left - this.pinEleCenter[0];
+        yPos = ev.touches[0].pageY - this.mapCanvas.getBoundingClientRect().top - this.pinEleCenter[1];
+      }
+      else if (ev instanceof MouseEvent) {
+        xPos = ev.clientX - this.mapCanvas.getBoundingClientRect().left - this.pinEleCenter[0];
+        yPos = ev.clientY - this.mapCanvas.getBoundingClientRect().top - this.pinEleCenter[1];
+      }
+      this.pinEle.style.top = (yPos) + 'px';
+      this.pinEle.style.left = (xPos) + 'px';
+    }
+  }
+
+  PinDragEnd = (ev) => {
+    if (this.pinEle) {
+      console.log('DragEnd');
+      this.pinEle.style.top = this.pinEle_oriTop;
+      this.pinEle.style.left = this.pinEle_oriLeft;
+
+      console.dir(ev);
+
+      var coordinatesOverDiv;
+      if (ev instanceof TouchEvent) {
+        coordinatesOverDiv = [ev.changedTouches[0].pageX - this.mapCanvas.getBoundingClientRect().left, ev.changedTouches[0].pageY - this.mapCanvas.getBoundingClientRect().top];
+        this.pinEle.removeEventListener('touchmove', this.PinDragMove);
+        this.pinEle.removeEventListener('touchend', this.PinDragEnd);
+        this.pinEle.removeEventListener('touchcancel', this.PinDragCancel);
+      }
+      else {
+        coordinatesOverDiv = [ev.clientX - this.mapCanvas.getBoundingClientRect().left, ev.clientY - this.mapCanvas.getBoundingClientRect().top];
+        this.mapCanvas.removeEventListener('mousemove', this.PinDragMove);
+        this.mapCanvas.removeEventListener('mouseup', this.PinDragEnd);
+        this.pinEle.removeEventListener('mouseup', this.PinDragEnd);
+      }
+
+      // Get position of the active point
+      coordinatesOverDiv = [
+        coordinatesOverDiv[0] + this.pinEleActivePoint[0] - this.pinEleMouseStartDrag[0],
+        coordinatesOverDiv[1] + this.pinEleActivePoint[1] - this.pinEleMouseStartDrag[1]
+      ];
+
+      // ask Google Map to get the position, corresponding to a pixel on the map
+      var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
+
+      var newMarker = new google.maps.Marker({
+        map: this.map,
+        position: pixelLatLng,
+        label: 'I',
+        animation: google.maps.Animation.DROP,
+        incidentData: {
+          category: 'Category is the Incident Header',
+          description: 'Incident description and other information are displayed here.'
+        }
+      });
+
+      google.maps.event.addListener(newMarker, 'click', () => {
+        console.log('Marker Clicked: ' + newMarker.getTitle())
+        this.panMapTo(newMarker.getPosition().lat(), newMarker.getPosition().lng());
+        this.showRecenterFab = true;
+        //this.infoWindow.setContent(newMarker.getTitle());
+        //this.infoWindow.open(this.map, newMarker);
+
+        this.selectedIncident = newMarker['incidentData'];
+        this.incidentWrapper.classList.add('show');
+      });
+
+      this.openComplaintModal();
+    }
+  }
+
+  PinDragCancel = (ev) => {
+    console.log('DragCancel');
+    this.pinEle.style.top = this.pinEle_oriTop;
+    this.pinEle.style.left = this.pinEle_oriLeft;
+
+    if (ev instanceof TouchEvent) {
+      this.pinEle.removeEventListener('touchmove', this.PinDragMove);
+      this.pinEle.removeEventListener('touchend', this.PinDragEnd);
+      this.pinEle.removeEventListener('touchcancel', this.PinDragCancel);
+    }
+    else {
+      this.mapCanvas.removeEventListener('mousemove', this.PinDragMove);
+      this.mapCanvas.removeEventListener('mouseup', this.PinDragEnd);
+      this.pinEle.removeEventListener('mouseup', this.PinDragEnd);
+    }
+  }
+
+  openComplaintModal() {
     var modalPage = this.modalCtrl.create(
       'ComplaintModalPage',
       {
-        
+
       },
       {
         showBackdrop: true,
@@ -613,4 +681,5 @@ export class GoogleMapComponent {
     this.toast = this.toastCtrl.create({ message: msg, position: 'bottom', duration: 3000 });
     await this.toast.present();
   }
+
 }

@@ -108,6 +108,25 @@ google-map {
         padding-bottom: 0;
     }
     
+    #complain-pin-bg{
+        position: absolute;
+        bottom: 20px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        background-color: white;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    }
+    #complain-pin{
+        background-image: url("https://cdn3.iconfinder.com/data/icons/user-interface-icons-bundle-17/32/882-512.png");
+        background-size: cover; 
+        position: absolute; 
+        bottom: 25px; 
+        right: 15px; 
+        width: 40px; 
+        height: 40px;
+        transition: left 0.05s ease-out, top 0.05s ease-out;
+    }
 
 // Google Maps Place Search Autocomplete
 //.pac-container{
