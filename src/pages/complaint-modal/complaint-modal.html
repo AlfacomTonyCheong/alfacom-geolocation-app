@@ -76,6 +76,10 @@
                           <ion-input type="text" required  disabled="true" [(ngModel)]="selectedIcon.Name" ngControl="title"></ion-input>
                         </ion-item>
                         <ion-item>
+                            <ion-label stacked>Location</ion-label>
+                            <ion-textarea type="text" required  disabled="true" [(ngModel)]="location" ngControl="location"></ion-textarea>
+                          </ion-item>
+                        <ion-item>
                           <ion-label stacked>Comments</ion-label>
                           <ion-textarea  ngControl="description" rows="3"></ion-textarea>
                         </ion-item>

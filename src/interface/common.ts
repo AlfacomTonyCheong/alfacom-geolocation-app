@@ -11,3 +11,8 @@ export interface IGoogleMapComponentOptions {
         tapToPlace?: boolean
     }
 }
+
+export interface IIncidentData {
+    category: string,
+    description: string
+}

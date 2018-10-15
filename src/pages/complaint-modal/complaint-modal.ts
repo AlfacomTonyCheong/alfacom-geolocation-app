@@ -19,6 +19,7 @@ export class ComplaintModalPage  implements OnInit {
   public selectedCategory: number;
   public selectedIcon: any = {Id:1,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[]}
   public secondPage:boolean = false;
+  public location:string;
   public captures: Array<any> = [];
   // public categories:Array<any> = 
   // [[{Id:1,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[
@@ -62,7 +63,8 @@ export class ComplaintModalPage  implements OnInit {
   ];
 
 
-  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController) {
+  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,public navParams: NavParams) {
+    this.location = this.navParams.get('location');
   }
 
   public ngOnInit() { this.captures = [];}

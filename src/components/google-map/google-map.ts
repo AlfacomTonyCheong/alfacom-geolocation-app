@@ -4,7 +4,7 @@ import { AlertController, AlertOptions, ToastController, Toast, Events, ModalCon
 import { Observable, Subscription } from 'rxjs';
 import { ERROR_MESSAGES } from '../../app/messages';
 import { IMapPosition } from '../../interface/geolocation';
-import { IGoogleMapComponentOptions } from '../../interface/common';
+import { IGoogleMapComponentOptions, IIncidentData } from '../../interface/common';
 
 declare var google: any;
 
@@ -584,29 +584,7 @@ export class GoogleMapComponent {
       // ask Google Map to get the position, corresponding to a pixel on the map
       var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
 
-      var newMarker = new google.maps.Marker({
-        map: this.map,
-        position: pixelLatLng,
-        label: 'I',
-        animation: google.maps.Animation.DROP,
-        incidentData: {
-          category: 'Category is the Incident Header',
-          description: 'Incident description and other information are displayed here.'
-        }
-      });
-
-      google.maps.event.addListener(newMarker, 'click', () => {
-        console.log('Marker Clicked: ' + newMarker.getTitle())
-        this.panMapTo(newMarker.getPosition().lat(), newMarker.getPosition().lng());
-        this.showRecenterFab = true;
-        //this.infoWindow.setContent(newMarker.getTitle());
-        //this.infoWindow.open(this.map, newMarker);
-
-        this.selectedIncident = newMarker['incidentData'];
-        this.incidentWrapper.classList.add('show');
-      });
-
-      this.openComplaintModal();
+      this.openComplaintModal(pixelLatLng);
     }
   }
 
@@ -627,27 +605,82 @@ export class GoogleMapComponent {
     }
   }
 
-  openComplaintModal() {
-    var modalPage = this.modalCtrl.create(
-      'ComplaintModalPage',
-      {
+  openComplaintModal(latLng: google.maps.LatLng) {
+    let that = this;
+    this.reverseGeocode(latLng.lat(), latLng.lng()).then(function (result) {
+      var modalPage = that.modalCtrl.create(
+        'ComplaintModalPage',
+        {
+          location: result
+        },
+        {
+          showBackdrop: true,
+          enableBackdropDismiss: true
+        }
+      );
+      modalPage.present();
 
-      },
-      {
-        showBackdrop: true,
-        enableBackdropDismiss: true
-      }
-    );
-    modalPage.present();
-
-    modalPage.onDidDismiss(data => {
-      console.log('dasd')
+      modalPage.onDidDismiss(data => {
+        if (data && data.submitted) {
+          that.showToast("Complaint successfully submitted!")
+          that.panMapTo(latLng.lat(), latLng.lng())
+        }
+      })
     })
+  }
+
+  addComplaintMarker(latLng: google.maps.LatLng) {
+    var incidentData: IIncidentData = {
+      category: 'Category is the Incident Header',
+      description: 'Incident description and other information are displayed here.'
+    };
+
+    var newMarker = new google.maps.Marker({
+      map: this.map,
+      position: latLng,
+      label: 'I',
+      animation: google.maps.Animation.DROP,
+      incidentData: incidentData
+    });
+
+    google.maps.event.addListener(newMarker, 'click', () => {
+      console.log('Marker Clicked: ' + newMarker.getTitle())
+      this.panMapTo(newMarker.getPosition().lat(), newMarker.getPosition().lng());
+      this.showRecenterFab = true;
+      //this.infoWindow.setContent(newMarker.getTitle());
+      //this.infoWindow.open(this.map, newMarker);
+      this.selectedIncident = newMarker['incidentData'];
+      this.showIncidentInfo(true);
+    });
+  }
+
+  showIncidentInfo(show: boolean) {
+    if (show)
+      this.incidentWrapper.classList.add('show');
+    else
+      this.incidentWrapper.classList.remove('show');
   }
 
   //===========================
   // Misc
   //===========================
+  reverseGeocode(lat: number, lng: number) {
+    let that = this;
+    return new Promise(function (resolve, reject) {
+      that.geocoder.geocode({ 'location': { lat: lat, lng: lng } }, function (results, status) {
+        if (status.toString() === 'OK') {
+          if (results[0]) {
+            resolve(results[0].formatted_address)
+          } else {
+            resolve("Latitude: " + lat + ";Longtitude: " + lng)
+          }
+        } else {
+          resolve("Latitude: " + lat + ";Longtitude: " + lng)
+        }
+      })
+    })
+  }
+
   setMapCenter(lat: number, lng: number) {
     this.map.setCenter({ lat: lat, lng: lng });
   }
