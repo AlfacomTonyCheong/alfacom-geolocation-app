@@ -108,9 +108,7 @@ page-complaint-modal {
         height: 65px;
     }
 
-    .slide-zoom{
-        height: 100%;
-    }
+    
 
     .navbar-title-center{
         position: absolute;
@@ -234,5 +232,6 @@ page-complaint-modal {
 
       .swiper-slide{
           overflow-y: auto;
+          display: block;
       }
 }

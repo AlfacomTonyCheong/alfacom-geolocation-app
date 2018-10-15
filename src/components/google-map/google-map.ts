@@ -554,32 +554,54 @@ export class GoogleMapComponent {
       this.selectedIncident = newMarker['incidentData'];
       this.incidentWrapper.classList.toggle('show');
     })
-
-    this.openComplaintModal();
+    this.openComplaintModal(newMarker.getPosition().lat(), newMarker.getPosition().lng())
     return true;
   }
 
-  openComplaintModal(){
-    var modalPage = this.modalCtrl.create(
-      'ComplaintModalPage',
-      {
-        
-      },
-      {
-        showBackdrop: true,
-        enableBackdropDismiss: true
-      }
-    );
-    modalPage.present();
-
-    modalPage.onDidDismiss(data => {
-      console.log('dasd')
+  openComplaintModal(lat,lng){
+    let that = this;
+    this.reverseGeocode(lat,lng).then(function(result){
+      var modalPage = that.modalCtrl.create(
+        'ComplaintModalPage',
+        {
+          location:result
+        },
+        {
+          showBackdrop: true,
+          enableBackdropDismiss: true
+        }
+      );
+      modalPage.present();
+  
+      modalPage.onDidDismiss(data => {
+        if (data && data.submitted){
+          that.showToast("Complaint successfully submitted!")
+          that.panMapTo(lat,lng)
+        }
+      })
     })
   }
 
   //===========================
   // Misc
   //===========================
+  reverseGeocode(lat:number,lng:number){
+    let that = this;
+    return new Promise(function(resolve, reject) {
+      that.geocoder.geocode({'location': {lat: lat, lng: lng}}, function(results, status) {
+            if (status.toString() === 'OK') {
+              if (results[0]) {
+                resolve(results[0].formatted_address) 
+              } else {
+                resolve("Latitude: " + lat + ";Longtitude: " + lng)
+              }
+            } else {
+              resolve("Latitude: " + lat + ";Longtitude: " + lng)
+            }
+      })
+    })
+} 
+
   setMapCenter(lat: number, lng: number) {
     this.map.setCenter({ lat: lat, lng: lng });
   }
