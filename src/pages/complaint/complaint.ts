@@ -33,24 +33,5 @@ export class ComplaintPage {
 
   }
 
-  openModal(){
-    var modalPage = this.modalCtrl.create(
-      'ComplaintModalPage',
-      {
-        
-      },
-      {
-        showBackdrop: true,
-        enableBackdropDismiss: true
-      }
-    );
-    modalPage.present();
-
-    modalPage.onDidDismiss(data => {
-      console.log(data)
-      if (data.submitted){
-        alert("Complaint successfully submitted!")
-      }
-    })
-  }
+  
 }
