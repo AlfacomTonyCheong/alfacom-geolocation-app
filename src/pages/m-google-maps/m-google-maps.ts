@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { IGoogleMapComponentOptions } from '../../interface/common';
+import { IGoogleMapComponentOptions } from '../../interface/common.interface';
 
 /**
  * Generated class for the MGoogleMapsPage page.

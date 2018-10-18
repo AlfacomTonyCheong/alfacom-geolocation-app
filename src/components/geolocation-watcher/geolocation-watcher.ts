@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Events, ToastController } from 'ionic-angular';
 import { Subject } from 'rxjs';
-import { IMapPosition } from '../../interface/geolocation';
+import { IMapPosition } from '../../interface/geolocation.interface';
 
 /**
  * Generated class for the GeolocationWatcherComponent component.

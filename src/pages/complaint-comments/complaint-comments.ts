@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
- * Generated class for the CreditPage page.
+ * Generated class for the ComplaintCommentsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -10,15 +10,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-credit',
-  templateUrl: 'credit.html',
+  selector: 'page-complaint-comments',
+  templateUrl: 'complaint-comments.html',
 })
-export class CreditPage {
+export class ComplaintCommentsPage {
+  comments;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.comments = this.navParams.get('comments').valueChanges();
   }
 
-  ionViewDidEnter() {
+  ionViewDidLoad() {
+    
   }
 
-  
 }

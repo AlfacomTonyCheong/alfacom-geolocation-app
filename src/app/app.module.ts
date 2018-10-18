@@ -15,8 +15,10 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { firebaseConfig } from './config';
+import { AgmCoreModule } from '@agm/core';
 
-import { NgDragDropModule } from 'ng-drag-drop';
+import { ComplaintsProvider } from '../providers/complaints/complaints';
+import { GeolocationProvider } from '../providers/geolocation/geolocation';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { NgDragDropModule } from 'ng-drag-drop';
     AngularFireAuthModule,
     IonicStorageModule.forRoot(),
     SuperTabsModule.forRoot(),
-    NgDragDropModule.forRoot()
+    AgmCoreModule.forRoot({
+      apiKey: firebaseConfig.apiKey
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -42,7 +46,9 @@ import { NgDragDropModule } from 'ng-drag-drop';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Geolocation,
     VehiclesProvider,
-    FirebaseProvider
+    FirebaseProvider,
+    ComplaintsProvider,
+    GeolocationProvider
   ]
 })
 export class AppModule { }

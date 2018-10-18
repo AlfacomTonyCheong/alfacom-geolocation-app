@@ -11,6 +11,7 @@
     "lint": "ionic-app-scripts lint"
   },
   "dependencies": {
+    "@agm/core": "^1.0.0-beta.5",
     "@angular/animations": "5.2.11",
     "@angular/common": "5.2.11",
     "@angular/compiler": "5.2.11",
@@ -29,11 +30,11 @@
     "@types/googlemaps": "^3.30.13",
     "cordova-plugin-geolocation": "^4.0.1",
     "firebase": "^5.5.2",
+    "geofirex": "0.0.6",
     "ionic-angular": "3.9.2",
     "ionic2-super-tabs": "github:AlfacomTonyCheong/ionic2-super-tabs",
     "ionicons": "3.0.0",
     "moment": "^2.22.2",
-    "ng-drag-drop": "^5.0.0",
     "ngdraggable": "git+https://github.com/fatlinesofcode/ngDraggable.git",
     "promise-polyfill": "^8.1.0",
     "quagga": "^0.12.1",

@@ -128,6 +128,12 @@ google-map {
         transition: left 0.05s ease-out, top 0.05s ease-out;
     }
 
+    #dev-button {
+        position: absolute;
+        left: 50%;
+        bottom: 10px;
+    }
+
 // Google Maps Place Search Autocomplete
 //.pac-container{
 //    margin-top: -225px;
