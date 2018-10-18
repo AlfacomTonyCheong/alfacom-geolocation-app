@@ -3,8 +3,8 @@ import { GeolocationOptions } from '@ionic-native/geolocation';
 import { AlertController, AlertOptions, ToastController, Toast, Events, ModalController } from 'ionic-angular';
 import { Observable, Subscription } from 'rxjs';
 import { ERROR_MESSAGES } from '../../app/messages';
-import { IMapPosition } from '../../interface/geolocation';
-import { IGoogleMapComponentOptions, IIncidentData } from '../../interface/common';
+import { IMapPosition } from '../../interface/geolocation.interface';
+import { IGoogleMapComponentOptions, IIncidentData } from '../../interface/common.interface';
 
 declare var google: any;
 
@@ -713,6 +713,12 @@ export class GoogleMapComponent {
   async showToast(msg: string) {
     this.toast = this.toastCtrl.create({ message: msg, position: 'bottom', duration: 3000 });
     await this.toast.present();
+  }
+
+  devFunc(){
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    console.dir(this.map.getBounds());
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   }
 
 }

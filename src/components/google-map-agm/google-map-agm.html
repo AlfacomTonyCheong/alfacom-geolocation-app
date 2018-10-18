@@ -1,0 +1,56 @@
+<agm-map [id]="'google-map_' + canvasId" class="map-canvas" (mapReady)="onMapReady($event)">
+  <!-- <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker> -->
+  <!-- <agm-marker *ngFor="let point of points | async; trackBy: trackByFn" [latitude]="point.position.geopoint.latitude" [longitude]="point.position.geopoint.longitude">
+    <agm-info-window>
+      <h1>This point is {{point.queryMetadata.distance}} kilometers from the center.</h1>
+    </agm-info-window>
+  </agm-marker> -->
+
+</agm-map>
+
+<div class="control-bar">
+  <!-- Place Search Controls  -->
+  <div class="control-container">
+    <div class="control-searchbar-container">
+      <ion-searchbar #searchbar [(ngModel)]="placeSearchInput" placeholder="Search Places" animated></ion-searchbar>
+    </div>
+  </div>
+</div>
+
+<div [id]="'complaint-info_' + canvasId" class="complaint-wrapper">
+  <ion-card class="complaint-container">
+    <ion-card-header ion-item>
+      <ion-icon item-right name="walk"></ion-icon>
+      {{currentComplaint? getCategoryTitle(currentComplaint.category) : ''}}
+    </ion-card-header>
+    <ion-card-content>
+      <div class="block-with-text">
+        {{currentComplaint?.description}}
+      </div>
+    </ion-card-content>
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-start clear small (click)="showCommentsModal()">
+          <ion-icon name="text"></ion-icon>
+          <div>{{(currentComplaintSocialData | async)?.commentCount || '0'}} Comments</div>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-start clear small>
+          <ion-icon name="thumbs-up"></ion-icon>
+          <div>{{(currentComplaintSocialData | async)?.likeCount || '0'}} Likes</div>
+        </button>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <ion-note>
+          {{currentComplaint ? getMomentFromNow(currentComplaint.created) : ''}}
+        </ion-note>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+</div>
+
+<div id="complain-pin-bg"></div>
+<div id="complain-pin"></div>
+
+<button id="dev-button" ion-button (click)="onDevButtonClick()">DEV FUNC</button>

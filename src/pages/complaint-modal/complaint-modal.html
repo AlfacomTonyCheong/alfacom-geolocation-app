@@ -28,21 +28,31 @@
             <ion-slide>
                 <div>
                     <div class="grid-container">
-                        <div class="gridChild" *ngFor="let icon of categories" >
+                        <!-- <div class="gridChild" *ngFor="let icon of categories" >
                             <button  ion-button icon-only item-end (click)="selectCategory(icon)" class="round-icon-btns">
                                 <img src={{icon.ImgUrl}}>
                             </button>
                             <small class="icon-name">{{icon.Name}}</small>
+                        </div> -->
+                        <div class="category-container" *ngFor="let icon of categories" (click)="selectCategory(icon)"> 
+                            <ion-item class="category" >
+                                <ion-thumbnail item-start class="category-thumbnail">
+                                    <img src={{icon.ImgUrl}} >
+                                </ion-thumbnail>
+                                <h4>{{icon.Name}}</h4>
+                            </ion-item>
                         </div>
                         
                     </div>
                 </div>
-                
+                <!-- <ul class='circle-container'>
+                        <li *ngFor="let icon of categories"><img src={{icon.ImgUrl}} alt="..." /></li>
+                </ul> -->
                 
             </ion-slide>
 
             <!-- select sub category slide -->
-            <ion-slide>
+            <!-- <ion-slide>
                 <div>
                     
                     <ion-row id="subCategories">
@@ -66,7 +76,7 @@
                         
                     </div>
                 </div>
-            </ion-slide>
+            </ion-slide> -->
 
             <!-- complaint form slide -->
             <ion-slide>

@@ -16,8 +16,10 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { firebaseConfig } from './config';
+import { AgmCoreModule } from '@agm/core';
 
-import { NgDragDropModule } from 'ng-drag-drop';
+import { ComplaintsProvider } from '../providers/complaints/complaints';
+import { GeolocationProvider } from '../providers/geolocation/geolocation';
 import { HttpClientModule } from '@angular/common/http';
 import {DatePipe} from '@angular/common'
 
@@ -34,7 +36,9 @@ import {DatePipe} from '@angular/common'
     HttpClientModule,
     IonicStorageModule.forRoot(),
     SuperTabsModule.forRoot(),
-    NgDragDropModule.forRoot()
+    AgmCoreModule.forRoot({
+      apiKey: firebaseConfig.apiKey
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -48,6 +52,8 @@ import {DatePipe} from '@angular/common'
     HttpClientModule,
     VehiclesProvider,
     FirebaseProvider,
+    ComplaintsProvider,
+    GeolocationProvider,
     DealsProvider,
     DatePipe
   ]

@@ -55,12 +55,12 @@ page-complaint-modal {
         // display: block;
         // align-items: center;
         // justify-content: center;
-        flex: 1 0 calc(33% - 10px);
+        flex: 1 0 calc(50% - 10px);
         box-sizing: border-box;
         color: #171e42;
         padding: 5px 0;
         margin: 5px;
-        max-width: 33.33333%;
+        max-width: 50%;
     }
 
     .toolbar-background-md {
@@ -102,6 +102,11 @@ page-complaint-modal {
         margin: 0;
         background-color: #d1ecb7;
     }
+    
+    .button-inner{
+        padding:10px;
+    }
+
 
     .button-inner > img{
         width:65px;
@@ -234,4 +239,86 @@ page-complaint-modal {
           overflow-y: auto;
           display: block;
       }
+
+      //categories
+      .label-md {
+        margin: 0;
+    }
+
+    .category-container{
+        width: 45%;
+        margin: 5px;
+    }
+
+    .category{
+        background: gold;
+        border-radius: 7px;
+    }
+
+    .category-thumbnail{
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px;
+        min-height: 40px;
+        margin:8px 2px !important;
+    }
+
+    .category-thumbnail > img{
+        width: 40px;
+        height: 40px;
+    }
+
+      //circle
+    //   @mixin on-circle($item-count, $circle-size, $item-size) {
+    //     position: relative;
+    //     width:  $circle-size;
+    //     height: $circle-size;
+    //     padding: 0;
+    //     border-radius: 50%; 
+    //     list-style: none;       
+        
+    //     > * {
+    //       display: block;
+    //       position: absolute;
+    //       top:  50%; 
+    //       left: 50%;
+    //       width:  $item-size;
+    //       height: $item-size;
+    //       margin: -($item-size / 2);
+        
+    //       $angle: (360 / $item-count);
+    //       $rot: 0;
+      
+    //       @for $i from 1 through $item-count {
+    //         &:nth-of-type(#{$i}) {
+    //           transform: 
+    //             rotate($rot * 1deg) 
+    //             translate($circle-size / 2) 
+    //             rotate($rot * -1deg);
+    //         }
+      
+    //         $rot: $rot + $angle;
+    //       }
+    //     }
+    //   }
+
+    //   .circle-container {
+    //     @include on-circle($item-count: 12, $circle-size: 80%, $item-size: 4.5em); 
+    //     margin: 3em auto;
+    //     //border: solid 5px tomato;
+        
+    //     img { 
+    //       display: block; 
+    //       max-width: 100%; 
+    //       border-radius: 50%;
+    //       filter: grayscale(100%);
+    //       border: solid 5px tomato;
+    //       transition: .15s;
+          
+    //       &:hover,
+    //       &:active {
+    //         filter: grayscale(0);
+    //       }
+    //     }
+    //   }
 }

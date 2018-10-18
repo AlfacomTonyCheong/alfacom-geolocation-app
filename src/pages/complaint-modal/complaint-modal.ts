@@ -42,24 +42,17 @@ export class ComplaintModalPage  implements OnInit {
   // {Id:12,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Walkways",SubCategories:[]}]
   // ];
   public categories:Array<any> = 
-  [{Id:1,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[
-      {Id:2,ImgUrl:"https://static.thenounproject.com/png/16017-200.png",Name:"Trees"},
-    {Id:3,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Walkways"},
-    {Id:4,ImgUrl:"https://image.flaticon.com/icons/svg/55/55166.svg",Name:"Highway"},
-    {Id:5,ImgUrl:"https://static.thenounproject.com/png/95044-200.png",Name:"Car Breakdown"},
-    {Id:6,ImgUrl:"https://static.thenounproject.com/png/753-200.png",Name:"Potholes"}
-    ]},
+  [{Id:1,ImgUrl:"assets/imgs/complaints/traffic-light.png",Name:"Traffic Light",SubCategories:[]},
   {Id:2,ImgUrl:"https://static.thenounproject.com/png/16017-200.png",Name:"Trees",SubCategories:[]},
-  {Id:3,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Walkways",SubCategories:[]},
-  {Id:4,ImgUrl:"https://image.flaticon.com/icons/svg/55/55166.svg",Name:"Highway",SubCategories:[]},
-  {Id:5,ImgUrl:"https://static.thenounproject.com/png/95044-200.png",Name:"Car Breakdown",SubCategories:[]},
-  {Id:6,ImgUrl:"https://static.thenounproject.com/png/753-200.png",Name:"Potholes",SubCategories:[]},
-  {Id:7,ImgUrl:"https://image.flaticon.com/icons/svg/55/55166.svg",Name:"Highway",SubCategories:[]},
-  {Id:8,ImgUrl:"https://static.thenounproject.com/png/95044-200.png",Name:"Car Breakdown",SubCategories:[]},
-  {Id:9,ImgUrl:"https://static.thenounproject.com/png/753-200.png",Name:"Potholes",SubCategories:[]},
-  {Id:10,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[]},
-  {Id:11,ImgUrl:"https://static.thenounproject.com/png/16017-200.png",Name:"Trees",SubCategories:[]},
-  {Id:12,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Walkways",SubCategories:[]}
+  {Id:3,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Pedestrian",SubCategories:[]},
+  {Id:4,ImgUrl:"https://image.flaticon.com/icons/svg/55/55166.svg",Name:"Road",SubCategories:[]},
+  {Id:5,ImgUrl:"assets/imgs/complaints/animal.png",Name:"Animal",SubCategories:[]},
+  {Id:7,ImgUrl:"assets/imgs/complaints/trash.png",Name:"Garbage",SubCategories:[]},
+  {Id:8,ImgUrl:"assets/imgs/complaints/building.png",Name:"Building",SubCategories:[]},
+  {Id:9,ImgUrl:"assets/imgs/complaints/drain.png",Name:"Drainage",SubCategories:[]},
+  {Id:11,ImgUrl:"assets/imgs/complaints/toilet.png",Name:"Toilet",SubCategories:[]},
+  {Id:12,ImgUrl:"assets/imgs/complaints/park.png",Name:"Parks",SubCategories:[]},
+  {Id:13,ImgUrl:"assets/imgs/complaints/transport.png",Name:"Transport",SubCategories:[]}
   ];
 
 
