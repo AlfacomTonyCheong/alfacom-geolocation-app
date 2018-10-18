@@ -1,0 +1,65 @@
+
+<ion-header>
+        <ion-navbar color="primary" >
+            <ion-buttons left *ngIf="!slides.isBeginning()">
+                    <button ion-button icon-only class="disable-hover" (click)="prevSlide()" >
+                        <ion-icon ios="ios-arrow-round-back" md="md-arrow-round-back"></ion-icon>
+                    </button>
+                </ion-buttons>
+            <ion-title class="navbar-title-center">
+                Restaurants near you
+            </ion-title>
+            <ion-buttons right>
+                <button ion-button icon-only class="disable-hover" (click)="closeModal()">
+                <ion-icon ios="ios-close" md="md-close"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-navbar>
+
+    
+</ion-header>
+<ion-content padding>
+    <ion-slides #slides>
+        <ion-slide >
+            <ion-list>
+                <ion-item *ngFor="let item of suggestions">
+                    <ion-thumbnail item-start>
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfXlYfT3kAP6mMQjxF5tydeVfzSCa70eAD3ixi4GPUawH8TDrgQ">
+                    </ion-thumbnail>
+                    <h2>{{item.venue.name}}</h2>
+                    <p>{{item.venue.categories[0].name}}</p>
+                    <button ion-button clear item-end (click)="selectItem(item)">View</button>
+                </ion-item>
+            </ion-list>
+        </ion-slide>
+        <ion-slide>
+            <ion-card>
+                <div class="img-container">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfXlYfT3kAP6mMQjxF5tydeVfzSCa70eAD3ixi4GPUawH8TDrgQ"/>
+                </div>
+                
+                <ion-card-content>
+                    <ion-card-title>
+                        {{selectedItem.venue.name}}
+                    </ion-card-title>
+                    <!-- <p>Category: {{selectedItem.venue.categories[0].name}}</p>
+                    <br> -->
+                    <p>{{selectedItem.venue.location.formattedAddress}}</p>
+                    <br>
+                    <h4>Only {{selectedItem.venue.location.distance}}m away!</h4>
+                    <br>
+                    <!-- <ion-item>
+                        <span item-start><ion-icon ios="ios-walk" md="md-walk"></ion-icon> 8 min</span>
+                        <span item-start>({{selectedItem.venue.location.distance}} metres)</span>
+                        <button ion-button icon-start clear item-end>
+                            <ion-icon name="navigate"></ion-icon>
+                            Start
+                        </button>
+                    </ion-item> -->
+                </ion-card-content>
+            </ion-card>
+            
+        </ion-slide>
+    </ion-slides>   
+    
+</ion-content>

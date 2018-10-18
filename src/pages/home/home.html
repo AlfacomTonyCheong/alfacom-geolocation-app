@@ -53,7 +53,16 @@
       
     </div>
   </ion-card>
-
+  <ion-fab bottom right *ngIf="showSuggestions">
+      <button ion-button icon-start (click)="openDealsModal()" color="info" >
+          <ion-icon ios="ios-alert" md="md-alert"></ion-icon>
+          There are {{suggestions.length}} deals near you!
+      </button>
+  </ion-fab>
+  <!-- <button bottom right ion-button icon-end  (click)="openDealsModal()">
+      There are 10 deals near you!
+    <ion-icon ios="ios-alert" md="md-alert"></ion-icon>
+  </button> -->
   <!--
   <ion-card class="card-button">
     <button ion-item (click)="initQuagga()" detail-none>
