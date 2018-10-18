@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, IonicPage, AlertController, ModalController, Events } from 'ionic-angular';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { NavController, IonicPage, AlertController, ModalController, Events, ToastController } from 'ionic-angular';
 import { VehiclesProvider } from '../../providers/vehicles/vehicles';
 import { GeolocationOptions, Geolocation } from '@ionic-native/geolocation';
 import { Subject } from 'rxjs';
@@ -7,6 +7,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 import * as Quagga from 'quagga';
+import { DealsProvider } from '../../providers/deals/deals';
 
 @IonicPage()
 @Component({
@@ -22,10 +23,12 @@ export class HomePage {
   myPos: any;
   myPosResults: string[];
   myPosAddress: string;
+  myPosCoordinatesString:string;
 
   firebaseDoc;
   firebaseCollection;
-
+  suggestions: any[];
+  showSuggestions:boolean = false;
   canvasSrc;
 
   constructor(
@@ -33,9 +36,12 @@ export class HomePage {
     private vehiclesProvider: VehiclesProvider,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
+    private toastCtrl: ToastController,
     private events: Events,
     private geolocation: Geolocation,
-    private firebaseProvider: FirebaseProvider
+    private firebaseProvider: FirebaseProvider,
+    private dealsProvider: DealsProvider,
+    private ref: ChangeDetectorRef
   ) {
 
   }
@@ -58,7 +64,10 @@ export class HomePage {
 
   initParkingDetails() {
     this.events.subscribe('geolocationWatcher_update', (data) => {
+      console.log(data)
       this.myPosAddress = data.address;
+      var coordString = data.lat.toString() +","+data.lng.toString();
+      this.loadDeals(coordString)
     })
 
     this.events.subscribe('location_canvasImg', (url) => {
@@ -229,5 +238,125 @@ export class HomePage {
         Quagga.start();
       }
     })
+  }
+
+
+  //===========================
+  // Deals
+  //===========================
+  openDealsModal(){
+    var modalPage = this.modalCtrl.create(
+      'DealsModalPage',
+      {
+        suggestions: this.suggestions
+      },
+      {
+        showBackdrop: true,
+        enableBackdropDismiss: true
+      }
+    );
+    modalPage.present();
+
+    modalPage.onDidDismiss(data => {
+      //this.navCtrl.push(nextPage)
+    })
+  }
+
+  loadDeals(coordString) {
+    // this.loadError = false;
+    // let loading = this.loadingCtrl.create({
+    //   content: "Loading Highlights..."
+    // });
+    // loading.present();
+
+    this.dealsProvider.GetDealsByCoordinates(coordString)
+      
+      .subscribe((data : any) => {
+        if (data && data.meta.code == '200'){
+          try{
+            this.suggestions = data.response.groups[0].items;
+          }catch(Exception){
+
+            this.suggestions = [];
+
+          }
+          if (this.suggestions.length > 0){
+            //this.getDealsImages()
+            this.showSuggestions = true;
+            this.ref.detectChanges();
+         }
+        }
+        // this.highlights = data.content as IWiseInfoTVHighlights[];
+      },
+      (error) => {
+        // this.loadError = true;
+        let toast = this.toastCtrl.create({
+          message: error.message,
+          position: 'middle',
+          duration: 2000
+          // showCloseButton:true
+        });
+      
+        toast.onDidDismiss(() => {
+          console.log('Dismissed toast');
+        });
+      
+        toast.present();
+      },()=>{
+        console.log(this.suggestions)
+        
+        // console.log('finally')
+        // if (this.suggestions.length > 0){
+        //    //this.getDealsImages()
+        //    this.showSuggestions = true;
+        //    this.ref.detectChanges();
+        // }
+        // console.log(this.suggestions)
+      }
+      );
+  }
+
+  getDealsImages(){
+    if (this.suggestions.length > 0){
+      var imgUrl = "";
+      for (let deal of this.suggestions){
+        this.dealsProvider.GetVenueImage(deal.venue.id)
+          .subscribe((data : any) => {
+            if (data && data.meta.code == '200'){
+              try{
+                var imgJson = data.response.photos.items[0];
+                console.log(imgJson)
+                imgUrl = imgJson.prefix + imgJson.width + "x"+imgJson.height+imgJson.suffix
+                console.log('imgUrl: ' + imgUrl)
+              }catch(Exception){
+    
+                imgUrl = "";
+    
+              }
+            }
+            // this.highlights = data.content as IWiseInfoTVHighlights[];
+          },
+          (error) => {
+            // this.loadError = true;
+            let toast = this.toastCtrl.create({
+              message: error.message,
+              position: 'middle',
+              duration: 2000
+              // showCloseButton:true
+            });
+          
+            toast.onDidDismiss(() => {
+              console.log('Dismissed toast');
+            });
+          
+            toast.present();
+          },()=>{
+            deal.venue.imgUrl = imgUrl;
+          }
+          );
+
+        
+      } 
+    }
   }
 }

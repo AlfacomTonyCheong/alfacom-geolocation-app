@@ -126,7 +126,7 @@ export class GeolocationWatcherComponent {
     this.text = 'Located';
     this.success = true;
     this.cdr.detectChanges();
-    this.events.publish('geolocationWatcher_update', { address: this.myPosAddress });
+    this.events.publish('geolocationWatcher_update', { address: this.myPosAddress,lat: this.myPos.latitude, lng: this.myPos.longitude });
   }
 
   resetVariables() {

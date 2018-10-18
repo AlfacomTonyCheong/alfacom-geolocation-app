@@ -10,6 +10,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { SuperTabsModule } from 'ionic2-super-tabs';
 import { VehiclesProvider } from '../providers/vehicles/vehicles';
 import { FirebaseProvider } from '../providers/firebase/firebase';
+import { DealsProvider } from '../providers/deals/deals';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -19,6 +20,8 @@ import { AgmCoreModule } from '@agm/core';
 
 import { ComplaintsProvider } from '../providers/complaints/complaints';
 import { GeolocationProvider } from '../providers/geolocation/geolocation';
+import { HttpClientModule } from '@angular/common/http';
+import {DatePipe} from '@angular/common'
 
 @NgModule({
   declarations: [
@@ -30,6 +33,7 @@ import { GeolocationProvider } from '../providers/geolocation/geolocation';
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    HttpClientModule,
     IonicStorageModule.forRoot(),
     SuperTabsModule.forRoot(),
     AgmCoreModule.forRoot({
@@ -45,10 +49,13 @@ import { GeolocationProvider } from '../providers/geolocation/geolocation';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Geolocation,
+    HttpClientModule,
     VehiclesProvider,
     FirebaseProvider,
     ComplaintsProvider,
-    GeolocationProvider
+    GeolocationProvider,
+    DealsProvider,
+    DatePipe
   ]
 })
 export class AppModule { }

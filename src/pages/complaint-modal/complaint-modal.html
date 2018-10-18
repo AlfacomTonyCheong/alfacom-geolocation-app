@@ -1,14 +1,14 @@
 
 <ion-header>
-        <ion-navbar >
+        <ion-navbar color="primary">
             <ion-buttons left *ngIf="!slides.isBeginning()">
                 <button ion-button icon-only class="disable-hover" (click)="prevSlide()" >
                     <ion-icon ios="ios-arrow-round-back" md="md-arrow-round-back"></ion-icon>
                 </button>
             </ion-buttons>
-            <ion-title class="navbar-title-center">
+            <!-- <ion-title class="navbar-title-center">
                 Complaint Types
-            </ion-title>
+            </ion-title> -->
             <ion-buttons right>
                 <button ion-button icon-only class="disable-hover" (click)="closeModal()">
                 <ion-icon ios="ios-close" md="md-close"></ion-icon>

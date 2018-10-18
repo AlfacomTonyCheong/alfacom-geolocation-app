@@ -1,0 +1,18 @@
+page-deals-modal {
+    .slide-zoom{
+        height: 100%;
+    }
+
+    .img-container{
+        width:100%;
+        background: black;
+        img{
+            width: auto;
+            display: initial;
+        }
+    }
+
+    .swiper-slide-active{
+        overflow-y: auto;
+    }
+}
