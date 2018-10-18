@@ -22,7 +22,7 @@
                         <button ion-button round (click)="encode()">Encode</button> -->
                 
                         <ion-item>
-                            <ion-input type="text" placeholder="Compound/ Vehicle Number" [(ngModel)]="scannedData"></ion-input>
+                            <ion-input type="text" placeholder="Compound/ Vehicle Number" [(ngModel)]="scannedData.compoundNo"></ion-input>
                             <button ion-button icon-only class="round-icon-btns" id="scanBtn"  (click)="triggerInput()" item-end>
                                 <ion-icon name="qr-scanner"></ion-icon>
                             </button>
@@ -35,17 +35,17 @@
                 </ion-card>
                 <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
                     <ion-item>
-                        <ion-input type="text" placeholder="IC Number" [(ngModel)]="icNumber"></ion-input>
+                        <ion-input type="text" placeholder="IC Number" [(ngModel)]="scannedData.ic"></ion-input>
                     </ion-item>
                     
                 </ion-card>
                 <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
                     <ion-item>
-                        <ion-input type="text" placeholder="Address" [(ngModel)]="address"></ion-input>
+                        <ion-input type="text" placeholder="Address" [(ngModel)]="scannedData.address"></ion-input>
                     </ion-item>
                 </ion-card>
                 <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
-                    <button ion-button block color="light" (click)="scan()">Pay Now</button>
+                    <button ion-button block color="light" (click)="pay()">Pay Now</button>
                     <!-- <div *ngIf="scannedData.text">
                         <label>Your barcode is</label>
                         <br>

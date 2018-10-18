@@ -17,11 +17,13 @@ import Quagga from 'quagga'; // ES6
 })
 export class CompoundPage {
     @ViewChild('slides') slides: Slides;
-    scannedData:any;
+    scannedData:any = {compoundNo:"",address:"",ic:""}
     imgToScan:any;
     isMobile:boolean = false;
     toast: Toast;
     alertExist:boolean= false;
+    _address = "32, Jalan 17/21H, Seksyen 17, 46400 Petaling Jaya, Selangor Malaysia"
+    _icNo = "951212-14-2484"
     
     ngAfterViewInit() {
         this.slides.lockSwipes(true);
@@ -80,6 +82,7 @@ export class CompoundPage {
         }, function(err) {
             if (err) {
                 that.showToast(err);
+                that.prevSlide()
                 return
             }
             that.showToast("Initialization finished. Ready to start");
@@ -140,51 +143,45 @@ export class CompoundPage {
             },
         }, function(result) {
             if(result && result.codeResult) {
-            that.scannedData = result.codeResult.code;
-            that.showToast("result: " + result.codeResult.code);
-            } else {
-            that.showToast("not detected");
-            }
-        });
-
-        Quagga.onProcessed(function (result) {
-            var drawingCtx = Quagga.canvas.ctx.overlay,
-            drawingCanvas = Quagga.canvas.dom.overlay;
-    
-            if (result) {
-                if (result.boxes) {
-                    drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
-                    result.boxes.filter(function (box) {
-                        return box !== result.box;
-                    }).forEach(function (box) {
-                        Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
-                    });
-                }
-    
-                if (result.box) {
-                    Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
-                }
-    
-                if (result.codeResult && result.codeResult.code) {
-                    Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
-                }
-            }
-        });
-
-        Quagga.onDetected(function (result) {
-            if (!that.alertExist){
-                Quagga.stop();
+            // that.scannedData = {compoundNo: result.codeResult.code,address:tmpAddress,ic:icNo};
+            // that.showToast("result: " + result.codeResult.code);
+            // } else {
+            // that.showToast("not detected");
+            // }
+                // const alert = that.alertCtrl.create({
+                //     title: "Barcode Detected",
+                //     subTitle: result.codeResult.code,
+                //     buttons: ['Okay']
+                // });
+                // alert.present();
+                that.scannedData = {compoundNo: result.codeResult.code,address:that._address,ic:that._icNo};
+            }else{
                 const alert = that.alertCtrl.create({
-                    title: "Barcode Detected",
-                    subTitle: result.codeResult.code,
+                    title: "Error",
+                    subTitle: "Barcode not detected.",
                     buttons: ['Okay']
-                  });
+                });
                 alert.present();
-                // that.alertMessage("Barcode Detected", result.codeResult.code);
+                that.scannedData = {compoundNo:"",address:"",ic:""};
             }
-            
-            //that.showToast("Barcode detected and processed : [" + result.codeResult.code + "] " + result);
         });
+
+
+        // Quagga.onDetected(function (result) {
+        //     if (!that.alertExist){
+        //         Quagga.stop();
+        //         const alert = that.alertCtrl.create({
+        //             title: "Barcode Detected",
+        //             subTitle: result.codeResult.code,
+        //             buttons: ['Okay']
+        //           });
+        //         alert.present();
+        //         this.scannedData = {compoundNo: result.codeResult.code,address:this._address,ic:this._icNo};
+        //         // that.alertMessage("Barcode Detected", result.codeResult.code);
+        //     }
+            
+        //     //that.showToast("Barcode detected and processed : [" + result.codeResult.code + "] " + result);
+        // });
     }
 
     //===========================
@@ -215,7 +212,7 @@ export class CompoundPage {
             handler: () => {
                 this.alertExist = false;
                 this.prevSlide();
-                this.scannedData = message;
+                this.scannedData = {compoundNo: message,address:this._address,ic:this._icNo};
                 // Quagga.stop();
             }
         });
@@ -281,5 +278,15 @@ export class CompoundPage {
         
             reader.readAsDataURL(event.target.files[0]);
         }
+    }
+
+    pay(){
+        const alert = this.alertCtrl.create({
+            title: "Success",
+            subTitle: "Payment has been made!",
+            buttons: ['Okay']
+        });
+        alert.present();
+        this.scannedData = {compoundNo:"",address:"",ic:""};
     }
 }
