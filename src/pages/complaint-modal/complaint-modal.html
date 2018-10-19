@@ -27,19 +27,6 @@
             <ion-slide>
                 <div>
                     <div class="grid-container">
-<<<<<<< HEAD
-                        <div class="gridChild" *ngFor="let icon of categories">
-                            <button ion-button icon-only item-end (click)="selectCategory(icon)" class="round-icon-btns">
-                                <img src={{icon.ImgUrl}}>
-                            </button>
-                            <small class="icon-name">{{icon.Name}}</small>
-                        </div>
-
-                    </div>
-                </div>
-
-
-=======
                         <div class="gridChild" *ngFor="let icon of allCategories| async" >
                             <button  ion-button icon-only item-end (click)="selectCategory(icon)" class="round-icon-btns">
                                 <img [src]="getImgSrc(icon.Name)">
@@ -61,7 +48,6 @@
                         <li *ngFor="let icon of categories"><img src={{icon.ImgUrl}} alt="..." /></li>
                 </ul> -->
                 
->>>>>>> 16567d6462304b7c330ffd9fccacbdec6b99b6ca
             </ion-slide>
 
             <!-- select sub category slide -->
