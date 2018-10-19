@@ -6,13 +6,53 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>complaintComments</ion-title>
+  <ion-navbar color="primary">
+    <ion-buttons left>
+      <button ion-button icon-only class="disable-hover" (click)="dismiss()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </button>
+      <!-- <button ion-button icon-only>
+                <img src="assets/imgs/logo_pwa.png" width="30" height="30"/>
+              </button> -->
+    </ion-buttons>
+    <ion-title class="navbar-title-center">Comments</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-  <ion-item *ngFor="let comment of comments | async">{{comment.content}}</ion-item>
+<ion-content class="no-scroll">
+  <div class="box">
+    <ion-scroll class="row content">
+      <div *ngIf="comments$ | async as comments; else loading">
+        <ng-container *ngIf="comments.length; else noItems">
+          <ion-item *ngFor="let comment of comments">
+            <ion-avatar item-start>
+              <img src="assets/imgs/buzz.jpeg">
+            </ion-avatar>
+            <h2>{{comment.createdBy}}</h2>
+            <div class="comment-timestamp">{{comment.created | toDate | momentFromNow}}</div>
+            <p>{{comment.content}}</p>
+          </ion-item>
+        </ng-container>
+        <ng-template #noItems>No Items!</ng-template>
+      </div>
+      <ng-template #loading>
+        <div class="loading-wrapper">
+          <ion-spinner></ion-spinner><span class="loading-text">Loading comments...</span>
+        </div>
+      </ng-template>
+    </ion-scroll>
+    <div class="row footer">
+      <ion-item>
+        <ion-textarea [(ngModel)]="newCommentText" class="comment-textarea" placeholder="Post a new comment...">
+        </ion-textarea>
+        <ion-note item-end>
+          <button ion-button icon-only outline (click)="submitNewComment()">
+            <ion-icon name="play"></ion-icon>
+          </button>
+        </ion-note>
+      </ion-item>
+    </div>
+  </div>
 </ion-content>

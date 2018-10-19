@@ -6,3 +6,8 @@ export enum ComplaintCategory{
    CarBreakdown = 5,
    Potholes = 6
 }
+
+export enum ComplaintLikeType {
+    Like = 1,
+    Dislike = 2
+}
