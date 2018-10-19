@@ -18,10 +18,17 @@ page-complaint-modal {
         border:1px solid !important;
     }
 
-    .icon-name{
+    .gridChild .icon-name{
         display:block;
         color:black;
         line-height: 25px;
+    }
+
+    .category .icon-name{
+        text-align: center;
+        // display:block;
+        // color:black;
+        // line-height: 25px;
     }
 
     .activated-button{
@@ -55,12 +62,12 @@ page-complaint-modal {
         // display: block;
         // align-items: center;
         // justify-content: center;
-        flex: 1 0 calc(50% - 10px);
+        flex: 1 0 calc(33% - 10px);
         box-sizing: border-box;
         color: #171e42;
         padding: 5px 0;
         margin: 5px;
-        max-width: 50%;
+        max-width: 33%;
     }
 
     .toolbar-background-md {
@@ -243,6 +250,7 @@ page-complaint-modal {
       //categories
       .label-md {
         margin: 0;
+        // text-align: center;
     }
 
     .category-container{

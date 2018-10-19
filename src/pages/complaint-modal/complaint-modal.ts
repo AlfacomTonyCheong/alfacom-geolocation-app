@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams,ModalController,ViewController,Slides } from 'ionic-angular';
+import { ComplaintsProvider } from '../../providers/complaints/complaints';
+import { AngularFirestoreCollection } from '@angular/fire/firestore';
+import { IComplaintCategory } from '../../interface/complaint.interface';
 
 /**
  * Generated class for the ComplaintPage page.
@@ -16,56 +19,23 @@ import { IonicPage, NavController, NavParams,ModalController,ViewController,Slid
 export class ComplaintModalPage  implements OnInit {
   @ViewChild('slides') slides: Slides;
 
+  public imgRoot:string = "assets/imgs/complaints/"
   public selectedCategory: number;
   public selectedIcon: any = {Id:1,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[]}
   public secondPage:boolean = false;
   public location:string;
   public captures: Array<any> = [];
-  // public categories:Array<any> = 
-  // [[{Id:1,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[
-  //   {Id:2,ImgUrl:"https://static.thenounproject.com/png/16017-200.png",Name:"Trees"},
-  // {Id:3,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Walkways"},
-  // {Id:4,ImgUrl:"https://image.flaticon.com/icons/svg/55/55166.svg",Name:"Highway"},
-  // {Id:5,ImgUrl:"https://static.thenounproject.com/png/95044-200.png",Name:"Car Breakdown"},
-  // {Id:6,ImgUrl:"https://static.thenounproject.com/png/753-200.png",Name:"Potholes"}
-  // ]},
-  // {Id:2,ImgUrl:"https://static.thenounproject.com/png/16017-200.png",Name:"Trees",SubCategories:[]},
-  // {Id:3,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Walkways",SubCategories:[]},
-  // {Id:4,ImgUrl:"https://image.flaticon.com/icons/svg/55/55166.svg",Name:"Highway",SubCategories:[]},
-  // {Id:5,ImgUrl:"https://static.thenounproject.com/png/95044-200.png",Name:"Car Breakdown",SubCategories:[]},
-  // {Id:6,ImgUrl:"https://static.thenounproject.com/png/753-200.png",Name:"Potholes",SubCategories:[]},
-  // {Id:7,ImgUrl:"https://image.flaticon.com/icons/svg/55/55166.svg",Name:"Highway",SubCategories:[]},
-  // {Id:8,ImgUrl:"https://static.thenounproject.com/png/95044-200.png",Name:"Car Breakdown",SubCategories:[]},
-  // {Id:9,ImgUrl:"https://static.thenounproject.com/png/753-200.png",Name:"Potholes",SubCategories:[]},
-  // {Id:10,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[]},
-  // {Id:11,ImgUrl:"https://static.thenounproject.com/png/16017-200.png",Name:"Trees",SubCategories:[]},
-  // {Id:12,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Walkways",SubCategories:[]}]
-  // ];
-  public categories:Array<any> = 
-  [{Id:1,ImgUrl:"assets/imgs/complaints/traffic-light.png",Name:"Traffic Light",SubCategories:[]},
-  {Id:2,ImgUrl:"https://static.thenounproject.com/png/16017-200.png",Name:"Trees",SubCategories:[]},
-  {Id:3,ImgUrl:"https://static.thenounproject.com/png/35166-200.png",Name:"Pedestrian",SubCategories:[]},
-  {Id:4,ImgUrl:"https://image.flaticon.com/icons/svg/55/55166.svg",Name:"Road",SubCategories:[]},
-  {Id:5,ImgUrl:"assets/imgs/complaints/animal.png",Name:"Animal",SubCategories:[]},
-  {Id:7,ImgUrl:"assets/imgs/complaints/trash.png",Name:"Garbage",SubCategories:[]},
-  {Id:8,ImgUrl:"assets/imgs/complaints/building.png",Name:"Building",SubCategories:[]},
-  {Id:9,ImgUrl:"assets/imgs/complaints/drain.png",Name:"Drainage",SubCategories:[]},
-  {Id:11,ImgUrl:"assets/imgs/complaints/toilet.png",Name:"Toilet",SubCategories:[]},
-  {Id:12,ImgUrl:"assets/imgs/complaints/park.png",Name:"Parks",SubCategories:[]},
-  {Id:13,ImgUrl:"assets/imgs/complaints/transport.png",Name:"Transport",SubCategories:[]}
-  ];
-
-
-  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,public navParams: NavParams) {
+  public allCategories:AngularFirestoreCollection<IComplaintCategory>;
+ 
+  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: ComplaintsProvider,public navParams: NavParams) {
     this.location = this.navParams.get('location');
   }
 
   public ngOnInit() { this.captures = [];}
 
   public ngAfterViewInit() {
-    
+    this.getComplaintCategories();
     this.slides.lockSwipes(true);
-    console.log(this.categories)
       //for desktop
 
       // if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -141,4 +111,14 @@ export class ComplaintModalPage  implements OnInit {
   submitComplaint(){
     this.viewCtrl.dismiss({'submitted':true});
   }
+
+  getImgSrc(name:string){
+    return this.imgRoot + name + '.png'
+  }
+
+  getComplaintCategories(){
+    this.allCategories = <any>this.complaintsProvider.GetComplaintCategories().valueChanges();
+  }
+
+  
 }

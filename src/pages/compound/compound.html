@@ -24,7 +24,7 @@
                         <ion-item>
                             <ion-input type="text" placeholder="Compound/ Vehicle Number" [(ngModel)]="scannedData.compoundNo"></ion-input>
                             <button ion-button icon-only class="round-icon-btns" id="scanBtn"  (click)="triggerInput()" item-end>
-                                <ion-icon name="qr-scanner"></ion-icon>
+                                <ion-icon ios="ios-barcode" md="md-barcode"></ion-icon>
                             </button>
                             <!-- <button ion-button icon-only class="round-icon-btns" id="scanBtn" style="border-radius: 50%;width:35px;height:35px;margin: 0;" (click)="startScanner()" item-end>
                                 <ion-icon name="qr-scanner"></ion-icon>
@@ -45,7 +45,7 @@
                     </ion-item>
                 </ion-card>
                 <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
-                    <button ion-button block color="light" (click)="pay()">Pay Now</button>
+                    <button ion-button block color="secondary" (click)="pay()">Pay Now</button>
                     <!-- <div *ngIf="scannedData.text">
                         <label>Your barcode is</label>
                         <br>
