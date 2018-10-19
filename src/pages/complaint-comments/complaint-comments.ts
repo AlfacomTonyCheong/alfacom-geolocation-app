@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavParams, ViewController } from 'ionic-angular';
+import { ComplaintsProvider } from '../../providers/complaints/complaints';
+import { IComplaintComment } from '../../interface/complaint.interface';
 
 /**
  * Generated class for the ComplaintCommentsPage page.
@@ -14,14 +16,28 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'complaint-comments.html',
 })
 export class ComplaintCommentsPage {
-  comments;
+  commentId: string;
+  comments$;
+  newCommentText: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.comments = this.navParams.get('comments').valueChanges();
+  constructor(public viewCtrl: ViewController, public navParams: NavParams, private complaintsProvider: ComplaintsProvider) {
+    this.commentId = this.navParams.get('commentId');
+    this.comments$ = this.navParams.get('comments').valueChanges();
   }
 
   ionViewDidLoad() {
     
   }
 
+  dismiss(){
+    this.viewCtrl.dismiss();
+  }
+
+  submitNewComment(){
+    var newComment: IComplaintComment = {
+      content: this.newCommentText,
+      createdBy: 'System'
+    }
+    this.complaintsProvider.AddNewComment(this.commentId, newComment);
+  }
 }

@@ -1,3 +1,44 @@
 page-complaint-comments {
+    .loading-wrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .loading-text{
+        margin-left: 10px;
+        font-size: 1.6rem;
+    }
+    .comments-wrapper{
+        height: calc(100% - 50px);
+    }
+    .comment-timestamp{
+        font-size: 1.4rem;
+        color: color($colors, unfocused);
+    }
+    .no-scroll > .scroll-content{
+        overflow:hidden;
+    }
 
+    .box {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
+    }
+    .box .row.content{
+        display:flex;
+        flex-flow: column;
+        flex: 1 1 auto;
+    }
+    .box .row.content > .scroll-content {
+        overflow-y: scroll;
+    }
+    .box .row.footer{
+        flex: 0 1 auto;
+        padding: 5px;
+        background-color: color($colors, background);
+        border: 1px solid #ccc;
+    }
+    .comment-textarea{
+        background-color: color($colors, surface);
+    }
 }

@@ -38,6 +38,14 @@ ion-menu .menu-inner{
 	text-align: center;
 }
 
+.navbar-title-center{
+	position: absolute;
+	top: 0; right: 0; bottom: 0; left: 0;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
 
 /* Ionic Theme Override 

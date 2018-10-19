@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams,ModalController,ViewController,Slides } from 'ionic-angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonicPage, NavParams,ModalController,ViewController,Slides } from 'ionic-angular';
 import { ComplaintsProvider } from '../../providers/complaints/complaints';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { IComplaintCategory } from '../../interface/complaint.interface';
+import { ComplaintCategory } from '../../app/enums';
 
 /**
  * Generated class for the ComplaintPage page.
@@ -16,22 +17,25 @@ import { IComplaintCategory } from '../../interface/complaint.interface';
   selector: 'page-complaint-modal',
   templateUrl: 'complaint-modal.html',
 })
-export class ComplaintModalPage  implements OnInit {
+export class ComplaintModalPage implements OnInit {
   @ViewChild('slides') slides: Slides;
 
   public imgRoot:string = "assets/imgs/complaints/"
   public selectedCategory: number;
-  public selectedIcon: any = {Id:1,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[]}
-  public secondPage:boolean = false;
-  public location:string;
+  public selectedIcon: any = { Id: ComplaintCategory.Traffic, ImgUrl: "https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png", Name: "Traffic", SubCategories: [] }
+  public secondPage: boolean = false;
+  public locationLatLng: google.maps.LatLng;
+  public location: string;
+  public description: string;
   public captures: Array<any> = [];
   public allCategories:AngularFirestoreCollection<IComplaintCategory>;
  
   public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: ComplaintsProvider,public navParams: NavParams) {
     this.location = this.navParams.get('location');
+    this.locationLatLng = this.navParams.get('locationLatLng');
   }
 
-  public ngOnInit() { this.captures = [];}
+  public ngOnInit() { this.captures = []; }
 
   public ngAfterViewInit() {
     this.getComplaintCategories();
@@ -51,33 +55,33 @@ export class ComplaintModalPage  implements OnInit {
   //     this.captures.push(this.canvas.nativeElement.toDataURL("image/png"));
   // }
 
-  readUrl(event:any) {
-    
+  readUrl(event: any) {
+
     if (event.target.files && event.target.files.length > 0) {
       console.log(event.target.files.length)
-      if (event.target.files.length + this.captures.length < 5){
-        for (let img of event.target.files){
+      if (event.target.files.length + this.captures.length < 5) {
+        for (let img of event.target.files) {
           var reader = new FileReader();
-    
+
           reader.onload = (event: ProgressEvent) => {
-            this.captures.push((<FileReader>event.target).result) 
+            this.captures.push((<FileReader>event.target).result)
           }
-      
+
           reader.readAsDataURL(img);
         }
-      }else{
+      } else {
         alert('Error! Only a maximum of 4 files can be uploaded.')
       }
     }
   }
 
-  triggerInput(){
+  triggerInput() {
     let el: HTMLElement = document.getElementById("imgInput") as HTMLElement;
     el.click();
   }
 
-  closeModal(){
-    this.viewCtrl.dismiss({'submitted':false});
+  closeModal() {
+    this.viewCtrl.dismiss({ 'submitted': false });
   }
 
   nextSlide() {
@@ -93,14 +97,14 @@ export class ComplaintModalPage  implements OnInit {
     this.slides.lockSwipes(true);
   }
 
-  selectCategory(icon){
+  selectCategory(icon) {
     this.selectedIcon = icon;
     console.log(this.selectedIcon)
     this.nextSlide();
   }
 
-  removeImage(img){
-    if (img){
+  removeImage(img) {
+    if (img) {
       var index = this.captures.indexOf(img, 0);
       if (index > -1) {
         this.captures.splice(index, 1);
@@ -108,8 +112,12 @@ export class ComplaintModalPage  implements OnInit {
     }
   }
 
-  submitComplaint(){
-    this.viewCtrl.dismiss({'submitted':true});
+  submitComplaint() {
+    this.viewCtrl.dismiss({
+      submitted: true,
+      category: ComplaintCategory.Traffic, // TEMP VALUE 
+      description: this.description
+    });
   }
 
   getImgSrc(name:string){

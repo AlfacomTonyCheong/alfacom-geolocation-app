@@ -7,9 +7,9 @@ import { GeoQueryDocument } from 'geofirex';
 import { GeoPoint, Timestamp } from '@firebase/firestore-types';
 import { first } from 'rxjs/operators';
 import { IComplaint, IComplaintComment, IComplaintLike } from '../../interface/complaint.interface';
-import { ComplaintCategory } from '../../app/enums';
+import { ComplaintCategory, ComplaintLikeType } from '../../app/enums';
 import * as moment from 'moment';
-import { ModalController } from 'ionic-angular';
+import { ModalController, ToastController, Toast } from 'ionic-angular';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 
 declare var google: any;
@@ -30,6 +30,7 @@ export class GoogleMapAgmComponent {
   map: google.maps.Map;
   mapCanvas: HTMLElement;
   complaintInfoWrapper: HTMLElement;
+  geocoder: google.maps.Geocoder;
   overlay: google.maps.OverlayView;
   infoWindow: google.maps.InfoWindow;
   mapOptions: google.maps.MapOptions = {
@@ -104,8 +105,12 @@ export class GoogleMapAgmComponent {
 
   points: Observable<GeoQueryDocument[]>;
 
-  constructor(private geolocationProvider: GeolocationProvider, private complaintsProvider: ComplaintsProvider, private modalCtrl: ModalController) {
+  constructor(private geolocationProvider: GeolocationProvider, private complaintsProvider: ComplaintsProvider, private modalCtrl: ModalController, private toastCtrl: ToastController) {
 
+  }
+
+  ngOnDestroy() {
+    this.toast && this.toast.dismiss();
   }
 
   onMapReady(map) {
@@ -116,8 +121,8 @@ export class GoogleMapAgmComponent {
 
     this.complaintInfoWrapper = document.getElementById('complaint-info_' + this.canvasId);
 
+    this.geocoder = new google.maps.Geocoder();
     this.infoWindow = new google.maps.InfoWindow();
-
     this.overlay = new google.maps.OverlayView();
     this.overlay.draw = function () { };
     this.overlay.setMap(this.map);
@@ -165,6 +170,7 @@ export class GoogleMapAgmComponent {
   currentComplaintSocialData: any;
   currentComplaintComments: AngularFirestoreCollection<IComplaintComment>;
   currentComplaintLikes: AngularFirestoreCollection<IComplaintLike>;
+  likeBtnDisabled: boolean;
   getComplaintPoints() {
     this.points = this.complaintsProvider.GeoFireX_GetInRadiusObs(this.map.getCenter().lat(), this.map.getCenter().lng(), 5);
     this.points.pipe(first()).subscribe((data) => {
@@ -216,17 +222,18 @@ export class GoogleMapAgmComponent {
     google.maps.event.addListenerOnce(this.map, 'center_changed', this.hideComplaintInfoWrapper);
   }
 
-  getComplaintSocialData(){
+  getComplaintSocialData() {
     this.currentComplaintSocialData = this.complaintsProvider.GetSocialData(this.currentComplaintId).valueChanges();
     //this.currentComplaintLikes = this.complaintsProvider.GetLikes(this.currentComplaintId);
   }
-  
-  async showCommentsModal(){
+
+  async showCommentsModal() {
     this.currentComplaintComments = this.complaintsProvider.GetComments(this.currentComplaintId);
-  
+
     var modalPage = this.modalCtrl.create(
       'ComplaintCommentsPage',
       {
+        commentId: this.currentComplaintId,
         comments: this.currentComplaintComments
       },
       {
@@ -245,6 +252,26 @@ export class GoogleMapAgmComponent {
   hideComplaintInfoWrapper = () => {
     console.log('hide');
     this.complaintInfoWrapper.classList.remove('show');
+  }
+
+  onLikeBtnClick() {
+    this.likeBtnDisabled = true;
+    this.complaintsProvider.GetIfLikeExistsByUser(this.currentComplaintId, 'System').pipe(first()).subscribe((exists) => {
+      console.log('like exists: ' + exists);
+      if (exists[0] == true) {
+        console.log('delete like');
+        this.complaintsProvider.DeleteLike(this.currentComplaintId, 'System');
+      }
+      else {
+        console.log('add like');
+        var like: IComplaintLike = {
+          type: ComplaintLikeType.Like,
+          createdBy: 'System'
+        }
+        this.complaintsProvider.AddNewLike(this.currentComplaintId, like);
+      }
+    })
+    setTimeout(() => { this.likeBtnDisabled = false }, 3000);
   }
 
   //===========================
@@ -419,7 +446,7 @@ export class GoogleMapAgmComponent {
       // ask Google Map to get the position, corresponding to a pixel on the map
       var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
 
-      //this.openComplaintModal(pixelLatLng);
+      this.openComplaintModal(pixelLatLng);
     }
   }
 
@@ -440,12 +467,64 @@ export class GoogleMapAgmComponent {
     }
   }
 
+  openComplaintModal(latLng: google.maps.LatLng) {
+    this.reverseGeocode(latLng.lat(), latLng.lng()).then((result) => {
+      var modalPage = this.modalCtrl.create(
+        'ComplaintModalPage',
+        {
+          location: result,
+          locationLatLng: latLng
+        },
+        {
+          showBackdrop: true,
+          enableBackdropDismiss: true
+        }
+      );
+      modalPage.present();
+
+      modalPage.onDidDismiss(data => {
+        if (data && data.submitted) {
+          var newComplaint: IComplaint = {
+            category: data.category,
+            description: data.description,
+            createdBy: 'System'
+          };
+          this.complaintsProvider.AddNewComplaint(newComplaint, latLng.lat(), latLng.lng());
+          this.showToast("Complaint successfully submitted!")
+          this.map.panTo({ lat: latLng.lat(), lng: latLng.lng() })
+        }
+      });
+    });
+  }
+
   //===========================
   // Misc Functions
   //===========================
-  getCategoryTitle(type: number){
+  reverseGeocode(lat: number, lng: number) {
+    return new Promise((resolve, reject) => {
+      this.geocoder.geocode({ 'location': { lat: lat, lng: lng } }, (results, status) => {
+        if (status.toString() === 'OK') {
+          if (results[0]) {
+            resolve(results[0].formatted_address)
+          } else {
+            resolve("Latitude: " + lat + "; Longtitude: " + lng)
+          }
+        } else {
+          resolve("Latitude: " + lat + "; Longtitude: " + lng)
+        }
+      })
+    })
+  }
+
+  toast: Toast;
+  async showToast(msg: string) {
+    this.toast = this.toastCtrl.create({ message: msg, position: 'bottom', duration: 3000 });
+    await this.toast.present();
+  }
+
+  getCategoryTitle(type: number) {
     var val;
-    switch(type){
+    switch (type) {
       case 1:
         val = 'Traffic'; break;
       case 2:
@@ -459,18 +538,17 @@ export class GoogleMapAgmComponent {
       case 6:
         val = 'Car Breakdown'; break;
     }
-    return val;  
+    return val;
   }
 
-  getMomentFromNow(date: Timestamp){
+  getMomentFromNow(date: Timestamp) {
     return moment(date.toDate()).fromNow();
   }
-
 
   //===========================
   // Dev Functions
   //===========================
-  onDevButtonClick(){
+  onDevButtonClick() {
     this.seedComplaintComment();
     this.seedComplaintLike();
   }
@@ -503,7 +581,7 @@ export class GoogleMapAgmComponent {
     }
   }
 
-  seedComplaintComment(){
+  seedComplaintComment() {
     var comment: IComplaintComment = {
       content: 'This is yet another seeded comment.',
       createdBy: 'System'
@@ -511,7 +589,7 @@ export class GoogleMapAgmComponent {
     this.complaintsProvider.AddNewComment('vrBGi6MCXq2kLVlAYX2Y', comment);
   }
 
-  seedComplaintLike(){
+  seedComplaintLike() {
     var like: IComplaintLike = {
       type: 1,
       createdBy: 'System'

@@ -3,6 +3,7 @@ import * as firebaseApp from 'firebase/app';
 import * as geofirex from 'geofirex';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { map, first } from 'rxjs/operators';
 import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory } from '../../interface/complaint.interface';
 
 /*
@@ -65,18 +66,45 @@ export class ComplaintsProvider {
     socialDataDoc.collection<IComplaintLike>(this.likesCollection).add(like);
   }
 
+  DeleteLike(complaintId: string, author: string){
+    var socialDataDoc = this.db.doc(this.socialDataCollection + '/' + complaintId);
+    socialDataDoc.collection<IComplaintLike>(this.likesCollection, ref => ref.where('createdBy', '==', author).limit(1)).snapshotChanges().pipe(
+      first(),
+      map(docs => docs.map(doc => {
+        const data = doc.payload.doc.data() as IComplaintLike;
+        const id = doc.payload.doc.id;
+        this.db.doc(this.socialDataCollection + '/' + complaintId + '/' + this.likesCollection + '/' + id).delete().then(()=>{
+          console.log('Deleting like by ' + author + ' for complaint: ' + complaintId);
+        }).catch(error => {
+          console.error('Error deleting like: ' + error);
+        });
+      }))
+    ).subscribe();
+  }
+
   GetSocialData(complaintId: string){
     return this.db.doc(this.socialDataCollection + '/' + complaintId);
   }
 
   GetComments(complaintId: string){
     var socialDataDoc = this.db.doc(this.socialDataCollection + '/' + complaintId);
-    return socialDataDoc.collection<IComplaintComment>(this.commentsCollection);
+    return socialDataDoc.collection<IComplaintComment>(this.commentsCollection, ref => {
+      return ref.orderBy('created', 'desc');
+    });
   }
 
   GetLikes(complaintId: string){
     var socialDataDoc = this.db.doc(this.socialDataCollection + '/' + complaintId);
     return socialDataDoc.collection<IComplaintLike>(this.likesCollection);
+  }
+
+  GetIfLikeExistsByUser(complaintId: string, createdBy: string){
+    var socialDataDoc = this.db.doc(this.socialDataCollection + '/' + complaintId);
+    return socialDataDoc.collection<IComplaintLike>(this.likesCollection, ref => ref.where('createdBy', '==', createdBy).limit(1)).snapshotChanges().pipe(
+      map(docs => docs.map(doc => {
+        return doc.payload.doc.exists;
+      }))
+    );
   }
 
   GenerateNewId(){
