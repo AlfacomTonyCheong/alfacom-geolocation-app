@@ -115,7 +115,7 @@ export class ComplaintModalPage implements OnInit {
   submitComplaint() {
     this.viewCtrl.dismiss({
       submitted: true,
-      category: this.selectedIcon.Id,
+      category: ComplaintCategory.Traffic, // TEMP VALUE 
       description: this.description
     });
   }
