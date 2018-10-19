@@ -5,14 +5,14 @@
   "targets": {
     "alfacom-geolocation-app": {
       "hosting": {
-        "darien": [
-          "alfacom-geolocation-app-darien"
+        "original": [
+          "alfacom-geolocation-app"
         ],
         "parkir": [
           "parkir"
         ],
-        "original": [
-          "alfacom-geolocation-app"
+        "darien": [
+          "alfacom-geolocation-app-darien"
         ]
       }
     }
