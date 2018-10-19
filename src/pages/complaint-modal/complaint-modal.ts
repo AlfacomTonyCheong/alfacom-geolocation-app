@@ -1,6 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+<<<<<<< HEAD
 import { IonicPage, NavController, NavParams, ModalController, ViewController, Slides } from 'ionic-angular';
 import { ComplaintCategory } from '../../app/enums';
+=======
+import { IonicPage, NavController, NavParams,ModalController,ViewController,Slides } from 'ionic-angular';
+import { ComplaintsProvider } from '../../providers/complaints/complaints';
+import { AngularFirestoreCollection } from '@angular/fire/firestore';
+import { IComplaintCategory } from '../../interface/complaint.interface';
+>>>>>>> 16567d6462304b7c330ffd9fccacbdec6b99b6ca
 
 /**
  * Generated class for the ComplaintPage page.
@@ -17,6 +24,7 @@ import { ComplaintCategory } from '../../app/enums';
 export class ComplaintModalPage implements OnInit {
   @ViewChild('slides') slides: Slides;
 
+  public imgRoot:string = "assets/imgs/complaints/"
   public selectedCategory: number;
   public selectedIcon: any = { Id: ComplaintCategory.Traffic, ImgUrl: "https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png", Name: "Traffic", SubCategories: [] }
   public secondPage: boolean = false;
@@ -24,6 +32,7 @@ export class ComplaintModalPage implements OnInit {
   public location: string;
   public description: string;
   public captures: Array<any> = [];
+<<<<<<< HEAD
   // public categories:Array<any> = 
   // [[{Id:1,ImgUrl:"https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png",Name:"Traffic",SubCategories:[
   //   {Id:2,ImgUrl:"https://static.thenounproject.com/png/16017-200.png",Name:"Trees"},
@@ -69,6 +78,11 @@ export class ComplaintModalPage implements OnInit {
 
 
   public constructor(public viewCtrl: ViewController, public modalCtrl: ModalController, public navParams: NavParams) {
+=======
+  public allCategories:AngularFirestoreCollection<IComplaintCategory>;
+ 
+  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: ComplaintsProvider,public navParams: NavParams) {
+>>>>>>> 16567d6462304b7c330ffd9fccacbdec6b99b6ca
     this.location = this.navParams.get('location');
     this.locationLatLng = this.navParams.get('locationLatLng');
   }
@@ -76,6 +90,7 @@ export class ComplaintModalPage implements OnInit {
   public ngOnInit() { this.captures = []; }
 
   public ngAfterViewInit() {
+<<<<<<< HEAD
 
     this.slides.lockSwipes(true);
     console.log(this.categories)
@@ -87,6 +102,18 @@ export class ComplaintModalPage implements OnInit {
     //         this.video.nativeElement.play();
     //     });
     // }
+=======
+    this.getComplaintCategories();
+    this.slides.lockSwipes(true);
+      //for desktop
+
+      // if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      //     navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      //         this.video.nativeElement.src = window.URL.createObjectURL(stream);
+      //         this.video.nativeElement.play();
+      //     });
+      // }
+>>>>>>> 16567d6462304b7c330ffd9fccacbdec6b99b6ca
   }
 
   // public capture() {
@@ -158,4 +185,14 @@ export class ComplaintModalPage implements OnInit {
       description: this.description
     });
   }
+
+  getImgSrc(name:string){
+    return this.imgRoot + name + '.png'
+  }
+
+  getComplaintCategories(){
+    this.allCategories = <any>this.complaintsProvider.GetComplaintCategories().valueChanges();
+  }
+
+  
 }

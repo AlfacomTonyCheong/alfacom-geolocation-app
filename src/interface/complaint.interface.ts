@@ -31,3 +31,7 @@ export interface IComplaintLike{
     created?: Date,
     createdBy?: string
 }
+
+export interface IComplaintCategory{
+    name:string
+}

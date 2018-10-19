@@ -3,8 +3,8 @@ import * as firebaseApp from 'firebase/app';
 import * as geofirex from 'geofirex';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { IComplaint, IComplaintComment, IComplaintLike } from '../../interface/complaint.interface';
 import { map, first } from 'rxjs/operators';
+import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory } from '../../interface/complaint.interface';
 
 /*
   Generated class for the ComplaintsProvider provider.
@@ -17,6 +17,7 @@ export class ComplaintsProvider {
 
   collection: string ='complaints';
   
+  categoryCollection: string = 'complaintCategory';
   socialDataCollection: string = 'complaintSocialData';
   commentsCollection: string = 'comments';
   likesCollection: string = 'likes';
@@ -108,5 +109,11 @@ export class ComplaintsProvider {
 
   GenerateNewId(){
     return this.db.collection(this.collection).ref.doc().id;
+  }
+
+  //Complaint Categories
+  GetComplaintCategories(){
+    return this.db.collection<IComplaintCategory>(this.categoryCollection);
+    // return categoryDoc.collection<IComplaintCategory>('Name');
   }
 }
