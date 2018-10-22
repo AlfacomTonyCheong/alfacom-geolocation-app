@@ -20,7 +20,7 @@
 <div [id]="'complaint-info_' + canvasId" class="complaint-wrapper">
   <ion-card class="complaint-container">
     <ion-card-header ion-item>
-      <ion-icon item-right name="walk"></ion-icon>
+      <img item-right class="complaint-icon" [src]="getImgSrc(currentComplaint?currentComplaint.categoryName:'')">
       {{currentComplaint? currentComplaint.categoryName : ''}}
     </ion-card-header>
     <ion-card-content>

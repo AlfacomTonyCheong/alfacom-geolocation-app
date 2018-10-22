@@ -121,7 +121,9 @@ export class ComplaintModalPage implements OnInit {
   }
 
   getImgSrc(name:string){
-    return this.imgRoot + name.toLowerCase() + '.png'
+    if (name){
+      return this.imgRoot + name.toLowerCase() + '.png'
+    }
   }
 
   getComplaintCategories(){

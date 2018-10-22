@@ -27,6 +27,7 @@ declare var google: any;
 export class GoogleMapAgmComponent {
   @Input() canvasId: string;
   @Input() options: IGoogleMapComponentOptions;
+  imgRoot:string = "assets/imgs/complaints/"
   map: google.maps.Map;
   mapCanvas: HTMLElement;
   complaintInfoWrapper: HTMLElement;
@@ -522,10 +523,16 @@ export class GoogleMapAgmComponent {
     this.toast = this.toastCtrl.create({ message: msg, position: 'bottom', duration: 3000 });
     await this.toast.present();
   }
-  
+
   getCategoryTitle(complaint: any) {
     this.complaintsProvider.GetComplaintCategoryById(complaint.category.toString()).then((data)=>{complaint.categoryName = data})
     return complaint;
+  }
+
+  getImgSrc(name:string){
+    if (name){
+      return this.imgRoot + name.toLowerCase() + '.png'
+    }
   }
 
   getMomentFromNow(date: Timestamp) {
