@@ -113,7 +113,31 @@ export class ComplaintsProvider {
 
   //Complaint Categories
   GetComplaintCategories(){
-    return this.db.collection<IComplaintCategory>(this.categoryCollection);
-    // return categoryDoc.collection<IComplaintCategory>('Name');
+    return this.db.collection(this.categoryCollection).snapshotChanges().pipe
+      (map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as IComplaintCategory;
+          const id = a.payload.doc.id;
+          return {Id: id,Name:data.Name} as IComplaintCategory;
+          
+        });
+      }))
+  }
+  
+  GetComplaintCategoryById(categoryId: string){
+    return this.db.doc(this.categoryCollection + '/' + categoryId)
+    .ref.get().then(function(doc) {
+      if (doc.exists) {
+          return doc.data().Name;
+      } else {
+          console.log("No such document!");
+      }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+    // return this.db.doc(this.categoryCollection + '/' + categoryId).snapshotChanges().pipe
+    //   (map(docs => docs.map(doc => {
+    //     return doc.payload.doc.exists;
+    //   })))
   }
 }

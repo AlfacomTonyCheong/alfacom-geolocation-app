@@ -177,6 +177,7 @@ export class GoogleMapAgmComponent {
       for (var d of data) {
         if (this.markers.findIndex(x => x.getTitle() === d.id) == -1) {
           var geoPoint = d.position.geopoint as GeoPoint;
+          d = this.getCategoryTitle(d)
           const marker = new google.maps.Marker({
             position: {
               lat: geoPoint.latitude,
@@ -521,24 +522,10 @@ export class GoogleMapAgmComponent {
     this.toast = this.toastCtrl.create({ message: msg, position: 'bottom', duration: 3000 });
     await this.toast.present();
   }
-
-  getCategoryTitle(type: number) {
-    var val;
-    switch (type) {
-      case 1:
-        val = 'Traffic'; break;
-      case 2:
-        val = 'Trees'; break;
-      case 3:
-        val = 'Walkway'; break;
-      case 4:
-        val = 'Potholes'; break;
-      case 5:
-        val = 'Highways'; break;
-      case 6:
-        val = 'Car Breakdown'; break;
-    }
-    return val;
+  
+  getCategoryTitle(complaint: any) {
+    this.complaintsProvider.GetComplaintCategoryById(complaint.category.toString()).then((data)=>{complaint.categoryName = data})
+    return complaint;
   }
 
   getMomentFromNow(date: Timestamp) {

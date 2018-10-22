@@ -2,6 +2,7 @@ import { GeoPoint } from "@firebase/firestore-types";
 
 export interface IComplaint{
     category: number,
+    categoryName?:string,
     description?: string,
     position?: {
         geohash: string,
@@ -33,5 +34,6 @@ export interface IComplaintLike{
 }
 
 export interface IComplaintCategory{
-    name:string
+    Id:string,
+    Name:string
 }
