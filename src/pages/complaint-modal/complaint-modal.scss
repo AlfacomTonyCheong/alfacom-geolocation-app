@@ -62,13 +62,21 @@ page-complaint-modal {
         // display: block;
         // align-items: center;
         // justify-content: center;
-        flex: 1 0 calc(33% - 10px);
+        flex: 1 0 calc(25% - 10px);
         box-sizing: border-box;
         color: #171e42;
         padding: 5px 0;
         margin: 5px;
-        max-width: 33%;
+        max-width: 25%;
     }
+
+    @media only screen and (max-width: 425px) {
+        .gridChild {
+            flex: 1 0 calc(33% - 10px);
+            max-width: 33%;
+        }
+    }
+
 
     .toolbar-background-md {
         border-color: #b2b2b2;
@@ -83,12 +91,6 @@ page-complaint-modal {
         text-align: left;
     }
     
-
-    .st-btn-container {
-        width: 56px;
-        height: 56px;
-        
-    }
 
     .max-height{
         height: 100%;
@@ -110,12 +112,12 @@ page-complaint-modal {
         background-color: #d1ecb7;
     }
     
-    .button-inner{
+    .gridChild .button-inner{
         padding:10px;
     }
 
 
-    .button-inner > img{
+    .gridChild .button-inner > img{
         width:65px;
         height: 65px;
     }
@@ -129,29 +131,6 @@ page-complaint-modal {
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .full-width-modal-css{
-        height: 100% !important;
-        width: 100% !important;
-        padding:0px;
-        background-color: rgba(0, 0, 0, 0.2);
-        .modal-wrapper {
-            padding:0px;
-            position: absolute;
-            top: 0px;
-            right: 0px;
-            display: block;
-            width: 100%;
-            height: 100%;
-            background-color:#222222;
-        }
-        .backdrop {
-            
-            width:100%;
-            height: 100%;
-        }
-        
     }
 
     #video {

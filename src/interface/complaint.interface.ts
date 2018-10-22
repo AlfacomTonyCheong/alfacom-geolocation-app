@@ -36,4 +36,5 @@ export interface IComplaintLike{
 export interface IComplaintCategory{
     Id:string,
     Name:string
+    Color:string
 }

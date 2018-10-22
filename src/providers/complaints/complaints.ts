@@ -118,7 +118,7 @@ export class ComplaintsProvider {
         return actions.map(a => {
           const data = a.payload.doc.data() as IComplaintCategory;
           const id = a.payload.doc.id;
-          return {Id: id,Name:data.Name} as IComplaintCategory;
+          return {Id: id,Name:data.Name,Color:data.Color} as IComplaintCategory;
           
         });
       }))

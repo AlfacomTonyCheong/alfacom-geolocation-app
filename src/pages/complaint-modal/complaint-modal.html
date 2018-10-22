@@ -28,7 +28,7 @@
                 <div>
                     <div class="grid-container">
                         <div class="gridChild" *ngFor="let icon of allCategories| async" >
-                            <button  ion-button icon-only item-end (click)="selectCategory(icon)" class="round-icon-btns">
+                            <button  ion-button icon-only item-end (click)="selectCategory(icon)" class="round-icon-btns" [style.background]="icon.Color">
                                 <img [src]="getImgSrc(icon.Name)">
                             </button>
                             <small class="icon-name">{{icon.Name}}</small>
