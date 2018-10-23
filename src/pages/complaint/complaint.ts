@@ -23,6 +23,8 @@ export class ComplaintPage {
         recenter: true,
         searchbar: true,
         complaint: true
+      },
+      marker: {
       }
     };
   }

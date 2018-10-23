@@ -26,7 +26,9 @@ export class MGoogleMapsPage {
         recenter: true
       },
       marker: {
-        draggable: true
+        currentPos: true,
+        draggable: true,
+        tapToPlace: true
       }
     }
   }

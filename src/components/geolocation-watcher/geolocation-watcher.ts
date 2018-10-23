@@ -2,6 +2,8 @@ import { Component, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/co
 import { Events, ToastController } from 'ionic-angular';
 import { Subject } from 'rxjs';
 import { IMapPosition } from '../../interface/geolocation.interface';
+import { GeolocationProvider } from '../../providers/geolocation/geolocation';
+import { first } from 'rxjs/operators';
 
 /**
  * Generated class for the GeolocationWatcherComponent component.
@@ -36,7 +38,7 @@ export class GeolocationWatcherComponent {
   locating: boolean;
   loading: boolean;
 
-  constructor(private events: Events, private cdr: ChangeDetectorRef, private toastCtrl: ToastController) {
+  constructor(private events: Events, private cdr: ChangeDetectorRef, private toastCtrl: ToastController, private geolocationProvider: GeolocationProvider) {
 
   }
 
@@ -58,50 +60,53 @@ export class GeolocationWatcherComponent {
 
 
 
-  start = (pos?: IMapPosition) => {
+  start = (pos?: google.maps.LatLng) => {
     console.log('[GeolocationWatcher] Start');
 
     if (pos) {
-      this.myPos = pos;
-      this.getMyPosAddress();
+      this.getMyPosAddress(pos);
     }
-    else if (!this.watchId) {
-
-      this.success = false;
-      this.locating = true;
-      this.loading = true;
-      this.text = 'Locating...';
-
-      this.watchTimer = setTimeout(() => {
-        this.stop('Timed out');
-        this.cdr.detectChanges();
-      }, this.watchTimeout);
-
-      this.watchId = navigator.geolocation.watchPosition((pos) => {
-        console.dir(pos);
-        this.myPos = {
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-          accuracy: pos.coords.accuracy
-        };
-        if (this.myPos.accuracy <= this.accuracyThreshold) {
-          this.stop();
-          this.getMyPosAddress();
-        }
-      }, (err) => {
-        console.error(err);
-      }, this.options);
+    else{
+      this.geolocationProvider.getPosition().pipe(first()).subscribe((pos) => {
+        this.getMyPosAddress(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+      })
     }
+    // else if (!this.watchId) {
+
+    //   this.success = false;
+    //   this.locating = true;
+    //   this.loading = true;
+    //   this.text = 'Locating...';
+
+    //   this.watchTimer = setTimeout(() => {
+    //     this.stop('Timed out');
+    //     this.cdr.detectChanges();
+    //   }, this.watchTimeout);
+
+    //   this.watchId = navigator.geolocation.watchPosition((pos) => {
+    //     console.dir(pos);
+    //     this.myPos = {
+    //       latitude: pos.coords.latitude,
+    //       longitude: pos.coords.longitude,
+    //       accuracy: pos.coords.accuracy
+    //     };
+    //     if (this.myPos.accuracy <= this.accuracyThreshold) {
+    //       this.stop();
+    //       this.getMyPosAddress();
+    //     }
+    //   }, (err) => {
+    //     console.error(err);
+    //   }, this.options);
+    // }
   }
 
-  getMyPosAddress() {
+  getMyPosAddress(latLng: google.maps.LatLng) {
     var geocoder = new google.maps.Geocoder;
-    geocoder.geocode({ 'location': { lat: this.myPos.latitude, lng: this.myPos.longitude } }, (results, status) => {
+    geocoder.geocode({ 'location': latLng }, (results, status) => {
       console.log('Geocode status: ' + status);
       if (status.toString() === 'OK') {
         console.dir(results);
-        this.myPosAddress = results[0].formatted_address;
-        this.update();
+        this.update(results[0].formatted_address, latLng);
       }
     })
   }
@@ -121,12 +126,12 @@ export class GeolocationWatcherComponent {
     }, 2000);
   }
 
-  update() {
+  update(address: string, pos: google.maps.LatLng) {
     console.log(this.myPosAddress);
     this.text = 'Located';
     this.success = true;
     this.cdr.detectChanges();
-    this.events.publish('geolocationWatcher_update', { address: this.myPosAddress,lat: this.myPos.latitude, lng: this.myPos.longitude });
+    this.events.publish('geolocationWatcher_update', { address: address,lat: pos.lat(), lng: pos.lng()});
   }
 
   resetVariables() {

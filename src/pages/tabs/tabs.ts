@@ -19,7 +19,7 @@ export class TabsPage {
   tabRoots = [
     { id: 'tab-complaint', root: 'ComplaintPage', title: 'Complaint', icon: 'sad' },
     { id: 'tab-compound', root: 'CompoundPage', title: 'Compound', icon: 'car' },
-    { id: 'tab-home', root: 'HomePage', title: 'Home', icon: 'home' },
+    { id: 'tab-home', root: 'HomePage', title: 'Park', icon: 'home' },
     { id: 'tab-credit', root: 'CreditPage', title: 'Credit', icon: 'card' },
     { id: 'tab-profile', root: 'ProfilePage', title: 'Profile', icon: 'contact' },
     { id: 'tab-my-mp', root: 'MyMPPage', title: 'My MP', icon: 'contact' }
