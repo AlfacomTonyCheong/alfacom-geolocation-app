@@ -9,7 +9,7 @@ import { first } from 'rxjs/operators';
 import { IComplaint, IComplaintComment, IComplaintLike } from '../../interface/complaint.interface';
 import { ComplaintCategory, ComplaintLikeType } from '../../app/enums';
 import * as moment from 'moment';
-import { ModalController, ToastController, Toast } from 'ionic-angular';
+import { ModalController, ToastController, Toast, Events } from 'ionic-angular';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { GalleryModal } from 'ionic-gallery-modal';
 
@@ -26,9 +26,10 @@ declare var google: any;
   templateUrl: 'google-map-agm.html'
 })
 export class GoogleMapAgmComponent {
+  @Input() dismissCallback;
   @Input() canvasId: string;
   @Input() options: IGoogleMapComponentOptions;
-  imgRoot:string = "assets/imgs/complaints/"
+  imgRoot: string = "assets/imgs/complaints/"
   map: google.maps.Map;
   mapCanvas: HTMLElement;
   complaintInfoWrapper: HTMLElement;
@@ -107,7 +108,13 @@ export class GoogleMapAgmComponent {
 
   points: Observable<GeoQueryDocument[]>;
 
-  constructor(private geolocationProvider: GeolocationProvider, private complaintsProvider: ComplaintsProvider, private modalCtrl: ModalController, private toastCtrl: ToastController) {
+  constructor(
+    private geolocationProvider: GeolocationProvider,
+    private complaintsProvider: ComplaintsProvider,
+    private modalCtrl: ModalController,
+    private toastCtrl: ToastController,
+    private events: Events
+  ) {
 
   }
 
@@ -143,24 +150,88 @@ export class GoogleMapAgmComponent {
   }
 
   initCustomControls() {
-    this.initControl_PlaceSearch();
-    this.initControl_ComplaintPin();
+    if (this.options.controls) {
+      if (this.options.controls.searchbar) this.initControl_PlaceSearch();
+      if (this.options.controls.complaint) this.initControl_ComplaintPin();
+    }
   }
 
   mapCenterChangedTimer;
   mapCenterChangedTimeoutValue = 1000;
   initMapEvents() {
-    this.map.addListener('idle', () => {
-      console.log('Map Idle');
-      this.mapCenterChangedTimer && clearTimeout(this.mapCenterChangedTimer);
-      this.mapCenterChangedTimer = setTimeout(() => {
-        this.getComplaintPoints();
-      }, this.mapCenterChangedTimeoutValue)
+    if (this.options.controls) {
+      if (this.options.controls.complaint) {
+        this.map.addListener('idle', () => {
+          //console.log('Map Idle');
+          this.mapCenterChangedTimer && clearTimeout(this.mapCenterChangedTimer);
+          this.mapCenterChangedTimer = setTimeout(() => {
+            this.getComplaintPoints();
+          }, this.mapCenterChangedTimeoutValue)
+        });
+        this.map.addListener('bounds_changed', () => {
+          this.mapCenterChangedTimer && clearTimeout(this.mapCenterChangedTimer);
+        });
+      }
+      if (this.options.controls.recenter)
+        this.map.addListener('dragstart', () => {
+          //this.showRecenterFab = true;
+        });
+    }
+    if (this.options.marker) {
+      if (this.options.marker.tapToPlace)
+        this.map.addListener('click', (ev) => {
+          console.log('Map clicked: ' + ev.latLng.lat() + ' | ' + ev.latLng.lng());
+          this.setCurrentMarker(ev.latLng.lat(), ev.latLng.lng());
+        });
+
+      if(this.options.marker.currentPos){
+        this.geolocationProvider.getPosition().pipe(first()).subscribe((pos) => {
+          this.setCurrentMarker(pos.coords.latitude, pos.coords.longitude);
+        })
+      }
+    }
+
+  }
+  //===========================
+  // Current Pos Marker
+  //===========================
+  currentMarker: google.maps.Marker;
+  setCurrentMarker(lat: number, lng: number) {
+    if (this.currentMarker) {
+      this.currentMarker.setMap(null);
+    }
+
+    this.currentMarker = new google.maps.Marker({
+      position: {
+        lat: lat,
+        lng: lng
+      },
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      title: 'You\'re Here!',
+      draggable: (this.options.marker ? this.options.marker.draggable : false)
     });
-    this.map.addListener('bounds_changed', () => {
-      this.mapCenterChangedTimer && clearTimeout(this.mapCenterChangedTimer);
+    this.currentMarker.addListener('click', () => {
+      this.infoWindow.setContent(this.currentMarker.getTitle());
+      this.infoWindow.open(this.map, this.currentMarker);
     });
   }
+
+  confirmLocation() {
+    if (this.currentMarker) {
+      var pos = this.currentMarker.getPosition();
+      this.map.panTo({ lat: pos.lat(), lng: pos.lng() });
+      console.log('Confirm Location: ' + JSON.stringify(pos));
+      this.events.publish('geolocationWatcher_start', pos);
+
+      let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + pos.lat() + ',' + pos.lng();
+      canvasSrc += '&size=600x250&zoom=18&maptype=' + google.maps.MapTypeId.ROADMAP + '&key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0';
+      canvasSrc += '&markers=color:red|' + pos.lat() + ',' + pos.lng();
+      this.events.publish('location_canvasImg', canvasSrc);
+      this.dismissCallback && this.dismissCallback();
+    }
+  }
+
 
   //===========================
   // Complaints
@@ -174,6 +245,7 @@ export class GoogleMapAgmComponent {
   currentComplaintLikes: AngularFirestoreCollection<IComplaintLike>;
   likeBtnDisabled: boolean;
   getComplaintPoints() {
+    console.log('Get Complaints');
     this.points = this.complaintsProvider.GeoFireX_GetInRadiusObs(this.map.getCenter().lat(), this.map.getCenter().lng(), 5);
     this.points.pipe(first()).subscribe((data) => {
       for (var d of data) {
@@ -253,7 +325,7 @@ export class GoogleMapAgmComponent {
   }
 
   hideComplaintInfoWrapper = () => {
-    console.log('hide');
+    //console.log('hide');
     this.complaintInfoWrapper.classList.remove('show');
   }
 
@@ -361,6 +433,7 @@ export class GoogleMapAgmComponent {
   // Drag & Drop Pin
   //===========================
   pinEle;
+  pinBgEle;
   pinEleIsDragging: boolean;
   pinEleMouseStartDrag = [0, 0];
   pinEleCenter = [20, 20]; // Change this when size of pin is changed
@@ -368,18 +441,18 @@ export class GoogleMapAgmComponent {
   pinEle_oriTop; pinEle_oriLeft;
   initControl_ComplaintPin() {
     this.pinEle = document.getElementById('complain-pin');
+    this.pinBgEle = document.getElementById('complain-pin-bg');
 
     this.pinEle_oriTop = this.pinEle.style.top;
     this.pinEle_oriLeft = this.pinEle.style.left;
 
     this.pinEle.addEventListener('mousedown', this.PinDragStart);
     this.pinEle.addEventListener('touchstart', this.PinDragStart);
-
   }
 
   PinDragStart = (ev) => {
     if (this.pinEle) {
-      console.log('DragStart');
+      //console.log('DragStart');
       var rect = this.pinEle.getBoundingClientRect();
       var x, y;
       if (ev instanceof TouchEvent) {
@@ -403,7 +476,7 @@ export class GoogleMapAgmComponent {
 
   PinDragMove = (ev) => {
     if (this.pinEle) {
-      console.log('DragMove');
+      //console.log('DragMove');
       var xPos, yPos;
       if (ev instanceof TouchEvent) {
         xPos = ev.touches[0].pageX - this.mapCanvas.getBoundingClientRect().left - this.pinEleCenter[0];
@@ -420,11 +493,11 @@ export class GoogleMapAgmComponent {
 
   PinDragEnd = (ev) => {
     if (this.pinEle) {
-      console.log('DragEnd');
+      //console.log('DragEnd');
       this.pinEle.style.top = this.pinEle_oriTop;
       this.pinEle.style.left = this.pinEle_oriLeft;
 
-      console.dir(ev);
+      //console.dir(ev);
 
       var coordinatesOverDiv;
       if (ev instanceof TouchEvent) {
@@ -446,10 +519,19 @@ export class GoogleMapAgmComponent {
         coordinatesOverDiv[1] + this.pinEleActivePoint[1] - this.pinEleMouseStartDrag[1]
       ];
 
-      // ask Google Map to get the position, corresponding to a pixel on the map
-      var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
+      var pinBgRect = this.pinBgEle.getBoundingClientRect();
+      var mapCanvasRect = this.mapCanvas.getBoundingClientRect()
+      if (coordinatesOverDiv[0] >= pinBgRect.left - mapCanvasRect.left && coordinatesOverDiv[0] <= pinBgRect.right - mapCanvasRect.left &&
+        coordinatesOverDiv[1] >= pinBgRect.top - mapCanvasRect.top && coordinatesOverDiv[1] <= pinBgRect.bottom - mapCanvasRect.top) {
+        // Event is inside pin bg, do nothing
+      }
+      else {
+        // ask Google Map to get the position, corresponding to a pixel on the map
+        var pixelLatLng = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(coordinatesOverDiv[0], coordinatesOverDiv[1]));
 
-      this.openComplaintModal(pixelLatLng);
+        this.openComplaintModal(pixelLatLng);
+      }
+
     }
   }
 
@@ -527,18 +609,18 @@ export class GoogleMapAgmComponent {
   }
 
   getCategoryTitle(complaint: any) {
-    this.complaintsProvider.GetComplaintCategoryById(complaint.category.toString()).then((data)=>{complaint.categoryName = data})
+    this.complaintsProvider.GetComplaintCategoryById(complaint.category.toString()).then((data) => { complaint.categoryName = data })
     return complaint;
   }
 
-  getImgSrc(name:string){
-    if (name){
+  getImgSrc(name: string) {
+    if (name) {
       return this.imgRoot + name.toLowerCase() + '.png'
     }
   }
 
-  viewImages(){
-    var photos = this.currentComplaint.images.map(item => ({url:item}));
+  viewImages() {
+    var photos = this.currentComplaint.images.map(item => ({ url: item }));
     let modal = this.modalCtrl.create(GalleryModal, {
       photos: photos,
       initialSlide: 0

@@ -8,6 +8,10 @@
 
 </agm-map>
 
+<ion-fab *ngIf="options?.controls?.locationUpdate" bottom right>
+    <button ion-fab (click)="confirmLocation()" color="secondary-d2"><ion-icon name="checkmark"></ion-icon></button>
+</ion-fab>
+
 <div class="control-bar">
   <!-- Place Search Controls  -->
   <div class="control-container">
@@ -54,7 +58,7 @@
   </ion-card>
 </div>
 
-<div id="complain-pin-bg"></div>
-<div id="complain-pin"></div>
+<div id="complain-pin-bg" *ngIf="options?.controls?.complaint"></div>
+<div id="complain-pin" *ngIf="options?.controls?.complaint"></div>
 
-<button id="dev-button" ion-button (click)="onDevButtonClick()">DEV FUNC</button>
+<!-- <button id="dev-button" ion-button (click)="onDevButtonClick()">DEV FUNC</button> -->

@@ -6,7 +6,7 @@ export interface IGoogleMapComponentOptions {
         complaint?: boolean,
     },
     marker?: {
-        enabled?: boolean,
+        currentPos?: boolean,
         draggable?: boolean,
         tapToPlace?: boolean
     }
