@@ -26,7 +26,7 @@ export class ComplaintModalPage implements OnInit {
   public secondPage: boolean = false;
   public locationLatLng: google.maps.LatLng;
   public location: string;
-  public description: string;
+  public description: string = "";
   public captures: Array<any> = [];
   public allCategories:AngularFirestoreCollection<IComplaintCategory>;
  
@@ -116,7 +116,8 @@ export class ComplaintModalPage implements OnInit {
     this.viewCtrl.dismiss({
       submitted: true,
       category: this.selectedIcon.Id, // TEMP VALUE 
-      description: this.description
+      description: this.description,
+      images: this.captures
     });
   }
 

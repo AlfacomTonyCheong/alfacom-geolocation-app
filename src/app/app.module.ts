@@ -23,6 +23,9 @@ import { GeolocationProvider } from '../providers/geolocation/geolocation';
 import { HttpClientModule } from '@angular/common/http';
 import {DatePipe} from '@angular/common'
 
+import * as ionicGalleryModal from 'ionic-gallery-modal';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+
 @NgModule({
   declarations: [
     MyApp
@@ -38,7 +41,8 @@ import {DatePipe} from '@angular/common'
     SuperTabsModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: firebaseConfig.apiKey
-    })
+    }),
+    ionicGalleryModal.GalleryModalModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -55,7 +59,11 @@ import {DatePipe} from '@angular/common'
     ComplaintsProvider,
     GeolocationProvider,
     DealsProvider,
-    DatePipe
+    DatePipe,
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: ionicGalleryModal.GalleryModalHammerConfig,
+    }
   ]
 })
 export class AppModule { }

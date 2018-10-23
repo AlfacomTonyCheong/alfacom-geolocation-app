@@ -21,7 +21,8 @@ export class TabsPage {
     { id: 'tab-compound', root: 'CompoundPage', title: 'Compound', icon: 'car' },
     { id: 'tab-home', root: 'HomePage', title: 'Home', icon: 'home' },
     { id: 'tab-credit', root: 'CreditPage', title: 'Credit', icon: 'card' },
-    { id: 'tab-profile', root: 'ProfilePage', title: 'Profile', icon: 'contact' }
+    { id: 'tab-profile', root: 'ProfilePage', title: 'Profile', icon: 'contact' },
+    { id: 'tab-my-mp', root: 'MyMPPage', title: 'My MP', icon: 'contact' }
   ]
   selectedTabIndex: number = 2; // The index of the tab that is selected when the component is initialized
   pageTitle: string;

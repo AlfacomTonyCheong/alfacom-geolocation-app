@@ -7,7 +7,8 @@ export interface IComplaint{
     position?: {
         geohash: string,
         geopoint: GeoPoint
-    }
+    },
+    images?: string[],
     created?: Date,
     createdBy?: string,
     modified?: Date,

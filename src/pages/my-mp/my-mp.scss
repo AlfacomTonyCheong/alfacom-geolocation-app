@@ -1,0 +1,75 @@
+page-my-mp {
+    .profile-pic{
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+    }
+
+    .swiper-slide-active{
+        overflow-y: auto;
+    }
+
+    .slide-zoom{
+        height: 100%;
+    }
+
+    @media (max-width: 576px) {                  
+        .cropped-profile-pic {
+           display: block !important;
+          
+        }
+
+        .profile-pic{
+            display: none !important;
+        }
+     }
+
+     figure{
+        width:100%; /*container-width*/
+        overflow: hidden; /*hide bounds of image */
+        margin:0; /*reset margin of figure tag*/
+     }
+     figure img{
+        display:block; /*remove inline-block spaces*/  
+        width:100%;
+        margin:-10% 0 -80% 0;
+   //width:177.777%;
+     }
+
+
+     .card-background-page {
+
+        ion-card {
+          position: relative;
+          text-align: center;
+
+          width:100%; /*container-width*/
+            overflow: hidden; /*hide bounds of image */
+            margin:auto 0; /*reset margin of figure tag*/
+        }
+
+        ion-card img{
+            display:block; /*remove inline-block spaces*/  
+        width:100%;
+        margin:-10% 0 -80% 0;
+        }
+      
+        .card-title {
+          position: absolute;
+          top: 36%;
+          font-size: 2.0em;
+          width: 100%;
+          font-weight: bold;
+          color: #fff;
+        }
+      
+        .card-subtitle {
+          font-size: 1.0em;
+          position: absolute;
+          top: 52%;
+          width: 100%;
+          color: #fff;
+        }
+      
+      }
+}

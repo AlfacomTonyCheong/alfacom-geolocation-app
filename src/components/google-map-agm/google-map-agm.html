@@ -42,9 +42,13 @@
         </button>
       </ion-col>
       <ion-col align-self-center text-center>
-        <ion-note>
+          
+          <button ion-button icon-only small (click)="viewImages()" *ngIf="currentComplaint?.images?.length > 0">
+              <ion-icon ios="ios-images" md="md-images" item-end></ion-icon>
+            </button>
+        <!-- <ion-note>
           {{currentComplaint ? getMomentFromNow(currentComplaint.created) : ''}}
-        </ion-note>
+        </ion-note> -->
       </ion-col>
     </ion-row>
   </ion-card>

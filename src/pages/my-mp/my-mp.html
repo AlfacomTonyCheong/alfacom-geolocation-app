@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-item no-lines color="primary">
+    <div class="header-summary-container">
+      Total : RM 5.00
+    </div>
+
+    <div class="m-t-sm">
+      <button ion-button block color="light">
+        Park Now
+      </button>
+    </div>
+
+  </ion-item>
+</ion-header>
+
+<ion-content padding>
+  <ion-slides #slides>
+      <ion-slide >
+        <ion-row>
+        <!-- <ion-row    class="card-background-page">
+            <ion-card col-md-6 class="profile-card" *ngFor="let item of mp">
+                <img [src]="getImgSrc(item.ImgName)"/>
+                <div class="card-title">{{item.Name}}</div>
+                <div class="card-subtitle">{{item.Area}}</div>
+              </ion-card> -->
+
+            <ion-card  *ngFor="let item of mp" col-md-6>
+              <figure >
+                  <img class="cropped-profile-pic" [src]="getImgSrc(item.ImgName)" style="display:none">
+               </figure>
+                
+                <ion-card-content>
+                    <ion-item >
+                      <ion-grid>
+                          <ion-row>
+                              <ion-col col-12 col-sm-4 col-md-2>
+                                  <img class="profile-pic" [src]="getImgSrc(item.ImgName)">
+                              </ion-col>
+          
+                              <ion-col col-12 col-sm-8 col-md-10 style="text-align:center">
+                                  <h2>{{item.Name}}</h2>
+                                  <p>{{item.Area}}</p>
+                                  <button ion-button clear item-end (click)="viewComplaints(item)">View</button>
+                              </ion-col>                  
+                            </ion-row>
+                      </ion-grid>
+                      
+                        
+                        
+                        
+                        <ion-row>
+                            <ion-col col-6>
+                              <button ion-button icon-start clear small>
+                                <ion-icon name="thumbs-up"></ion-icon>
+                                <div>12 Likes</div>
+                              </button>
+                            </ion-col>
+                            <ion-col col-6>
+                              <button ion-button icon-start clear small>
+                                <ion-icon name="text"></ion-icon>
+                                <div>4 Comments</div>
+                              </button>
+                            </ion-col >
+                            
+                        </ion-row>  
+                    </ion-item>
+    
+                </ion-card-content>
+                
+              </ion-card>
+        </ion-row>
+          
+      </ion-slide>
+      <ion-slide>
+          <!-- <ion-card>
+              <div class="img-container">
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfXlYfT3kAP6mMQjxF5tydeVfzSCa70eAD3ixi4GPUawH8TDrgQ"/>
+              </div>
+              
+              <ion-card-content>
+                  <ion-card-title>
+                      {{selectedItem.venue.name}}
+                  </ion-card-title>
+                  <p>{{selectedItem.venue.location.formattedAddress}}</p>
+                  <br>
+                  <h4>Only {{selectedItem.venue.location.distance}}m away!</h4>
+                  <br>
+                  <button ion-button block color="secondary" >Redeem</button>
+              </ion-card-content>
+          </ion-card>
+           -->
+      </ion-slide>
+  </ion-slides> 
+</ion-content>

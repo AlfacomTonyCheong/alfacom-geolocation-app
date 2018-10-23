@@ -11,6 +11,7 @@ import { ComplaintCategory, ComplaintLikeType } from '../../app/enums';
 import * as moment from 'moment';
 import { ModalController, ToastController, Toast } from 'ionic-angular';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
+import { GalleryModal } from 'ionic-gallery-modal';
 
 declare var google: any;
 
@@ -489,6 +490,7 @@ export class GoogleMapAgmComponent {
           var newComplaint: IComplaint = {
             category: data.category,
             description: data.description,
+            images: data.images,
             createdBy: 'System'
           };
           this.complaintsProvider.AddNewComplaint(newComplaint, latLng.lat(), latLng.lng());
@@ -533,6 +535,15 @@ export class GoogleMapAgmComponent {
     if (name){
       return this.imgRoot + name.toLowerCase() + '.png'
     }
+  }
+
+  viewImages(){
+    var photos = this.currentComplaint.images.map(item => ({url:item}));
+    let modal = this.modalCtrl.create(GalleryModal, {
+      photos: photos,
+      initialSlide: 0
+    });
+    modal.present();
   }
 
   getMomentFromNow(date: Timestamp) {

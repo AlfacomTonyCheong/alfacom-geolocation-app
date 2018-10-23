@@ -32,6 +32,7 @@
     "firebase": "^5.5.2",
     "geofirex": "0.0.6",
     "ionic-angular": "3.9.2",
+    "ionic-gallery-modal": "^0.2.7",
     "ionic2-super-tabs": "github:AlfacomTonyCheong/ionic2-super-tabs",
     "ionicons": "3.0.0",
     "moment": "^2.22.2",
