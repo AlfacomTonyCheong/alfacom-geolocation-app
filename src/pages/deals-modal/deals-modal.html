@@ -22,20 +22,20 @@
     <ion-slides #slides>
         <ion-slide >
             <ion-list>
-                <ion-item *ngFor="let item of suggestions">
+                <ion-item *ngFor="let item of suggestions ;let i = index">
                     <ion-thumbnail item-start>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfXlYfT3kAP6mMQjxF5tydeVfzSCa70eAD3ixi4GPUawH8TDrgQ">
+                        <img [src]="getImgSrc(i)">
                     </ion-thumbnail>
                     <h2>{{item.venue.name}}</h2>
                     <p>{{item.venue.categories[0].name}}</p>
-                    <button ion-button clear item-end (click)="selectItem(item)">View</button>
+                    <button ion-button clear item-end (click)="selectItem(item,i)">View</button>
                 </ion-item>
             </ion-list>
         </ion-slide>
         <ion-slide>
             <ion-card>
                 <div class="img-container">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfXlYfT3kAP6mMQjxF5tydeVfzSCa70eAD3ixi4GPUawH8TDrgQ"/>
+                    <img [src]="getImgSrc(selectedItem.index)"/>
                 </div>
                 
                 <ion-card-content>

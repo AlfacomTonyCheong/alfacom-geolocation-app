@@ -17,7 +17,7 @@ export class DealsModalPage  implements OnInit {
   @ViewChild('slides') slides: Slides;
   suggestions:any[] = [];
   selectedItem:any;
-  
+  imgRoot:string = "assets/imgs/deals/"
 
 
   public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,public navParams: NavParams) {
@@ -33,8 +33,16 @@ export class DealsModalPage  implements OnInit {
     
   }
 
-  selectItem(item){
+  getImgSrc(name:string){
+    console.log(name)
+    if (name || name == '0'){
+      return this.imgRoot + name.toString().toLowerCase() + '.jpg'
+    }
+  }
+
+  selectItem(item,idx){
     this.selectedItem = item;
+    this.selectedItem.index = idx;
     this.nextSlide();
   }
 
