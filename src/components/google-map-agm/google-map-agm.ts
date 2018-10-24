@@ -461,16 +461,24 @@ export class GoogleMapAgmComponent {
         y = ev.touches[0].pageY - rect.top;
         this.pinEleMouseStartDrag = [x, y];
         this.pinEle.addEventListener('touchmove', this.PinDragMove);
+        this.mapCanvas.addEventListener('touchmove', this.PinDragMove);
+
         this.pinEle.addEventListener('touchend', this.PinDragEnd);
+        this.mapCanvas.addEventListener('touchend', this.PinDragEnd);
+
         this.pinEle.addEventListener('touchcancel', this.PinDragCancel);
+        this.mapCanvas.addEventListener('touchcancel', this.PinDragCancel);
       }
       else if (ev instanceof MouseEvent) {
         x = ev.clientX - rect.left;
         y = ev.clientY - rect.top;
         this.pinEleMouseStartDrag = [x, y];
+        this.pinEle.addEventListener('mousemove', this.PinDragMove);
         this.mapCanvas.addEventListener('mousemove', this.PinDragMove);
-        this.mapCanvas.addEventListener('mouseup', this.PinDragEnd);
+
         this.pinEle.addEventListener('mouseup', this.PinDragEnd);
+        this.mapCanvas.addEventListener('mouseup', this.PinDragEnd);
+        
       }
     }
   }
@@ -504,14 +512,19 @@ export class GoogleMapAgmComponent {
       if (ev instanceof TouchEvent) {
         coordinatesOverDiv = [ev.changedTouches[0].pageX - this.mapCanvas.getBoundingClientRect().left, ev.changedTouches[0].pageY - this.mapCanvas.getBoundingClientRect().top];
         this.pinEle.removeEventListener('touchmove', this.PinDragMove);
+        this.mapCanvas.removeEventListener('touchmove', this.PinDragMove);
         this.pinEle.removeEventListener('touchend', this.PinDragEnd);
+        this.mapCanvas.removeEventListener('touchend', this.PinDragEnd);
         this.pinEle.removeEventListener('touchcancel', this.PinDragCancel);
+        this.mapCanvas.removeEventListener('touchcancel', this.PinDragCancel);
       }
       else {
         coordinatesOverDiv = [ev.clientX - this.mapCanvas.getBoundingClientRect().left, ev.clientY - this.mapCanvas.getBoundingClientRect().top];
+        this.pinEle.removeEventListener('mousemove', this.PinDragMove);
         this.mapCanvas.removeEventListener('mousemove', this.PinDragMove);
-        this.mapCanvas.removeEventListener('mouseup', this.PinDragEnd);
         this.pinEle.removeEventListener('mouseup', this.PinDragEnd);
+        this.mapCanvas.removeEventListener('mouseup', this.PinDragEnd);
+        
       }
 
       // Get position of the active point
