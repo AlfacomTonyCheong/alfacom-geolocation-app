@@ -34,7 +34,7 @@
             console.log('service worker installed');
             reg.onupdatefound = () => {
               const installingWorker = reg.installing;
-              installingWorking.onstatechange = () => {
+              installingWorker.onstatechange = () => {
                 switch (installingWorker.state) {
                   case 'installed':
                     if (navigator.serviceWorker.controller)
