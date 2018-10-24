@@ -28,11 +28,12 @@
   <!-- un-comment this code to enable service worker -->
   <script>
     window.isUpdateAvailable = new Promise((resolve, reject) => {
-      if ('serviceWorker' in navigator && ['localhost', '127'].indexOf(location.hostname) === -1) {
+      if ('serviceWorker' in navigator ) { // && ['localhost', '127'].indexOf(location.hostname) === -1
         navigator.serviceWorker.register('service-worker.js')
           .then((reg) => {
             console.log('service worker installed');
             reg.onupdatefound = () => {
+              console.log('Service worker update found. Installing');
               const installingWorker = reg.installing;
               installingWorker.onstatechange = () => {
                 switch (installingWorker.state) {

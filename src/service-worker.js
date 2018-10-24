@@ -1,33 +1,69 @@
-/**
- * Check out https://googlechromelabs.github.io/sw-toolbox/ for
- * more info on how to use sw-toolbox to custom configure your service worker.
- */
-
-
 'use strict';
-importScripts('./build/sw-toolbox.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.6.1/workbox-sw.js');
 
-self.toolbox.options.cache = {
-  name: 'ionic-cache'
-};
+if (workbox) {
+  console.log(`Yay! Workbox is loaded 🎉`);
+} else {
+  console.log(`Boo! Workbox didn't load 😬`);
+}
 
-// pre-cache our key assets
-// self.toolbox.precache(
-//   [
-//     './build/main.js',
-//     './build/vendor.js',
-//     './build/main.css',
-//     './build/polyfills.js',
-//     'index.html',
-//     'manifest.json'
-//   ]
+// Force development builds
+//workbox.setConfig({ debug: true });
+
+// Force production builds
+workbox.setConfig({ debug: false });
+
+workbox.skipWaiting();
+workbox.clientsClaim();
+
+workbox.precaching.precacheAndRoute([
+    './build/main.js',
+    './build/vendor.js',
+    './build/main.css',
+    './build/polyfills.js',
+    'index.html',
+    'manifest.json'
+])
+// workbox.routing.registerRoute(
+//   // Cache JS files
+//   /.*\.js/,
+//   // Get from the network whenever possible, but fallback to the cached version if the network fails,
+//   workbox.strategies.networkFirst({
+//     cacheName: 'parkir-js-cache'
+//   })
 // );
 
-// dynamically cache any other local assets
-//self.toolbox.router.any('/*', self.toolbox.fastest);
+// workbox.routing.registerRoute(
+//   // Cache CSS files
+//   /.*\.css/,
+//   // Use cache but update in the background ASAP
+//   workbox.strategies.staleWhileRevalidate({
+//     // Use a custom cache name
+//     cacheName: 'parkir-css-cache',
+//   })
+// );
 
-// for any other requests go to the network, cache,
-// and then only use that cached resource if your user goes offline
-self.toolbox.router.default = self.toolbox.networkFirst;
+// workbox.routing.registerRoute(
+//   // Cache image files
+//   /.*\.(?:png|jpg|jpeg|svg|gif)/,
+//   // Use the cache if it's available
+//   workbox.strategies.cacheFirst({
+//     // Use a custom cache name
+//     cacheName: 'parkir-image-cache',
+//     plugins: [
+//       new workbox.expiration.Plugin({
+//         // Cache only 20 images
+//         maxEntries: 20,
+//         // Cache for a maximum of a week
+//         maxAgeSeconds: 7 * 24 * 60 * 60,
+//       })
+//     ],
+//   })
+// );
 
-var SW_VERSION = '1.0';
+// Disable caching
+workbox.routing.registerRoute(
+  // All files
+  /(.*)/,
+  workbox.strategies.networkOnly()
+)
