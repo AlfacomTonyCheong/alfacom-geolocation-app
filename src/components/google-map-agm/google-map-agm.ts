@@ -136,14 +136,15 @@ export class GoogleMapAgmComponent {
     this.overlay.draw = function () { };
     this.overlay.setMap(this.map);
 
+    this.initCustomControls();
+    //this.getComplaintPoints();
+    this.initMapEvents();
+    //this.seedFirestore();
+
     this.geolocationProvider.getPosition().subscribe((pos) => {
       console.log('[Geolocation] Lat: ' + pos.coords.latitude + ' | Lng: ' + pos.coords.longitude + ' | Acc: ' + pos.coords.accuracy);
       this.map.setCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude });
       this.map.panTo(this.map.getCenter());
-      this.initCustomControls();
-      //this.getComplaintPoints();
-      this.initMapEvents();
-      //this.seedFirestore();
     }, (err) => {
       console.error(err);
     })
@@ -184,7 +185,7 @@ export class GoogleMapAgmComponent {
           this.setCurrentMarker(ev.latLng.lat(), ev.latLng.lng());
         });
 
-      if(this.options.marker.currentPos){
+      if (this.options.marker.currentPos) {
         this.geolocationProvider.getPosition().pipe(first()).subscribe((pos) => {
           this.setCurrentMarker(pos.coords.latitude, pos.coords.longitude);
         })
