@@ -16,14 +16,14 @@ workbox.setConfig({ debug: false });
 workbox.skipWaiting();
 workbox.clientsClaim();
 
-workbox.precaching.precacheAndRoute([
-    './build/main.js',
-    './build/vendor.js',
-    './build/main.css',
-    './build/polyfills.js',
-    'index.html',
-    'manifest.json'
-])
+// workbox.precaching.precacheAndRoute([
+//     './build/main.js',
+//     './build/vendor.js',
+//     './build/main.css',
+//     './build/polyfills.js',
+//     'index.html',
+//     'manifest.json'
+// ])
 // workbox.routing.registerRoute(
 //   // Cache JS files
 //   /.*\.js/,
