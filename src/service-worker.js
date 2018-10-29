@@ -15,6 +15,7 @@ workbox.setConfig({ debug: false });
 
 workbox.skipWaiting();
 workbox.clientsClaim();
+workbox.precaching.precacheAndRoute([]);
 
 // workbox.precaching.precacheAndRoute([
 //     './build/main.js',
