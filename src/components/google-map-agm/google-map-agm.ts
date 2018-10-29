@@ -597,7 +597,7 @@ export class GoogleMapAgmComponent {
           };
           this.complaintsProvider.AddNewComplaint(newComplaint, latLng.lat(), latLng.lng(),data.images);
           this.showToast("Complaint successfully submitted!")
-          
+          this.getComplaintPoints();
         }
     });
   })
