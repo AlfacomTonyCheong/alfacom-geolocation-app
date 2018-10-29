@@ -9,10 +9,11 @@ page-login {
         top: 0; right:0; bottom: 0; left: 0;
         background-color: rgba(0,0,0,0.6);
     }
-    .content-wrapper, .success-wrapper{
+    .content-wrapper{
         position: relative;
         margin-top: 120px;
     }
+    
     hr.divider {
         background-color: rgba(255,255,255,0.7);
     }
@@ -30,5 +31,9 @@ page-login {
 
     .success-wrapper{
         
+    }
+
+    ion-spinner, ion-spinner * {
+        stroke: #fff !important; 
     }
 }

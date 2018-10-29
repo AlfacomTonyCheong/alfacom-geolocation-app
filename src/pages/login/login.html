@@ -16,41 +16,28 @@
       <div class="app-subtitle m-t-xs">Park It Right. Parking Done Right.</div>
     </div>
 
-    <hr class="divider m-t-md m-b-lg"/>
+    <hr class="divider m-t-md m-b-lg" />
 
-    <div *ngIf="auth.user | async; then authenticated else guest">
-      <!-- template will replace this div -->
-    </div>
-
-
-    <!-- User NOT logged in -->
-    <ng-template #guest>
-      <!-- <h3>Hello, GUEST</h3>
-          <p>Login to get started...</p> -->
-
-      <button ion-button icon-left block (click)="auth.googleLogin()" color="google">
-        <ion-icon name="logo-google"></ion-icon> Login with Google
-      </button>
-
-    </ng-template>
-
-
-    <!-- User logged in -->
-    <ng-template #authenticated>
-      <div *ngIf="auth.user | async as user">
+    <div *ngIf="authInitCompleted">
+      <div *ngIf="!user">
+        <button ion-button icon-left block (click)="auth.googleLogin()" color="google">
+          <ion-icon name="logo-google"></ion-icon> Login with Google
+        </button>
+      </div>
+      <div *ngIf="user" #userinfo>
         <h3>Hello, {{ user.displayName }}</h3>
-        <img [src]="user.photoURL">
+        <img style="width: 80px; height:80px;" [src]="user.photoURL">
         <p>UID: {{ user.uid }}</p>
         <p>Favorite Color: {{ user?.favoriteColor }} </p>
-        <button (click)="auth.signOut()">Logout</button>
+        <button ion-button (click)="goToTabsPage()">Continue</button>
+        <button ion-button color="light" (click)="auth.signOut()">Logout</button>
       </div>
-    </ng-template>
-  </div>
-
-  <div class="success-wrapper">
-    <div>
-      <ion-spinner></ion-spinner>
-      <div>Login Successful...</div>
+    </div>
+    <div *ngIf="!authInitCompleted" class="success-wrapper">
+      <div>
+        <ion-spinner></ion-spinner>
+        <div>{{loadingText}}</div>
+      </div>
     </div>
   </div>
 </ion-content>

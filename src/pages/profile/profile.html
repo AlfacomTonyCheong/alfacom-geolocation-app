@@ -1,11 +1,44 @@
 <ion-header no-border>
-    <ion-item no-lines color="primary">
+    <!-- <ion-item no-lines color="primary">
 
-    </ion-item>
+    </ion-item> -->
 </ion-header>
 
-<ion-content class="m-t-xl">
-    <ion-list>
+<ion-content>
+    <!-- <ion-item *ngIf="auth.user | async as user">
+        <ion-avatar item-start><img [src]="user.photoURL"></ion-avatar>
+        <h2>{{user.displayName}}</h2>
+        <p>{{user.uid}}</p>
+        <button ion-button item-end icon-only outline color="danger" class="btn-signout" (click)="onSignOut()">
+            <ion-icon name="log-out"></ion-icon>
+        </button>
+    </ion-item> -->
+
+    <div *ngIf="auth.user | async; then userinfo else guestinfo"></div>
+    <ng-template #userinfo>
+        <ion-item *ngIf="auth.user | async as user">
+            <ion-avatar item-start><img [src]="user.photoURL"></ion-avatar>
+            <h2>{{user.displayName}}</h2>
+            <p>{{user.uid}}</p>
+            <button ion-button item-end icon-only outline color="danger" class="btn-signout" (click)="onSignOutClicked()">
+                <ion-icon name="log-out"></ion-icon>
+            </button>
+        </ion-item>
+    </ng-template>
+    <ng-template #guestinfo>
+        <ion-item>
+            <ion-avatar item-start><img src="assets/imgs/buzz.jpeg"></ion-avatar>
+            <h2>Guest</h2>
+            <p>Not logged in.</p>
+            <button ion-button item-end icon-only outline color="secondary" class="btn-signout" (click)="onLogInClicked()">
+                <ion-icon name="log-in"></ion-icon>
+            </button>
+        </ion-item>
+
+    </ng-template>
+
+
+    <ion-list class="settings-list">
         <ion-list-header>General</ion-list-header>
         <button ion-item>
             <ion-icon name="calendar" item-start></ion-icon>
@@ -64,8 +97,8 @@
     </ion-card>
 </ion-content> -->
 
-<div class="avatar-container">
+<!-- <div class="avatar-container">
     <div class="avatar-img-container">
         <img src="assets/imgs/buzz.jpeg">
     </div>
-</div>
+</div> -->

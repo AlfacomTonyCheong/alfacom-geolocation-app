@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
+import { AuthProvider } from '../../providers/auth/auth';
 
 /**
  * Generated class for the ProfilePage page.
@@ -15,11 +16,37 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ProfilePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthProvider, private modalCtrl: ModalController, private alertCtrl: AlertController) {
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProfilePage');
   }
 
+  async onSignOutClicked(){
+    const alert = this.alertCtrl.create({
+      title: 'Sign Out',
+      message: 'Are you sure you want to sign out?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Sign Out',
+          handler: () => {
+            this.auth.signOut();
+          }
+        }
+      ]
+    });
+    await alert.present();
+
+  }
+
+  async onLogInClicked(){
+    const modal = this.modalCtrl.create('LoginPage');
+    await modal.present();
+  }
 }

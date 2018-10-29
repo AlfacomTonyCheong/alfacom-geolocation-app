@@ -14,4 +14,20 @@ page-profile {
             border-radius: 50%;
         }
     }
+
+    .settings-list ion-list-header, .settings-list .item{
+        background-color: transparent;
+    }
+
+    .settings-list ion-list-header {
+        color: color($colors, primary-d2);
+    }
+
+    .item-button.btn-signout{
+        margin: 0;
+        padding: 10px !important;
+        margin-right: -8px;
+        height: 100%;
+        border: none;
+    }
 }

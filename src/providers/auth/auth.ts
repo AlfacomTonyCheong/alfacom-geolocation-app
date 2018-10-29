@@ -29,12 +29,13 @@ export class AuthProvider {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
         if(user) {
-          return this.firestoreProvider.GetUserDoc(user.uid).valueChanges()
+          return this.firestoreProvider.GetUserDoc(user.uid).valueChanges();
         } else {
           return of(null);
         }
       })
-    )
+    );
+    this.events.subscribe('auth_signout', this.signOut);
   }
 
   googleLogin() {
@@ -45,7 +46,7 @@ export class AuthProvider {
   private oAuthLogin(provider){
     return this.afAuth.auth.signInWithPopup(provider).then((credentials) => {
       this.updateUserData(credentials.user);
-      this.events.publish('auth_login');
+      this.events.publish('auth_login_completed');
     }).catch(error => {
       console.error(error);
     });
@@ -65,7 +66,7 @@ export class AuthProvider {
 
   signOut(){
     this.afAuth.auth.signOut().then(() => {
-      this.events.publish('auth_signout');
+      this.events.publish('auth_signout_completed');
     })
   }
 }
