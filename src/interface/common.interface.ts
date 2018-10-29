@@ -16,3 +16,11 @@ export interface IIncidentData {
     category: string,
     description: string
 }
+
+export interface IUser {
+    uid: string;
+    email: string;
+    photoURL?: string;
+    displayName?: string;
+    favoriteColor?: string;
+}
