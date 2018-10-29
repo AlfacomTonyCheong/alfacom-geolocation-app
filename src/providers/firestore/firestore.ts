@@ -18,7 +18,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 export class FirestoreProvider {
 
   complaintsCollection: string = 'complaints';
-  complaintImagesCollection: string = 'complaintImages';
+  complaintImagesFolder: string = 'complaintImages/';
   complaintCategoryCollection: string = 'complaintCategory';
   complaintSocialDataCollection: string = 'complaintSocialData';
   complaintCommentsCollection: string = 'comments';
@@ -56,7 +56,7 @@ export class FirestoreProvider {
     var imagesUploaded = [];
     for (let img of images) {
       var uniqueName = new Date().getTime().toString();
-      await this.afStorage.ref(this.complaintImagesCollection + uniqueName).putString(img, 'data_url').then(snapshot => {
+      await this.afStorage.ref(this.complaintImagesFolder + uniqueName).putString(img, 'data_url').then(snapshot => {
         counter++;
         imagesUploaded.push(uniqueName)
         console.log(imagesUploaded)
@@ -110,7 +110,7 @@ export class FirestoreProvider {
   GetImages(images: string[]){
     var imagesUrl = [];
     for (let img of images){
-      this.afStorage.ref(this.complaintImagesCollection + img).getDownloadURL().toPromise().then((url)=>{
+      this.afStorage.ref(this.complaintImagesFolder + img).getDownloadURL().toPromise().then((url)=>{
         imagesUrl.push(url)
       }).catch((error)=> {
         switch (error.code) {
