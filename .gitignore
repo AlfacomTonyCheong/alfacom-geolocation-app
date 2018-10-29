@@ -29,11 +29,9 @@ plugins/android.json
 plugins/ios.json
 www/
 $RECYCLE.BIN/
-
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-
 config.ts
 .firebase/
 .firebase/hosting.d3d3.cache
