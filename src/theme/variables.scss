@@ -31,6 +31,7 @@ $on-colors: (
   background:  #444,
   surface:     #444,
   error:       #f4f4f4,
+  google: #f4f4f4,
 );
 
 $colors: (
@@ -79,6 +80,8 @@ $colors: (
   on-background: color($on-colors, background),
   on-surface: color($on-colors, surface),
   on-error: color($on-colors, error),
+
+  google: (base: #dd4b39, contrast: color($on-colors, google)),
 );
 
 // Shared Variables
