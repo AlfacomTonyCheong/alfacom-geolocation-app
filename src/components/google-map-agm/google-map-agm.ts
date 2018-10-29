@@ -242,6 +242,7 @@ export class GoogleMapAgmComponent {
   currentComplaint: IComplaint;
   currentComplaintId: string;
   currentComplaintSocialData: any;
+  currentComplaintImages: any[] = [];
   currentComplaintComments: AngularFirestoreCollection<IComplaintComment>;
   currentComplaintLikes: AngularFirestoreCollection<IComplaintLike>;
   likeBtnDisabled: boolean;
@@ -293,6 +294,7 @@ export class GoogleMapAgmComponent {
     this.currentComplaint = marker['complaintData'];
     console.dir(this.currentComplaint);
     this.currentComplaintId = marker['complaintId'];
+    this.getComplaintImages();
     this.getComplaintSocialData();
     this.showComplaintInfoWrapper();
     google.maps.event.addListenerOnce(this.map, 'center_changed', this.hideComplaintInfoWrapper);
@@ -301,6 +303,10 @@ export class GoogleMapAgmComponent {
   getComplaintSocialData() {
     this.currentComplaintSocialData = this.complaintsProvider.GetSocialData(this.currentComplaintId).valueChanges();
     //this.currentComplaintLikes = this.complaintsProvider.GetLikes(this.currentComplaintId);
+  }
+
+  getComplaintImages() {
+    this.currentComplaintImages = this.currentComplaint.images?this.complaintsProvider.GetImages(this.currentComplaint.images):[];
   }
 
   async showCommentsModal() {
@@ -567,6 +573,7 @@ export class GoogleMapAgmComponent {
   }
 
   openComplaintModal(latLng: google.maps.LatLng) {
+    let that = this;
     this.reverseGeocode(latLng.lat(), latLng.lng()).then((result) => {
       var modalPage = this.modalCtrl.create(
         'ComplaintModalPage',
@@ -586,15 +593,14 @@ export class GoogleMapAgmComponent {
           var newComplaint: IComplaint = {
             category: data.category,
             description: data.description,
-            images: data.images,
             createdBy: 'System'
           };
-          this.complaintsProvider.AddNewComplaint(newComplaint, latLng.lat(), latLng.lng());
+          this.complaintsProvider.AddNewComplaint(newComplaint, latLng.lat(), latLng.lng(),data.images);
           this.showToast("Complaint successfully submitted!")
-          this.map.panTo({ lat: latLng.lat(), lng: latLng.lng() })
+          
         }
-      });
     });
+  })
   }
 
   //===========================
@@ -634,7 +640,7 @@ export class GoogleMapAgmComponent {
   }
 
   viewImages() {
-    var photos = this.currentComplaint.images.map(item => ({ url: item }));
+    var photos = this.currentComplaintImages.map(item => ({ url: item }));
     let modal = this.modalCtrl.create(GalleryModal, {
       photos: photos,
       initialSlide: 0
@@ -672,13 +678,14 @@ export class GoogleMapAgmComponent {
     for (var i = 0; i < n; i++) {
       lat += 0.0025;
       complaint.category = this.getRandomComplaintCategory();
-      this.complaintsProvider.AddNewComplaint(complaint, lat, lng);
+      var img = []
+      this.complaintsProvider.AddNewComplaint(complaint, lat, lng,img);
       lat -= 0.0025; lng += 0.0025;
       complaint.category = this.getRandomComplaintCategory();
-      this.complaintsProvider.AddNewComplaint(complaint, lat, lng);
+      this.complaintsProvider.AddNewComplaint(complaint, lat, lng,img);
       lat += 0.0025;
       complaint.category = this.getRandomComplaintCategory();
-      this.complaintsProvider.AddNewComplaint(complaint, lat, lng);
+      this.complaintsProvider.AddNewComplaint(complaint, lat, lng,img);
     }
   }
 

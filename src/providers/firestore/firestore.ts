@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
 import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory } from '../../interface/complaint.interface';
 import { IUser } from '../../interface/common.interface';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 /*
   Generated class for the ComplaintsProvider provider.
@@ -17,6 +18,7 @@ import { IUser } from '../../interface/common.interface';
 export class FirestoreProvider {
 
   complaintsCollection: string = 'complaints';
+  complaintImagesCollection: string = 'complaintImages';
   complaintCategoryCollection: string = 'complaintCategory';
   complaintSocialDataCollection: string = 'complaintSocialData';
   complaintCommentsCollection: string = 'comments';
@@ -26,7 +28,7 @@ export class FirestoreProvider {
 
   geo: geofirex.GeoFireClient;
 
-  constructor(private db: AngularFirestore) {
+  constructor(private db: AngularFirestore, private afStorage: AngularFireStorage) {
     this.geo = geofirex.init(firebaseApp);
   }
 
@@ -49,7 +51,24 @@ export class FirestoreProvider {
     this.geo.collection(this.complaintsCollection).add({ position: point.data }); // geo.point.data generates { geohash: string, geopoint: GeoPoint } object
   }
 
-  AddNewComplaint(complaint: IComplaint, lat: number, lng: number) {
+  async AddNewComplaint(complaint, lat, lng, images) {
+    var counter = 0;
+    var imagesUploaded = [];
+    for (let img of images) {
+      var uniqueName = new Date().getTime().toString();
+      await this.afStorage.ref(this.complaintImagesCollection + uniqueName).putString(img, 'data_url').then(snapshot => {
+        counter++;
+        imagesUploaded.push(uniqueName)
+        console.log(imagesUploaded)
+        if (counter >= images.length) {
+          complaint.images = imagesUploaded;
+          this.AddComplaintData(complaint, lat, lng)
+        }
+      })
+    }
+  };
+
+  AddComplaintData(complaint: IComplaint, lat: number, lng: number) {
     const point = this.geo.point(lat, lng);
     complaint.position = point.data;
     complaint.created = new Date();
@@ -86,6 +105,27 @@ export class FirestoreProvider {
 
   GetSocialData(complaintId: string) {
     return this.db.doc(this.complaintSocialDataCollection + '/' + complaintId);
+  }
+
+  GetImages(images: string[]){
+    var imagesUrl = [];
+    for (let img of images){
+      this.afStorage.ref(this.complaintImagesCollection + img).getDownloadURL().toPromise().then((url)=>{
+        imagesUrl.push(url)
+      }).catch((error)=> {
+        switch (error.code) {
+          case 'storage/object-not-found':
+            console.log("Error! Image: " + img + " doesn't exist")
+      
+          case 'storage/unauthorized':
+          console.log("Error! User doesn't have permission to access " + img);
+
+          case 'storage/unknown':
+          console.log("Error");
+        }
+      });
+    }
+    return imagesUrl;
   }
 
   GetComments(complaintId: string) {

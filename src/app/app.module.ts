@@ -26,6 +26,7 @@ import {DatePipe} from '@angular/common'
 import * as ionicGalleryModal from 'ionic-gallery-modal';
 import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { AuthProvider } from '../providers/auth/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AuthProvider } from '../providers/auth/auth';
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
     HttpClientModule,
     IonicStorageModule.forRoot(),
     SuperTabsModule.forRoot(),
