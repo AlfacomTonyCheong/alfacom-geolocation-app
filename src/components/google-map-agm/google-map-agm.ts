@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { GeolocationProvider } from '../../providers/geolocation/geolocation';
-import { ComplaintsProvider } from '../../providers/complaints/complaints';
+import { FirestoreProvider } from '../../providers/firestore/firestore';
 import { IGoogleMapComponentOptions } from '../../interface/common.interface';
 import { Observable } from 'rxjs';
 import { GeoQueryDocument } from 'geofirex';
@@ -110,7 +110,7 @@ export class GoogleMapAgmComponent {
 
   constructor(
     private geolocationProvider: GeolocationProvider,
-    private complaintsProvider: ComplaintsProvider,
+    private complaintsProvider: FirestoreProvider,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private events: Events
