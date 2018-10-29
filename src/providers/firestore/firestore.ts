@@ -51,20 +51,25 @@ export class FirestoreProvider {
     this.geo.collection(this.complaintsCollection).add({ position: point.data }); // geo.point.data generates { geohash: string, geopoint: GeoPoint } object
   }
 
-  async AddNewComplaint(complaint, lat, lng, images) {
+  async AddNewComplaint(complaint, lat, lng, images?) {
     var counter = 0;
     var imagesUploaded = [];
-    for (let img of images) {
-      var uniqueName = new Date().getTime().toString();
-      await this.afStorage.ref(this.complaintImagesFolder + uniqueName).putString(img, 'data_url').then(snapshot => {
-        counter++;
-        imagesUploaded.push(uniqueName)
-        console.log(imagesUploaded)
-        if (counter >= images.length) {
-          complaint.images = imagesUploaded;
-          this.AddComplaintData(complaint, lat, lng)
-        }
-      })
+
+    if(images && images.length > 0){
+      for (let img of images) {
+        var uniqueName = new Date().getTime().toString();
+        await this.afStorage.ref(this.complaintImagesFolder + uniqueName).putString(img, 'data_url').then(snapshot => {
+          counter++;
+          imagesUploaded.push(uniqueName)
+          console.log(imagesUploaded)
+          if (counter >= images.length) {
+            complaint.images = imagesUploaded;
+          }
+        })
+      }
+    }
+    else{
+      this.AddComplaintData(complaint, lat, lng);
     }
   };
 
