@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonicPage, NavParams,ModalController,ViewController,Slides, Toast, ToastController } from 'ionic-angular';
 import { ComplaintsProvider } from '../../providers/complaints/complaints';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
-import { IComplaintCategory, IComplaint, IComplaintComment, IComplaintLike, IMPComplaint } from '../../interface/complaint.interface';
+import { IComplaintCategory, IComplaint, IComplaintComment, IComplaintLike, IMPComplaint, IMP } from '../../interface/complaint.interface';
 import { ComplaintCategory,ComplaintType } from '../../app/enums';
 import * as moment from 'moment';
 import { Timestamp } from '@firebase/firestore-types';import { FirestoreProvider } from '../../providers/firestore/firestore';
@@ -31,6 +31,7 @@ export class MPComplaintListModalPage implements OnInit {
   public captures: Array<any> = [];
   public allCategories:AngularFirestoreCollection<IComplaintCategory>;
   public allComplaints:AngularFirestoreCollection<IMPComplaint>;
+  mp: IMP;
   currentComplaint: IComplaint;
   currentComplaintId: string;
   currentComplaintSocialData: any;
@@ -40,14 +41,14 @@ export class MPComplaintListModalPage implements OnInit {
  
   public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,
     private complaintsProvider: FirestoreProvider,public navParams: NavParams,public toastCtrl:ToastController) {
-
+      this.mp = this.navParams.get('mp');
+      this.getMPComplaints()
   }
 
   public ngOnInit() { this.captures = []; }
 
   public ngAfterViewInit() {
     this.getComplaintCategories();
-    this.getMPComplaints();
   }
 
   closeModal() {
@@ -106,8 +107,7 @@ export class MPComplaintListModalPage implements OnInit {
 
   
   getMPComplaints(){
-    this.allComplaints = <any>this.complaintsProvider.GetMPComplaints();
-    console.log(this.allComplaints)
+    this.allComplaints = <any>this.complaintsProvider.GetMPComplaints(this.mp.id);
   }
 
 
@@ -150,6 +150,7 @@ export class MPComplaintListModalPage implements OnInit {
           categoryName:data.categoryName,
           subject: data.subject,
           description: data.description,
+          mpId: this.mp.id,
           createdBy: 'System'
         };
         this.complaintsProvider.AddNewMPComplaint(newComplaint);

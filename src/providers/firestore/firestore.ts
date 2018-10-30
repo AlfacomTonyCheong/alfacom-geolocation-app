@@ -4,7 +4,7 @@ import * as geofirex from 'geofirex';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
-import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory,IMPComplaint } from '../../interface/complaint.interface';
+import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory,IMPComplaint, IMP } from '../../interface/complaint.interface';
 import { IUser } from '../../interface/common.interface';
 import { ComplaintType } from '../../app/enums';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -17,7 +17,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 */
 @Injectable()
 export class FirestoreProvider {
-
+  mpCollection: string ='mp';
   mpComplaintCollection: string ='mpComplaints';
   complaintsCollection: string = 'complaints';
   complaintImagesFolder: string = 'complaintImages/';
@@ -116,14 +116,28 @@ export class FirestoreProvider {
     ).subscribe();
   }
 
-  GetMPComplaints(){
+  GetMPs(){
+    return this.db.collection(this.mpCollection).snapshotChanges().pipe
+      (map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as IMP;
+          data.id = a.payload.doc.id;
+          // data.socialData = this.GetSocialData(data.id).valueChanges();
+          return data;
+          
+        });
+      }))
+  }
+
+  GetMPComplaints(mpId){
     return this.db.collection(this.mpComplaintCollection, ref => {
-      return ref.orderBy('created', 'desc')
+      return ref.where('mpId','==',mpId)
     }).snapshotChanges().pipe
       (map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data() as IMPComplaint;
           data.id = a.payload.doc.id;
+          // data.socialData = this.GetSocialData(data.id).valueChanges();
           return data;
           
         });

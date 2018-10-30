@@ -40,6 +40,13 @@ export interface IComplaintCategory{
     Color:string
 }
 
+export interface IMP{
+    id:string,
+    name: number,
+    area?:string,
+    imgName?: string
+}
+
 export interface IMPComplaint{
     id:string,
     category: number,
@@ -49,5 +56,6 @@ export interface IMPComplaint{
     created?: Date,
     createdBy?: string,
     modified?: Date,
-    modifiedBy?: string
+    modifiedBy?: string,
+    mpId?:string
 }

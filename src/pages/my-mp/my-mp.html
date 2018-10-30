@@ -16,7 +16,7 @@
 <ion-content padding>
     <ion-row>
 
-            <ion-card  *ngFor="let item of mp" col-md-6>
+            <ion-card  *ngFor="let item of mp | async" col-md-6>
               <figure >
                   <img class="cropped-profile-pic" [src]="getImgSrc(item.ImgName)" style="display:none">
                </figure>

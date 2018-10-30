@@ -7,7 +7,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { DealsProvider } from '../../providers/deals/deals';
 import { FirestoreProvider } from '../../providers/firestore/firestore';
-import { IComplaint, IComplaintLike, IComplaintComment } from '../../interface/complaint.interface';
+import { IComplaint, IComplaintLike, IComplaintComment, IMP } from '../../interface/complaint.interface';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 
 @IonicPage()
@@ -17,11 +17,7 @@ import { AngularFirestoreCollection } from '@angular/fire/firestore';
 })
 export class MyMPPage {
   imgRoot:string = "assets/imgs/MP/"
-  mp:any[] = [
-    {Name:'Y.B. Tuan Lai Wai Chong',Area:'N22 Teratai',ImgName:'lai'},
-    {Name:'Y.B. Tuan Ir Izham Bin Hashim',Area:'N21 Pandan Indah',ImgName:'izham'},
-    {Name:'Y.B. Puan Haniza Binti Mohamed ',Area:'N20 Lembah Jaya',ImgName:'haniza'}
-  ]
+  mp:AngularFirestoreCollection<IMP>;
   currentComplaint: IComplaint;
   currentComplaintId: string;
   currentComplaintSocialData: any;
@@ -37,6 +33,7 @@ export class MyMPPage {
   }
 
   ionViewDidLoad() {
+    this.mp = <any>this.complaintsProvider.GetMPs();
     //this.initGeolocationWatcher();
     //this.firebaseDoc = this.firebaseProvider.getDocRef('temp/mANmENJSsGo6DZ0Xx8Hn').valueChanges();
     //this.firebaseCollection = this.firebaseProvider.getCollectionRef('temp').valueChanges();
@@ -53,12 +50,11 @@ export class MyMPPage {
 
   viewComplaints(mp:any){
     if (mp){
-      this.currentComplaintComments = this.complaintsProvider.GetComments(this.currentComplaintId);
     
         var modalPage = this.modalCtrl.create(
           'MPComplaintListModalPage',
           {
-            
+            mp:mp
           },
           {
             showBackdrop: true,

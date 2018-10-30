@@ -5,6 +5,7 @@ import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { IComplaintCategory } from '../../interface/complaint.interface';
 import { ComplaintCategory, ComplaintType } from '../../app/enums';
 import { FirestoreProvider } from '../../providers/firestore/firestore';
+import { AuthProvider } from '../../providers/auth/auth';
 
 /**
  * Generated class for the ComplaintPage page.
@@ -32,7 +33,7 @@ export class MPComplaintModalPage implements OnInit {
   public captures: Array<any> = [];
   public allCategories:AngularFirestoreCollection<IComplaintCategory>;
  
-  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: FirestoreProvider,public navParams: NavParams) {
+  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: FirestoreProvider,public navParams: NavParams,private auth: AuthProvider) {
 
   }
 
