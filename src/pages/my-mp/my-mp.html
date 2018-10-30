@@ -14,15 +14,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-slides #slides>
-      <ion-slide >
-        <ion-row>
-        <!-- <ion-row    class="card-background-page">
-            <ion-card col-md-6 class="profile-card" *ngFor="let item of mp">
-                <img [src]="getImgSrc(item.ImgName)"/>
-                <div class="card-title">{{item.Name}}</div>
-                <div class="card-subtitle">{{item.Area}}</div>
-              </ion-card> -->
+    <ion-row>
 
             <ion-card  *ngFor="let item of mp" col-md-6>
               <figure >
@@ -69,26 +61,4 @@
                 
               </ion-card>
         </ion-row>
-          
-      </ion-slide>
-      <ion-slide>
-          <!-- <ion-card>
-              <div class="img-container">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfXlYfT3kAP6mMQjxF5tydeVfzSCa70eAD3ixi4GPUawH8TDrgQ"/>
-              </div>
-              
-              <ion-card-content>
-                  <ion-card-title>
-                      {{selectedItem.venue.name}}
-                  </ion-card-title>
-                  <p>{{selectedItem.venue.location.formattedAddress}}</p>
-                  <br>
-                  <h4>Only {{selectedItem.venue.location.distance}}m away!</h4>
-                  <br>
-                  <button ion-button block color="secondary" >Redeem</button>
-              </ion-card-content>
-          </ion-card>
-           -->
-      </ion-slide>
-  </ion-slides> 
 </ion-content>

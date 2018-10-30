@@ -4,7 +4,8 @@ import * as geofirex from 'geofirex';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
-import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory } from '../../interface/complaint.interface';
+import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory, IMPComplaint } from '../../interface/complaint.interface';
+import { ComplaintType } from '../../app/enums';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 
 /*
@@ -17,8 +18,9 @@ import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage
 export class ComplaintsProvider {
 
   collection: string ='complaints';
-  
+  mpComplaintCollection: string ='mpComplaints';
   complaintImagesFolder: string = 'complaintImages/';
+  mpCategoryCollection: string = 'mpComplaintCategory';
   categoryCollection: string = 'complaintCategory';
   socialDataCollection: string = 'complaintSocialData';
   commentsCollection: string = 'comments';
@@ -80,6 +82,11 @@ export class ComplaintsProvider {
     
   }
 
+  AddNewMPComplaint(complaint) {
+    complaint.created = new Date();
+    this.geo.collection(this.mpComplaintCollection).add(complaint);
+  };
+
   AddNewComment(complaintId: string, comment: IComplaintComment){
     comment.created = new Date();
     var socialDataDoc = this.db.doc(this.socialDataCollection + '/' + complaintId);
@@ -106,6 +113,24 @@ export class ComplaintsProvider {
         });
       }))
     ).subscribe();
+  }
+
+  
+
+  GetMPComplaints(){
+    return this.db.collection(this.mpComplaintCollection, ref => {
+      return ref.orderBy('created', 'desc')
+    }).snapshotChanges().pipe
+      (map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as IMPComplaint;
+          data.id = a.payload.doc.id;
+          return data;
+          // const id = a.payload.doc.id;
+          // return {Id: id,subject:data.subject,description:data.description,created:data.created,createdBy:data.createdBy} as IMPComplaint;
+          
+        });
+      }))
   }
 
   GetSocialData(complaintId: string){
@@ -159,8 +184,9 @@ export class ComplaintsProvider {
   }
 
   //Complaint Categories
-  GetComplaintCategories(){
-    return this.db.collection(this.categoryCollection).snapshotChanges().pipe
+  GetComplaintCategories(type){
+    var collection = type == ComplaintType.General? this.categoryCollection:this.mpCategoryCollection;
+    return this.db.collection(collection).snapshotChanges().pipe
       (map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data() as IComplaintCategory;
@@ -171,8 +197,9 @@ export class ComplaintsProvider {
       }))
   }
   
-  GetComplaintCategoryById(categoryId: string){
-    return this.db.doc(this.categoryCollection + '/' + categoryId)
+  GetComplaintCategoryById(categoryId: string,type){
+    var collection = type == ComplaintType.General? this.categoryCollection:this.mpCategoryCollection;
+    return this.db.doc(collection + '/' + categoryId)
     .ref.get().then(function(doc) {
       if (doc.exists) {
           return doc.data().Name;

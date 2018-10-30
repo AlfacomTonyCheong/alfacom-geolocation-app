@@ -1,0 +1,115 @@
+page-mp-complaint-modal {
+    // .scroll-content{
+    //     background-color: #999;
+    // }
+    .segment-md-secondary .segment-button {
+        color: black;
+    }
+
+    .segment-ios .segment-button{
+        border:1px solid !important;
+    }
+
+    .gridChild .icon-name{
+        display:block;
+        color:black;
+        line-height: 25px;
+    }
+
+    .category .icon-name{
+        text-align: center;
+    }
+    .grid-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:center;
+    }
+    .gridChild {
+        flex: 1 0 calc(25% - 10px);
+        box-sizing: border-box;
+        color: #171e42;
+        padding: 5px 0;
+        margin: 5px;
+        max-width: 25%;
+    }
+
+    @media only screen and (max-width: 425px) {
+        .gridChild {
+            flex: 1 0 calc(33% - 10px);
+            max-width: 33%;
+        }
+    }
+
+
+    .toolbar-background-md {
+        border-color: #b2b2b2;
+        background: #26A69A;
+    }
+    
+    
+    
+    .text-left{
+        width: 100%;
+        float: left;
+        text-align: left;
+    }
+    
+
+    .max-height{
+        height: 100%;
+    }
+
+    .round-icon-btns{
+        text-align: center;
+        border-radius: 50%;
+        width:5em;
+        height:5em;
+        margin: 0;
+        background-color: #d1ecb7;
+    }
+    
+    .gridChild .button-inner{
+        padding:10px;
+    }
+
+    .gridChild .button-inner > img{
+        width:65px;
+        height: 65px;
+    }
+    
+    .navbar-title-center{
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #main-container{
+        display:flex;
+        flex-direction: column;
+        height:100%;
+    }
+
+    #slides{
+        height: 100%;
+    }
+
+    #complaint-form{
+        flex-grow: 1;
+    }
+
+    /* Fade-In Effect */
+    .visible
+    {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 1s linear;
+    }
+
+    .swiper-slide{
+        overflow-y: auto;
+        display: block;
+    }
+}

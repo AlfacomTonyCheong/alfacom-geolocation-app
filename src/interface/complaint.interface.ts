@@ -39,3 +39,15 @@ export interface IComplaintCategory{
     Name:string
     Color:string
 }
+
+export interface IMPComplaint{
+    id:string,
+    category: number,
+    categoryName?:string,
+    description?: string,
+    subject?: string,
+    created?: Date,
+    createdBy?: string,
+    modified?: Date,
+    modifiedBy?: string
+}

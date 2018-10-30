@@ -3,7 +3,7 @@ import { IonicPage, NavParams,ModalController,ViewController,Slides } from 'ioni
 import { ComplaintsProvider } from '../../providers/complaints/complaints';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { IComplaintCategory } from '../../interface/complaint.interface';
-import { ComplaintCategory,ComplaintType } from '../../app/enums';
+import { ComplaintCategory, ComplaintType } from '../../app/enums';
 
 /**
  * Generated class for the ComplaintPage page.
@@ -14,72 +14,34 @@ import { ComplaintCategory,ComplaintType } from '../../app/enums';
 
 @IonicPage()
 @Component({
-  selector: 'page-complaint-modal',
-  templateUrl: 'complaint-modal.html',
+  selector: 'page-mp-complaint-modal',
+  templateUrl: 'mp-complaint-modal.html',
 })
-export class ComplaintModalPage implements OnInit {
+export class MPComplaintModalPage implements OnInit {
   @ViewChild('slides') slides: Slides;
 
-  public imgRoot:string = "assets/imgs/complaints/"
+  public imgRoot:string = "assets/imgs/mpcomplaints/"
   public selectedCategory: number;
   public selectedIcon: any = { Id: ComplaintCategory.Traffic, ImgUrl: "https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png", Name: "Traffic", SubCategories: [] }
   public secondPage: boolean = false;
   public locationLatLng: google.maps.LatLng;
   public location: string;
   public description: string = "";
+  public subject:string = "";
   public captures: Array<any> = [];
   public allCategories:AngularFirestoreCollection<IComplaintCategory>;
  
   public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: ComplaintsProvider,public navParams: NavParams) {
-    this.location = this.navParams.get('location');
-    this.locationLatLng = this.navParams.get('locationLatLng');
+
   }
 
   public ngOnInit() { this.captures = []; }
 
   public ngAfterViewInit() {
-    this.getComplaintCategories();
+    this.getMPComplaintCategories();
     this.slides.lockSwipes(true);
-      //for desktop
-
-      // if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      //     navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-      //         this.video.nativeElement.src = window.URL.createObjectURL(stream);
-      //         this.video.nativeElement.play();
-      //     });
-      // }
   }
-
-  // public capture() {
-  //     var context = this.canvas.nativeElement.getContext("2d").drawImage(this.video.nativeElement, 0, 0, 640, 360);
-  //     this.captures.push(this.canvas.nativeElement.toDataURL("image/png"));
-  // }
-
-  readUrl(event: any) {
-
-    if (event.target.files && event.target.files.length > 0) {
-      console.log(event.target.files.length)
-      if (event.target.files.length + this.captures.length < 5) {
-        for (let img of event.target.files) {
-          var reader = new FileReader();
-
-          reader.onload = (event: ProgressEvent) => {
-            this.captures.push((<FileReader>event.target).result)
-          }
-
-          reader.readAsDataURL(img);
-        }
-      } else {
-        alert('Error! Only a maximum of 4 files can be uploaded.')
-      }
-    }
-  }
-
-  triggerInput() {
-    let el: HTMLElement = document.getElementById("imgInput") as HTMLElement;
-    el.click();
-  }
-
+  
   closeModal() {
     this.viewCtrl.dismiss({ 'submitted': false });
   }
@@ -115,9 +77,10 @@ export class ComplaintModalPage implements OnInit {
   submitComplaint() {
     this.viewCtrl.dismiss({
       submitted: true,
-      category: this.selectedIcon.Id, // TEMP VALUE 
+      category: this.selectedIcon.Id,
+      categoryName:this.selectedIcon.Name, 
       description: this.description,
-      images: this.captures
+      subject: this.subject
     });
   }
 
@@ -127,9 +90,9 @@ export class ComplaintModalPage implements OnInit {
     }
   }
 
-  getComplaintCategories(){
+  getMPComplaintCategories(){
     // this.allCategories = <any>this.complaintsProvider.GetComplaintCategories().valueChanges();
-    this.allCategories = <any>this.complaintsProvider.GetComplaintCategories(ComplaintType.General);
+    this.allCategories = <any>this.complaintsProvider.GetComplaintCategories(ComplaintType.MP);
     
   }
 

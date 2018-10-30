@@ -1,0 +1,82 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-buttons right>
+            <button ion-button icon-only class="disable-hover" (click)="closeModal()">
+                <ion-icon ios="ios-close" md="md-close"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+
+
+</ion-header>
+<ion-content padding>
+
+    <div id="main-container">
+        <ion-row>
+            <ion-col>
+            
+                <ion-list>
+                    <ion-card *ngFor="let c of allComplaints | async">
+                        <ion-item class="complaint-header">
+                                <ion-avatar item-start>
+                                    <img src="assets/imgs/buzz.jpeg">
+                                </ion-avatar>
+                                <h2>{{c.createdBy}}</h2>
+                                <img item-right class="complaint-icon" [src]="getImgSrc(c?c.categoryName:'')">
+                        </ion-item>
+                            
+                        <ion-card-header>
+                            {{c.subject}}
+                        </ion-card-header>
+                        <ion-card-content>
+                            <p>{{c.description}}</p>
+                        </ion-card-content>
+                            
+                        <ion-row>
+                            <ion-col>
+                                <button ion-button icon-start clear small>
+                                <ion-icon name="thumbs-up"></ion-icon>
+                                <div>12 Likes</div>
+                                </button>
+                            </ion-col>
+                            <ion-col>
+                                <button ion-button icon-start clear small (click)="showCommentsModal(c.id)">
+                                <ion-icon name="text"></ion-icon>
+                                <div>4 Comments</div>
+                                </button>
+                            </ion-col>
+                            <ion-col center text-center>
+                                <ion-note>
+                                    {{c ? getMomentFromNow(c.created) : ''}}
+                                </ion-note>
+                            </ion-col>
+                        </ion-row>
+                    </ion-card>
+                                
+                </ion-list>
+              
+            </ion-col>
+                
+        </ion-row>
+        
+        
+    </div>
+
+    <ion-fab bottom right>
+            <button ion-fab (click)="showComplaintModal()" color="info" >
+                <ion-icon name="md-alert"></ion-icon>
+            </button>
+        </ion-fab>
+</ion-content>
+<!-- <ion-footer>
+    <ion-toolbar>
+        <ion-segment [(ngModel)]="icons" color="secondary">
+            <ion-segment-button (click)="closeModal()">
+                Cancel
+            </ion-segment-button>
+            <ion-segment-button (click)="submitComplaint()">
+                Submit
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-footer> -->

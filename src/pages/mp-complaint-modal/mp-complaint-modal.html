@@ -1,0 +1,74 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-buttons left *ngIf="!slides.isBeginning()">
+            <button ion-button icon-only class="disable-hover" (click)="prevSlide()">
+                <ion-icon ios="ios-arrow-round-back" md="md-arrow-round-back"></ion-icon>
+            </button>
+        </ion-buttons>
+        <!-- <ion-title class="navbar-title-center">
+                Complaint Types
+            </ion-title> -->
+        <ion-buttons right>
+            <button ion-button icon-only class="disable-hover" (click)="closeModal()">
+                <ion-icon ios="ios-close" md="md-close"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+
+
+</ion-header>
+<ion-content padding>
+
+    <div id="main-container">
+
+        <ion-slides #slides id="slides" style="height:100%">
+
+            <!-- select category slide -->
+            <ion-slide>
+                <div>
+                    <div class="grid-container">
+                        <div class="gridChild" *ngFor="let icon of allCategories| async" >
+                            <button  ion-button icon-only item-end (click)="selectCategory(icon)" class="round-icon-btns" [style.background]="icon.Color">
+                                <img [src]="getImgSrc(icon.Name)">
+                            </button>
+                            <small class="icon-name">{{icon.Name}}</small>
+                        </div>
+                        
+                    </div>
+                </div>
+            </ion-slide>
+
+            <!-- complaint form slide -->
+            <ion-slide>
+                <div>
+                    <ion-item>
+                        <ion-label stacked>Type</ion-label>
+                        <ion-input type="text" required disabled="true" [(ngModel)]="selectedIcon.Name" ngControl="title"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label stacked>Subject</ion-label>
+                        <ion-textarea type="text" required  [(ngModel)]="subject" ngControl="subject"></ion-textarea>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label stacked>Description</ion-label>
+                        <ion-textarea type="text" [(ngModel)]="description" ngControl="description" rows="3"></ion-textarea>
+                    </ion-item>
+                </div>
+            </ion-slide>
+        </ion-slides>
+    </div>
+
+
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+        <ion-segment [(ngModel)]="icons" color="secondary">
+            <ion-segment-button (click)="closeModal()">
+                Cancel
+            </ion-segment-button>
+            <ion-segment-button (click)="submitComplaint()" *ngIf="slides.isEnd()">
+                Submit
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-footer>

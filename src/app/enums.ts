@@ -11,3 +11,8 @@ export enum ComplaintLikeType {
     Like = 1,
     Dislike = 2
 }
+
+export enum ComplaintType {
+    General = 1,
+    MP = 2
+}

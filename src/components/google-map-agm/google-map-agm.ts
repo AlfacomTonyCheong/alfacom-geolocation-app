@@ -7,7 +7,7 @@ import { GeoQueryDocument } from 'geofirex';
 import { GeoPoint, Timestamp } from '@firebase/firestore-types';
 import { first } from 'rxjs/operators';
 import { IComplaint, IComplaintComment, IComplaintLike } from '../../interface/complaint.interface';
-import { ComplaintCategory, ComplaintLikeType } from '../../app/enums';
+import { ComplaintCategory, ComplaintLikeType,ComplaintType } from '../../app/enums';
 import * as moment from 'moment';
 import { ModalController, ToastController, Toast, Events } from 'ionic-angular';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -616,7 +616,7 @@ export class GoogleMapAgmComponent {
   }
 
   getCategoryTitle(complaint: any) {
-    this.complaintsProvider.GetComplaintCategoryById(complaint.category.toString()).then((data) => { complaint.categoryName = data })
+    this.complaintsProvider.GetComplaintCategoryById(complaint.category.toString(),ComplaintType.General).then((data) => { complaint.categoryName = data })
     return complaint;
   }
 

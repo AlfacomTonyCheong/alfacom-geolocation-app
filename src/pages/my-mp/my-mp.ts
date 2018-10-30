@@ -30,14 +30,7 @@ export class MyMPPage {
 
   constructor(
     public navCtrl: NavController,
-    private alertCtrl: AlertController,
     private modalCtrl: ModalController,
-    private toastCtrl: ToastController,
-    private events: Events,
-    private geolocation: Geolocation,
-    private firebaseProvider: FirebaseProvider,
-    private dealsProvider: DealsProvider,
-    private ref: ChangeDetectorRef,
     private complaintsProvider: ComplaintsProvider
   ) {
 
@@ -63,10 +56,9 @@ export class MyMPPage {
       this.currentComplaintComments = this.complaintsProvider.GetComments(this.currentComplaintId);
     
         var modalPage = this.modalCtrl.create(
-          'ComplaintCommentsPage',
+          'MPComplaintListModalPage',
           {
-            commentId: this.currentComplaintId,
-            comments: this.currentComplaintComments
+            
           },
           {
             showBackdrop: true,
