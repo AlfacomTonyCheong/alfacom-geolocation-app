@@ -4,6 +4,7 @@ import { ComplaintsProvider } from '../../providers/complaints/complaints';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { IComplaintCategory } from '../../interface/complaint.interface';
 import { ComplaintCategory, ComplaintType } from '../../app/enums';
+import { FirestoreProvider } from '../../providers/firestore/firestore';
 
 /**
  * Generated class for the ComplaintPage page.
@@ -20,7 +21,7 @@ import { ComplaintCategory, ComplaintType } from '../../app/enums';
 export class MPComplaintModalPage implements OnInit {
   @ViewChild('slides') slides: Slides;
 
-  public imgRoot:string = "assets/imgs/mpcomplaints/"
+  public imgRoot:string = "assets/imgs/mpComplaints/"
   public selectedCategory: number;
   public selectedIcon: any = { Id: ComplaintCategory.Traffic, ImgUrl: "https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png", Name: "Traffic", SubCategories: [] }
   public secondPage: boolean = false;
@@ -31,7 +32,7 @@ export class MPComplaintModalPage implements OnInit {
   public captures: Array<any> = [];
   public allCategories:AngularFirestoreCollection<IComplaintCategory>;
  
-  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: ComplaintsProvider,public navParams: NavParams) {
+  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: FirestoreProvider,public navParams: NavParams) {
 
   }
 
@@ -41,7 +42,7 @@ export class MPComplaintModalPage implements OnInit {
     this.getMPComplaintCategories();
     this.slides.lockSwipes(true);
   }
-  
+
   closeModal() {
     this.viewCtrl.dismiss({ 'submitted': false });
   }

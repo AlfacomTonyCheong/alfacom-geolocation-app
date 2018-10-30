@@ -5,7 +5,8 @@ import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { IComplaintCategory, IComplaint, IComplaintComment, IComplaintLike, IMPComplaint } from '../../interface/complaint.interface';
 import { ComplaintCategory,ComplaintType } from '../../app/enums';
 import * as moment from 'moment';
-import { Timestamp } from '@firebase/firestore-types';;
+import { Timestamp } from '@firebase/firestore-types';import { FirestoreProvider } from '../../providers/firestore/firestore';
+;
 
 /**
  * Generated class for the ComplaintPage page.
@@ -22,7 +23,7 @@ import { Timestamp } from '@firebase/firestore-types';;
 export class MPComplaintListModalPage implements OnInit {
   @ViewChild('slides') slides: Slides;
 
-  public imgRoot:string = "assets/imgs/mpcomplaints/"
+  public imgRoot:string = "assets/imgs/mpComplaints/"
   public selectedCategory: number;
   public selectedIcon: any = { Id: ComplaintCategory.Traffic, ImgUrl: "https://cdn4.iconfinder.com/data/icons/transport-56/30/Traffic_Jam-512.png", Name: "Traffic", SubCategories: [] }
   public secondPage: boolean = false;
@@ -38,7 +39,7 @@ export class MPComplaintListModalPage implements OnInit {
   currentComplaintLikes: AngularFirestoreCollection<IComplaintLike>;
  
   public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,
-    private complaintsProvider: ComplaintsProvider,public navParams: NavParams,public toastCtrl:ToastController) {
+    private complaintsProvider: FirestoreProvider,public navParams: NavParams,public toastCtrl:ToastController) {
 
   }
 
