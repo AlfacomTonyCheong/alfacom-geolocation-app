@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Events } from 'ionic-angular';
+import { Events, ModalController } from 'ionic-angular';
 
 /**
  * Generated class for the NavbarComponent component.
@@ -14,10 +14,12 @@ import { Events } from 'ionic-angular';
 export class NavbarComponent {
   @Input('title') title: string;
   
-  constructor(private events: Events) {
+  constructor(private events: Events, private modalCtrl: ModalController) {
   }
 
-  goToCreditsTab() {
-    this.events.publish('goToCreditsTab');
+  async goToCreditsTab() {
+    //this.events.publish('goToCreditsTab');
+    const modal = this.modalCtrl.create('CreditPage');
+    await modal.present();
   }
 }

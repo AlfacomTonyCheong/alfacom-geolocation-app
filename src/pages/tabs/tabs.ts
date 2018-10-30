@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, Events, ToastController } from 'ionic-angular';
+import { IonicPage, ToastController } from 'ionic-angular';
 import { SuperTabs, SuperTabsController } from 'ionic2-super-tabs';
 
 /**
@@ -20,15 +20,15 @@ export class TabsPage {
     { id: 'tab-complaint', root: 'ComplaintPage', title: 'Complaint', icon: 'sad' },
     { id: 'tab-compound', root: 'CompoundPage', title: 'Compound', icon: 'car' },
     { id: 'tab-home', root: 'HomePage', title: 'Park', icon: 'home' },
-    { id: 'tab-credit', root: 'CreditPage', title: 'Credit', icon: 'card' },
-    { id: 'tab-profile', root: 'ProfilePage', title: 'Profile', icon: 'contact' },
-    { id: 'tab-my-mp', root: 'MyMPPage', title: 'My MP', icon: 'contact' }
+    //{ id: 'tab-credit', root: 'CreditPage', title: 'Credit', icon: 'card' },
+    { id: 'tab-my-mp', root: 'MyMPPage', title: 'My MP', icon: 'contact' },
+    { id: 'tab-profile', root: 'ProfilePage', title: 'Profile', icon: 'contact' }
   ]
   selectedTabIndex: number = 2; // The index of the tab that is selected when the component is initialized
   pageTitle: string;
   
-  constructor(private superTabsCtrl: SuperTabsController, private events: Events, private toastCtrl: ToastController) {
-    this.initEvents();
+  constructor(private superTabsCtrl: SuperTabsController, private toastCtrl: ToastController) {
+    //this.initEvents();
   }
 
   ionViewDidLoad() {
@@ -42,7 +42,7 @@ export class TabsPage {
   }
 
   initEvents(){
-    this.events.subscribe('goToCreditsTab', () => { this.selectTab(3); })
+    //this.events.subscribe('goToCreditsTab', () => { this.selectTab(3); })
   }
 
   selectTab(tabIndex: number) {

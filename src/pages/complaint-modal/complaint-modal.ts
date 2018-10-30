@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonicPage, NavParams,ModalController,ViewController,Slides } from 'ionic-angular';
-import { ComplaintsProvider } from '../../providers/complaints/complaints';
+import { FirestoreProvider } from '../../providers/firestore/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { IComplaintCategory } from '../../interface/complaint.interface';
 import { ComplaintCategory,ComplaintType } from '../../app/enums';
@@ -30,7 +30,7 @@ export class ComplaintModalPage implements OnInit {
   public captures: Array<any> = [];
   public allCategories:AngularFirestoreCollection<IComplaintCategory>;
  
-  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: ComplaintsProvider,public navParams: NavParams) {
+  public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,private complaintsProvider: FirestoreProvider,public navParams: NavParams) {
     this.location = this.navParams.get('location');
     this.locationLatLng = this.navParams.get('locationLatLng');
   }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavParams, ViewController } from 'ionic-angular';
-import { ComplaintsProvider } from '../../providers/complaints/complaints';
+import { FirestoreProvider } from '../../providers/firestore/firestore';
 import { IComplaintComment } from '../../interface/complaint.interface';
 
 /**
@@ -20,7 +20,7 @@ export class ComplaintCommentsPage {
   comments$;
   newCommentText: string;
 
-  constructor(public viewCtrl: ViewController, public navParams: NavParams, private complaintsProvider: ComplaintsProvider) {
+  constructor(public viewCtrl: ViewController, public navParams: NavParams, private complaintsProvider: FirestoreProvider) {
     this.commentId = this.navParams.get('commentId');
     this.comments$ = this.navParams.get('comments').valueChanges();
   }

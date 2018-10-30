@@ -18,13 +18,14 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { firebaseConfig } from './config';
 import { AgmCoreModule } from '@agm/core';
 
-import { ComplaintsProvider } from '../providers/complaints/complaints';
+import { FirestoreProvider } from '../providers/firestore/firestore';
 import { GeolocationProvider } from '../providers/geolocation/geolocation';
 import { HttpClientModule } from '@angular/common/http';
 import {DatePipe} from '@angular/common'
 
 import * as ionicGalleryModal from 'ionic-gallery-modal';
 import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { AuthProvider } from '../providers/auth/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
 @NgModule({
@@ -58,14 +59,15 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
     HttpClientModule,
     VehiclesProvider,
     FirebaseProvider,
-    ComplaintsProvider,
+    FirestoreProvider,
     GeolocationProvider,
     DealsProvider,
     DatePipe,
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: ionicGalleryModal.GalleryModalHammerConfig,
-    }
+    },
+    AuthProvider
   ]
 })
 export class AppModule { }

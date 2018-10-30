@@ -1,7 +1,23 @@
 <ion-header>
+
+    <ion-navbar color="primary">
+        <ion-buttons left>
+            <button ion-button icon-only class="disable-hover" (click)="dismiss()">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </button>
+            <!-- <button ion-button icon-only>
+                            <img src="assets/imgs/logo_pwa.png" width="30" height="30"/>
+                          </button> -->
+        </ion-buttons>
+        <ion-title align-items-center class="navbar-title-center">
+            Credits
+        </ion-title>
+    </ion-navbar>
+
     <ion-item no-lines color="primary">
         <div class="header-summary-container">
-            <ion-icon name="cube"></ion-icon> 1830
+            <ion-icon name="cube"></ion-icon>
+            <span class="m-l-xs">1830</span>
         </div>
     </ion-item>
 </ion-header>
