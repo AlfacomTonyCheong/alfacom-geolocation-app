@@ -4,8 +4,9 @@ import * as geofirex from 'geofirex';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
-import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory } from '../../interface/complaint.interface';
+import { IComplaint, IComplaintComment, IComplaintLike, IComplaintCategory,IMPComplaint } from '../../interface/complaint.interface';
 import { IUser } from '../../interface/common.interface';
+import { ComplaintType } from '../../app/enums';
 import { AngularFireStorage } from '@angular/fire/storage';
 
 /*
@@ -17,9 +18,11 @@ import { AngularFireStorage } from '@angular/fire/storage';
 @Injectable()
 export class FirestoreProvider {
 
+  mpComplaintCollection: string ='mpComplaints';
   complaintsCollection: string = 'complaints';
   complaintImagesFolder: string = 'complaintImages/';
   complaintCategoryCollection: string = 'complaintCategory';
+  mpCategoryCollection: string = 'mpComplaintCategory';
   complaintSocialDataCollection: string = 'complaintSocialData';
   complaintCommentsCollection: string = 'comments';
   complaintLikesCollection: string = 'likes';
@@ -50,6 +53,11 @@ export class FirestoreProvider {
     const point = this.geo.point(lat, lng);
     this.geo.collection(this.complaintsCollection).add({ position: point.data }); // geo.point.data generates { geohash: string, geopoint: GeoPoint } object
   }
+
+  AddNewMPComplaint(complaint) {
+    complaint.created = new Date();
+    this.geo.collection(this.mpComplaintCollection).add(complaint);
+  };
 
   async AddNewComplaint(complaint, lat, lng, images?) {
     var counter = 0;
@@ -108,6 +116,20 @@ export class FirestoreProvider {
     ).subscribe();
   }
 
+  GetMPComplaints(){
+    return this.db.collection(this.mpComplaintCollection, ref => {
+      return ref.orderBy('created', 'desc')
+    }).snapshotChanges().pipe
+      (map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as IMPComplaint;
+          data.id = a.payload.doc.id;
+          return data;
+          
+        });
+      }))
+  }
+
   GetSocialData(complaintId: string) {
     return this.db.doc(this.complaintSocialDataCollection + '/' + complaintId);
   }
@@ -163,8 +185,9 @@ export class FirestoreProvider {
   }
 
   //Complaint Categories
-  GetComplaintCategories() {
-    return this.db.collection(this.complaintCategoryCollection).snapshotChanges().pipe
+  GetComplaintCategories(type){
+    var collection = type == ComplaintType.General? this.complaintCategoryCollection:this.mpCategoryCollection;
+    return this.db.collection(collection).snapshotChanges().pipe
       (map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data() as IComplaintCategory;
@@ -175,8 +198,9 @@ export class FirestoreProvider {
       }))
   }
 
-  GetComplaintCategoryById(categoryId: string) {
-    return this.db.doc(this.complaintCategoryCollection + '/' + categoryId)
+  GetComplaintCategoryById(categoryId: string,type){
+    var collection = type == ComplaintType.General? this.complaintCategoryCollection:this.mpCategoryCollection;
+    return this.db.doc(collection + '/' + categoryId)
       .ref.get().then(function (doc) {
         if (doc.exists) {
           return doc.data().Name;

@@ -9,7 +9,6 @@ import { DealsProvider } from '../../providers/deals/deals';
 import { FirestoreProvider } from '../../providers/firestore/firestore';
 import { IComplaint, IComplaintLike, IComplaintComment } from '../../interface/complaint.interface';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
-import { ComplaintsProvider } from '../../providers/complaints/complaints';
 
 @IonicPage()
 @Component({
@@ -32,7 +31,7 @@ export class MyMPPage {
   constructor(
     public navCtrl: NavController,
     private modalCtrl: ModalController,
-    private complaintsProvider: ComplaintsProvider
+    private complaintsProvider: FirestoreProvider
   ) {
 
   }
