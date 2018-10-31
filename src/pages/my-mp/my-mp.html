@@ -13,52 +13,60 @@
   </ion-item>
 </ion-header>
 
-<ion-content padding>
-    <ion-row>
-
-            <ion-card  *ngFor="let item of mp | async" col-md-6>
-              <figure >
-                  <img class="cropped-profile-pic" [src]="getImgSrc(item.ImgName)" style="display:none">
-               </figure>
-                
-                <ion-card-content>
-                    <ion-item >
-                      <ion-grid>
-                          <ion-row>
-                              <ion-col col-12 col-sm-4 col-md-2>
-                                  <img class="profile-pic" [src]="getImgSrc(item.ImgName)">
-                              </ion-col>
+<ion-content padding class="card-background-page">
+    <ion-row >
+        <ion-card *ngFor="let item of mp | async" col-md-4 (click)="viewComplaints(item)">
+          <img class="mp-logo" src="assets/imgs/MP/Dewan_Rakyat.png">
+          <figure>
+              <img  class="cropped-profile-pic" [src]="getImgSrc(item.ImgName)"/>
+          </figure>
           
-                              <ion-col col-12 col-sm-8 col-md-10 style="text-align:center">
-                                  <h2>{{item.Name}}</h2>
-                                  <p>{{item.Area}}</p>
-                                  <button ion-button clear item-end (click)="viewComplaints(item)">View</button>
-                              </ion-col>                  
-                            </ion-row>
-                      </ion-grid>
-                      
-                        
-                        
-                        
-                        <ion-row>
-                            <ion-col col-6>
-                              <button ion-button icon-start clear small>
-                                <ion-icon name="thumbs-up"></ion-icon>
-                                <div>12 Likes</div>
-                              </button>
-                            </ion-col>
-                            <ion-col col-6>
-                              <button ion-button icon-start clear small>
-                                <ion-icon name="text"></ion-icon>
-                                <div>4 Comments</div>
-                              </button>
-                            </ion-col >
-                            
-                        </ion-row>  
-                    </ion-item>
-    
-                </ion-card-content>
+          <div class="card-title">{{item.Name}}</div>
+          <!-- <div class="card-subtitle">{{item.Area}}</div> -->
+        </ion-card> 
+      <!-- <ion-card  *ngFor="let item of mp | async" col-md-6>
+      <figure >
+          <img class="cropped-profile-pic" [src]="getImgSrc(item.ImgName)" style="display:none">
+        </figure>
+        
+        <ion-card-content>
+            <ion-item >
+              <ion-grid>
+                  <ion-row>
+                      <ion-col col-12 col-sm-4 col-md-2>
+                          <img class="profile-pic" [src]="getImgSrc(item.ImgName)">
+                      </ion-col>
+  
+                      <ion-col col-12 col-sm-8 col-md-10 style="text-align:center">
+                          <h2>{{item.Name}}</h2>
+                          <p>{{item.Area}}</p>
+                          <button ion-button clear item-end (click)="viewComplaints(item)">View</button>
+                      </ion-col>                  
+                    </ion-row>
+              </ion-grid>
+              
                 
-              </ion-card>
-        </ion-row>
+                
+                
+                <ion-row>
+                    <ion-col col-6>
+                      <button ion-button icon-start clear small>
+                        <ion-icon name="thumbs-up"></ion-icon>
+                        <div>12 Likes</div>
+                      </button>
+                    </ion-col>
+                    <ion-col col-6>
+                      <button ion-button icon-start clear small>
+                        <ion-icon name="text"></ion-icon>
+                        <div>4 Comments</div>
+                      </button>
+                    </ion-col >
+                    
+                </ion-row>  
+            </ion-item>
+
+        </ion-card-content>
+        
+      </ion-card> -->
+    </ion-row>
 </ion-content>

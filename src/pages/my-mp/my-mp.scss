@@ -32,7 +32,7 @@ page-my-mp {
      figure img{
         display:block; /*remove inline-block spaces*/  
         width:100%;
-        margin:-10% 0 -80% 0;
+        margin:-10% 0 -70% 0;
    //width:177.777%;
      }
 
@@ -48,17 +48,24 @@ page-my-mp {
             margin:auto 0; /*reset margin of figure tag*/
         }
 
-        ion-card img{
+        ion-card img.cropped-profile-pic{
             display:block; /*remove inline-block spaces*/  
-        width:100%;
-        margin:-10% 0 -80% 0;
+            width:100%;
+            margin:-10% 0 -70% 0;
+        }
+
+        .mp-logo{
+            position: absolute;
+            width: 10%;
+            bottom: 5%;
+            left: 5%;
         }
       
         .card-title {
           position: absolute;
-          top: 36%;
-          font-size: 2.0em;
-          width: 100%;
+          top: 10%;
+          font-size: 1.5em;
+          width: 30%;
           font-weight: bold;
           color: #fff;
         }
