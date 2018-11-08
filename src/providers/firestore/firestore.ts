@@ -72,6 +72,7 @@ export class FirestoreProvider {
           console.log(imagesUploaded)
           if (counter >= images.length) {
             complaint.images = imagesUploaded;
+            this.AddComplaintData(complaint, lat, lng);
           }
         })
       }
@@ -131,12 +132,15 @@ export class FirestoreProvider {
 
   GetMPComplaints(mpId){
     return this.db.collection(this.mpComplaintCollection, ref => {
-      return ref.where('mpId','==',mpId)
+      return ref.where('mpId','==',mpId);
     }).snapshotChanges().pipe
       (map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data() as IMPComplaint;
           data.id = a.payload.doc.id;
+          this.GetSocialData(data.id).then((sData)=>{
+            data.socialData = sData;
+          })
           // data.socialData = this.GetSocialData(data.id).valueChanges();
           return data;
           
@@ -145,28 +149,32 @@ export class FirestoreProvider {
   }
 
   GetSocialData(complaintId: string) {
-    return this.db.doc(this.complaintSocialDataCollection + '/' + complaintId);
+    // return this.db.doc(this.complaintSocialDataCollection + '/' + complaintId);
+    return this.db.doc(this.complaintSocialDataCollection + '/' + complaintId)
+      .ref.get().then(function (doc) {
+        if (doc.exists) {
+          console.log(doc.data())
+          return doc.data();
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
   }
 
   GetImages(images: string[]){
-    var imagesUrl = [];
-    for (let img of images){
-      this.afStorage.ref(this.complaintImagesFolder + img).getDownloadURL().toPromise().then((url)=>{
-        imagesUrl.push(url)
-      }).catch((error)=> {
-        switch (error.code) {
-          case 'storage/object-not-found':
-            console.log("Error! Image: " + img + " doesn't exist")
-      
-          case 'storage/unauthorized':
-          console.log("Error! User doesn't have permission to access " + img);
-
-          case 'storage/unknown':
-          console.log("Error");
-        }
-      });
-    }
-    return imagesUrl;
+    return new Promise((resolve, reject) => {
+      var imagesUrl = [];
+      for (let img of images){
+        this.afStorage.ref(this.complaintImagesFolder + img).getDownloadURL().toPromise().then((url)=>{
+          imagesUrl.push(url)
+        }).catch((error)=> {
+          reject(error)
+        });
+      }
+      resolve(imagesUrl)
+    })
   }
 
   GetComments(complaintId: string) {

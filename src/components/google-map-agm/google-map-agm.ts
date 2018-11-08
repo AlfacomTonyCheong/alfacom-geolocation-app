@@ -2,14 +2,14 @@ import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { GeolocationProvider } from '../../providers/geolocation/geolocation';
 import { FirestoreProvider } from '../../providers/firestore/firestore';
 import { IGoogleMapComponentOptions } from '../../interface/common.interface';
-import { Observable } from 'rxjs';
+import { Observable,interval, Subscription  } from 'rxjs';
 import { GeoQueryDocument } from 'geofirex';
 import { GeoPoint, Timestamp } from '@firebase/firestore-types';
 import { first } from 'rxjs/operators';
 import { IComplaint, IComplaintComment, IComplaintLike } from '../../interface/complaint.interface';
 import { ComplaintCategory, ComplaintLikeType,ComplaintType } from '../../app/enums';
 import * as moment from 'moment';
-import { ModalController, ToastController, Toast, Events } from 'ionic-angular';
+import { ModalController, ToastController, Toast, Events, Slides } from 'ionic-angular';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { GalleryModal } from 'ionic-gallery-modal';
 
@@ -29,6 +29,7 @@ export class GoogleMapAgmComponent {
   @Input() dismissCallback;
   @Input() canvasId: string;
   @Input() options: IGoogleMapComponentOptions;
+  @ViewChild('imageSlider') imageSlider: Slides;
   imgRoot: string = "assets/imgs/complaints/"
   map: google.maps.Map;
   mapCanvas: HTMLElement;
@@ -115,7 +116,6 @@ export class GoogleMapAgmComponent {
     private toastCtrl: ToastController,
     private events: Events
   ) {
-
   }
 
   ngOnDestroy() {
@@ -301,12 +301,23 @@ export class GoogleMapAgmComponent {
   }
 
   getComplaintSocialData() {
-    this.currentComplaintSocialData = this.complaintsProvider.GetSocialData(this.currentComplaintId).valueChanges();
+    // this.currentComplaintSocialData = this.complaintsProvider.GetSocialData(this.currentComplaintId);
+    this.complaintsProvider.GetSocialData(this.currentComplaintId).then((data)=>{
+      this.currentComplaintSocialData = data;
+    });
     //this.currentComplaintLikes = this.complaintsProvider.GetLikes(this.currentComplaintId);
   }
 
   getComplaintImages() {
-    this.currentComplaintImages = this.currentComplaint.images?this.complaintsProvider.GetImages(this.currentComplaint.images):[];
+    if (this.currentComplaint.images){
+      this.complaintsProvider.GetImages(this.currentComplaint.images).then((data)=>{
+        this.currentComplaintImages = data as any[];
+        console.log(this.currentComplaintImages.length)
+      })
+    }else{
+      this.currentComplaintImages = [];
+    }
+    
   }
 
   async showCommentsModal() {
@@ -325,6 +336,10 @@ export class GoogleMapAgmComponent {
     );
 
     await modalPage.present();
+
+    modalPage.onDidDismiss(data=>{
+      this.getComplaintSocialData()
+    })
   }
 
   showComplaintInfoWrapper = () => {
@@ -353,7 +368,7 @@ export class GoogleMapAgmComponent {
         this.complaintsProvider.AddNewLike(this.currentComplaintId, like);
       }
     })
-    setTimeout(() => { this.likeBtnDisabled = false }, 3000);
+    setTimeout(() => { this.getComplaintSocialData();this.likeBtnDisabled = false }, 3000);
   }
 
   //===========================
@@ -596,8 +611,10 @@ export class GoogleMapAgmComponent {
             createdBy: 'System'
           };
           this.complaintsProvider.AddNewComplaint(newComplaint, latLng.lat(), latLng.lng(),data.images);
-          this.showToast("Complaint successfully submitted!")
-          this.getComplaintPoints();
+          setTimeout(() => {  
+            this.showToast("Complaint successfully submitted!");
+            this.getComplaintPoints(); 
+        }, 3000);
         }
     });
   })
@@ -640,6 +657,7 @@ export class GoogleMapAgmComponent {
   }
 
   viewImages() {
+    console.log(this.currentComplaintImages)
     var photos = this.currentComplaintImages.map(item => ({ url: item }));
     let modal = this.modalCtrl.create(GalleryModal, {
       photos: photos,

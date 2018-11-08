@@ -18,8 +18,8 @@ export class TabsPage {
   @ViewChild(SuperTabs) superTabs: SuperTabs;
   tabRoots = [
     { id: 'tab-complaint', root: 'ComplaintPage', title: 'Complaint', icon: 'sad' },
-    { id: 'tab-compound', root: 'CompoundPage', title: 'Compound', icon: 'car' },
-    { id: 'tab-home', root: 'HomePage', title: 'Park', icon: 'home' },
+    { id: 'tab-compound', root: 'CompoundPage', title: 'Compound', icon: 'document' },
+    { id: 'tab-home', root: 'HomePage', title: 'Park', icon: 'car' },
     //{ id: 'tab-credit', root: 'CreditPage', title: 'Credit', icon: 'card' },
     { id: 'tab-my-mp', root: 'MyMPPage', title: 'My MP', icon: 'contact' },
     { id: 'tab-profile', root: 'ProfilePage', title: 'Profile', icon: 'contact' }

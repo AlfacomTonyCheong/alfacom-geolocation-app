@@ -1,4 +1,5 @@
 import { GeoPoint } from "@firebase/firestore-types";
+import { AngularFirestoreCollection } from "@angular/fire/firestore";
 
 export interface IComplaint{
     category: number,
@@ -57,5 +58,6 @@ export interface IMPComplaint{
     createdBy?: string,
     modified?: Date,
     modifiedBy?: string,
-    mpId?:string
+    mpId?:string,
+    socialData?:any
 }

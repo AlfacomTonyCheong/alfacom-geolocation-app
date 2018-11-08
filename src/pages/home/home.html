@@ -59,6 +59,11 @@
           There are {{suggestions.length}} deals near you!
       </button>
   </ion-fab>
+  <ion-slides *ngIf="suggestions && suggestions.length" #dealsSlides autoplay="500" loop="true" speed="500" pager="true">
+    <ion-slide *ngFor="let item of suggestions;let i = index">
+        <img [src]="getImgSrc(i)">
+    </ion-slide>
+  </ion-slides>
   <!-- <button bottom right ion-button icon-end  (click)="openDealsModal()">
       There are 10 deals near you!
     <ion-icon ios="ios-alert" md="md-alert"></ion-icon>

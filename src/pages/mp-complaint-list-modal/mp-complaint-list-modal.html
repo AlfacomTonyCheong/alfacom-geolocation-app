@@ -7,8 +7,12 @@
             </button>
         </ion-buttons>
     </ion-navbar>
-
-
+    <ion-item no-lines color="primary">
+        <div  style="text-align:center">
+          <p>{{mp.Area}}</p>
+        </div>
+    
+      </ion-item>
 </ion-header>
 <ion-content padding>
 
@@ -35,15 +39,16 @@
                             
                         <ion-row>
                             <ion-col>
-                                <button ion-button icon-start clear small>
+                                <button ion-button icon-start clear small (click)="onLikeBtnClick(c)" [disabled]="c.likeBtnDisabled">
                                 <ion-icon name="thumbs-up"></ion-icon>
-                                <div>12 Likes</div>
+                                <div>{{c.socialData?.likeCount || '0'}} Likes</div>
                                 </button>
                             </ion-col>
                             <ion-col>
-                                <button ion-button icon-start clear small (click)="showCommentsModal(c.id)">
+                                <button ion-button icon-start clear small (click)="showCommentsModal(c)">
                                 <ion-icon name="text"></ion-icon>
-                                <div>4 Comments</div>
+                                <!-- <div>{{c.socialData?c.socialData.commentCount: '0' }} Comments</div> -->
+                                <div>{{(c.socialData )?.commentCount || '0'}} Comments</div>
                                 </button>
                             </ion-col>
                             <ion-col center text-center>

@@ -1,5 +1,5 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavController, IonicPage, AlertController, ModalController, Events, ToastController } from 'ionic-angular';
+import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { NavController, IonicPage, AlertController, ModalController, Events, ToastController, Slides } from 'ionic-angular';
 import { VehiclesProvider } from '../../providers/vehicles/vehicles';
 import { GeolocationOptions, Geolocation } from '@ionic-native/geolocation';
 import { Subject } from 'rxjs';
@@ -15,6 +15,7 @@ import { DealsProvider } from '../../providers/deals/deals';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  @ViewChild('dealsSlides') slides: Slides;
   private unsubscribe$ = new Subject();
 
   chosenVehicle: any;
@@ -30,6 +31,7 @@ export class HomePage {
   suggestions: any[];
   showSuggestions:boolean = false;
   canvasSrc;
+  imgRoot:string = "assets/imgs/deals/"
 
   constructor(
     public navCtrl: NavController,
@@ -43,7 +45,6 @@ export class HomePage {
     private dealsProvider: DealsProvider,
     private ref: ChangeDetectorRef
   ) {
-
   }
 
   ionViewDidLoad() {
@@ -195,6 +196,12 @@ export class HomePage {
     });
 
     await alert.present();
+  }
+
+  getImgSrc(name:string){
+    if (name || name == '0'){
+      return this.imgRoot + name.toString().toLowerCase() + '.jpg'
+    }
   }
 
   getDurationLabel(hours: number) {

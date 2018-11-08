@@ -3,9 +3,10 @@ import { IonicPage, NavParams,ModalController,ViewController,Slides, Toast, Toas
 import { ComplaintsProvider } from '../../providers/complaints/complaints';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { IComplaintCategory, IComplaint, IComplaintComment, IComplaintLike, IMPComplaint, IMP } from '../../interface/complaint.interface';
-import { ComplaintCategory,ComplaintType } from '../../app/enums';
+import { ComplaintCategory,ComplaintType, ComplaintLikeType } from '../../app/enums';
 import * as moment from 'moment';
 import { Timestamp } from '@firebase/firestore-types';import { FirestoreProvider } from '../../providers/firestore/firestore';
+import { first } from 'rxjs/operators';
 ;
 
 /**
@@ -30,7 +31,7 @@ export class MPComplaintListModalPage implements OnInit {
   public description: string = "";
   public captures: Array<any> = [];
   public allCategories:AngularFirestoreCollection<IComplaintCategory>;
-  public allComplaints:AngularFirestoreCollection<IMPComplaint>;
+  public allComplaints:any;
   mp: IMP;
   currentComplaint: IComplaint;
   currentComplaintId: string;
@@ -110,14 +111,35 @@ export class MPComplaintListModalPage implements OnInit {
     this.allComplaints = <any>this.complaintsProvider.GetMPComplaints(this.mp.id);
   }
 
+  getSocialData(complaint: any) {
+    this.complaintsProvider.GetSocialData(complaint.id.toString()).then((data) => { complaint.socialData = data })
+    return complaint;
+  }
 
-  async showCommentsModal(id) {
-    var comments = this.complaintsProvider.GetComments(id);
+  onLikeBtnClick(complaint: any) {
+    complaint.likeBtnDisabled = true;
+    this.complaintsProvider.GetIfLikeExistsByUser(complaint.id, 'System').pipe(first()).subscribe((exists) => {
+      if (exists[0] == true) {
+        this.complaintsProvider.DeleteLike(complaint.id, 'System');
+      }
+      else {
+        var like: IComplaintLike = {
+          type: ComplaintLikeType.Like,
+          createdBy: 'System'
+        }
+        this.complaintsProvider.AddNewLike(complaint.id, like);
+      }
+    })
+    setTimeout(() => { this.getSocialData(complaint);complaint.likeBtnDisabled = false }, 3000);
+  }
 
+
+  async showCommentsModal(complaint) {
+    var comments = this.complaintsProvider.GetComments(complaint.id);
     var modalPage = this.modalCtrl.create(
       'ComplaintCommentsPage',
       {
-        commentId: id,
+        commentId: complaint.id,
         comments: comments
       },
       {
@@ -127,6 +149,10 @@ export class MPComplaintListModalPage implements OnInit {
     );
 
     await modalPage.present();
+
+    modalPage.onDidDismiss(data=>{
+      complaint = this.getSocialData(complaint)
+    })
   }
 
   async showComplaintModal(){

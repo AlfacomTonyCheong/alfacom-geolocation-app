@@ -31,30 +31,39 @@
       <div class="block-with-text">
         {{currentComplaint?.description}}
       </div>
+      <ion-row>
+        <ion-col>
+          <button ion-button icon-start clear small (click)="showCommentsModal()">
+            <ion-icon name="text"></ion-icon>
+            <div>{{currentComplaintSocialData?.commentCount || '0'}} Comments</div>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button icon-start clear small (click)="onLikeBtnClick()" [disabled]="likeBtnDisabled">
+            <ion-icon name="thumbs-up"></ion-icon>
+            <div>{{currentComplaintSocialData?.likeCount || '0'}} Likes</div>
+          </button>
+        </ion-col>
+        <ion-col align-self-center text-center>
+            
+            <button ion-button icon-only small (click)="viewImages()" *ngIf="currentComplaintImages?.length > 0">
+                <ion-icon ios="ios-images" md="md-images" item-end></ion-icon>
+              </button>
+          <!-- <ion-note>
+            {{currentComplaint ? getMomentFromNow(currentComplaint.created) : ''}}
+          </ion-note> -->
+        </ion-col>
+        
+        <ion-col col-12 *ngIf="currentComplaintImages?.length > 0">
+          <div class="line-horizontal"></div>
+          <ion-slides *ngIf="currentComplaintImages?.length > 0" #imageSlider   loop="true">
+            <ion-slide *ngFor="let item of currentComplaintImages">
+              <img [src]="item" style="display:initial">
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
-    <ion-row>
-      <ion-col>
-        <button ion-button icon-start clear small (click)="showCommentsModal()">
-          <ion-icon name="text"></ion-icon>
-          <div>{{(currentComplaintSocialData | async)?.commentCount || '0'}} Comments</div>
-        </button>
-      </ion-col>
-      <ion-col>
-        <button ion-button icon-start clear small (click)="onLikeBtnClick()" [disabled]="likeBtnDisabled">
-          <ion-icon name="thumbs-up"></ion-icon>
-          <div>{{(currentComplaintSocialData | async)?.likeCount || '0'}} Likes</div>
-        </button>
-      </ion-col>
-      <ion-col align-self-center text-center>
-          
-          <button ion-button icon-only small (click)="viewImages()" *ngIf="currentComplaintImages?.length > 0">
-              <ion-icon ios="ios-images" md="md-images" item-end></ion-icon>
-            </button>
-        <!-- <ion-note>
-          {{currentComplaint ? getMomentFromNow(currentComplaint.created) : ''}}
-        </ion-note> -->
-      </ion-col>
-    </ion-row>
   </ion-card>
 </div>
 

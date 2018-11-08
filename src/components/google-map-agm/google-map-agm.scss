@@ -43,7 +43,7 @@ google-map-agm {
         overflow: hidden;
         max-width: 600px;
         transition: margin-top 0.3s ease-out;
-        margin-top: -160px;
+        margin-top: -300px;
         padding-bottom: 5px;
         background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.5) 85%, rgba(0, 0, 0, 0) 100%); /* FF3.6-15 */
         background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.5) 85%, rgba(0, 0, 0, 0) 100%); /* Chrome10-25,Safari5.1-6 */
@@ -55,7 +55,7 @@ google-map-agm {
     }
 
     .complaint-wrapper > .complaint-container {
-        max-height: 130px;
+        max-height: 260px;
         transition: max-height 0.5s ease-in-out;
     }
 
@@ -73,4 +73,21 @@ google-map-agm {
         height: 3rem;
         width: 3rem;
     }
+
+    // Image slider
+    .line-horizontal{
+        width:100%;
+        border-top: 1px solid #999;
+        padding-bottom: 5px;
+    }
+
+    .swiper-slide{
+        height: 150px;
+        // width:auto !important;
+
+        .slide-zoom{
+            height: 100%;
+        }
+    }
+
 }

@@ -39,5 +39,6 @@ export class ComplaintCommentsPage {
       createdBy: 'System'
     }
     this.complaintsProvider.AddNewComment(this.commentId, newComment);
+    this.newCommentText = '';
   }
 }
