@@ -139,8 +139,11 @@ export class MPComplaintListModalPage implements OnInit {
     var modalPage = this.modalCtrl.create(
       'ComplaintCommentsPage',
       {
+        complaint:complaint,
+        complaintSocialData:complaint.socialData,
         commentId: complaint.id,
-        comments: comments
+        comments: comments,
+        type: ComplaintType.MP
       },
       {
         showBackdrop: true,

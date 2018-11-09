@@ -326,8 +326,11 @@ export class GoogleMapAgmComponent {
     var modalPage = this.modalCtrl.create(
       'ComplaintCommentsPage',
       {
+        complaint:this.currentComplaint,
+        complaintSocialData: this.currentComplaintSocialData,
         commentId: this.currentComplaintId,
-        comments: this.currentComplaintComments
+        comments: this.currentComplaintComments,
+        type: ComplaintType.General
       },
       {
         showBackdrop: true,
