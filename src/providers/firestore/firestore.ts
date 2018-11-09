@@ -132,7 +132,7 @@ export class FirestoreProvider {
 
   GetMPComplaints(mpId){
     return this.db.collection(this.mpComplaintCollection, ref => {
-      return ref.where('mpId','==',mpId);
+      return ref.where('mpId','==',mpId).orderBy('created','desc');
     }).snapshotChanges().pipe
       (map(actions => {
         return actions.map(a => {
