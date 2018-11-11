@@ -1,20 +1,9 @@
-<ion-header>
+<!-- <ion-header>
   <ion-item no-lines color="primary">
     <div class="header-summary-container">
       Total : RM 5.00
     </div>
     
-    <!-- <div>
-      {{ (firebaseDoc | async)?.first_name }}
-      {{ (firebaseDoc | async)?.last_name }}
-    </div>
-    <div>
-      <ul>
-        <li *ngFor="let firebaseListItem of firebaseCollection | async">
-          {{ firebaseListItem.first_name }}
-        </li>
-      </ul>
-    </div> -->
 
     <div class="m-t-sm">
       <button ion-button block color="light">
@@ -23,7 +12,7 @@
     </div>
 
   </ion-item>
-</ion-header>
+</ion-header> -->
 
 <ion-content>
   <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
@@ -53,17 +42,38 @@
       
     </div>
   </ion-card>
-  <ion-fab bottom right *ngIf="showSuggestions">
-      <button ion-button icon-start (click)="openDealsModal()" color="info" >
-          <ion-icon ios="ios-alert" md="md-alert"></ion-icon>
-          There are {{suggestions.length}} deals near you!
+  <ion-fab bottom right  *ngIf="showSuggestions">
+      <button ion-fab (click)="openDealsModal(-1)" class="deals-background" >
+          <ion-icon ios="ios-add" md="md-add"></ion-icon>
       </button>
   </ion-fab>
-  <ion-slides *ngIf="suggestions && suggestions.length" #dealsSlides autoplay="500" loop="true" speed="500" pager="true">
-    <ion-slide *ngFor="let item of suggestions;let i = index">
-        <img [src]="getImgSrc(i)">
-    </ion-slide>
-  </ion-slides>
+ 
+  <ion-row>
+      <ion-card col-md-4 col-sm-6 col-xs-12 color="red" class="card-button card-background-page " *ngIf="suggestions && suggestions.length">
+          
+            <ion-item class="deals-header deals-background">
+                <h2>Explore Nearby</h2>
+            </ion-item>
+            <ion-card-content>
+                <ion-slides  #dealsSlides  loop="true" speed="1000" pager="true">
+                    <ion-slide *ngFor="let item of suggestions;let i = index">
+                          <ion-item class="card-title">
+                              <button ion-button icon-start round small class="deals-background" (click)="openDealsModal(i)">
+                                  <ion-icon ios="ios-information-circle" md="md-information-circle"></ion-icon>
+                                  {{item.venue.name}}
+                                </button>
+                          </ion-item>
+                          <figure>
+                              <img  class="cropped-profile-pic" [src]="getImgSrc(i)"/>
+                          </figure>
+                    </ion-slide>
+                  </ion-slides>
+            </ion-card-content>
+          
+        </ion-card>
+  </ion-row>
+  
+  
   <!-- <button bottom right ion-button icon-end  (click)="openDealsModal()">
       There are 10 deals near you!
     <ion-icon ios="ios-alert" md="md-alert"></ion-icon>

@@ -35,18 +35,18 @@
         <ion-slide>
             <ion-card>
                 <div class="img-container">
-                    <img [src]="getImgSrc(selectedItem.index)"/>
+                    <img [src]="getImgSrc(selectedItem?.index)"/>
                 </div>
                 
                 <ion-card-content>
                     <ion-card-title>
-                        {{selectedItem.venue.name}}
+                        {{selectedItem?.venue.name}}
                     </ion-card-title>
                     <!-- <p>Category: {{selectedItem.venue.categories[0].name}}</p>
                     <br> -->
-                    <p>{{selectedItem.venue.location.formattedAddress}}</p>
+                    <p>{{selectedItem?.venue.location.formattedAddress}}</p>
                     <br>
-                    <h4>Only {{selectedItem.venue.location.distance}}m away!</h4>
+                    <h4>Only {{selectedItem?.venue.location.distance}}m away!</h4>
                     <br>
                     <!-- <ion-item>
                         <span item-start><ion-icon ios="ios-walk" md="md-walk"></ion-icon> 8 min</span>

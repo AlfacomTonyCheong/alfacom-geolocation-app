@@ -17,4 +17,71 @@ page-home {
     .location-image-container.expanded{
         max-height: 600px;
     }
+
+    //Deals
+
+    .swiper-slide{
+       // height: 150px;
+        // width:auto !important;
+
+        .slide-zoom{
+            height: 100% !important;
+        }
+    }
+
+    .deals-background{
+        background-color: red;
+    }
+
+    .card-background-page {
+        padding: 0px;
+        margin:auto;
+
+        ion-card {
+            position: relative;
+            text-align: center;
+            width:100%; /*container-width*/
+            overflow: hidden; /*hide bounds of image */
+            margin:auto 0; /*reset margin of figure tag*/
+        }
+
+        ion-card-content{
+            background-color: lightgray;
+        }
+
+        img.cropped-profile-pic{
+            // display:block; /*remove inline-block spaces*/  
+            width:100%;
+            border-radius: 15px;
+            // margin:-10% 0 -70% 0;
+        }
+
+      
+        .card-title {
+        //   position: absolute;
+        //   bottom: 10%;
+        //   right:10%;
+        //   font-size: 1em;
+        //   //width: 30%;
+        //   font-weight: bold;
+        //   color: #000;
+        text-align: center;
+        background-color:initial;
+        }
+      
+        .card-subtitle {
+          font-size: 1.0em;
+          position: absolute;
+          top: 52%;
+          width: 100%;
+          color: #fff;
+        }
+      
+      }
+
+      .deals-header h2{
+        font-weight: bold;
+        color:#fff;
+          
+      }
 }

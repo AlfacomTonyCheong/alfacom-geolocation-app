@@ -251,10 +251,11 @@ export class HomePage {
   //===========================
   // Deals
   //===========================
-  openDealsModal(){
+  openDealsModal(index){
     var modalPage = this.modalCtrl.create(
       'DealsModalPage',
       {
+        index:index,
         suggestions: this.suggestions
       },
       {

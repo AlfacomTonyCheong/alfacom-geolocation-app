@@ -18,15 +18,31 @@ export class DealsModalPage  implements OnInit {
   suggestions:any[] = [];
   selectedItem:any;
   imgRoot:string = "assets/imgs/deals/"
+  initialIndex: number= 0;
 
 
   public constructor(public viewCtrl: ViewController,public modalCtrl: ModalController,public navParams: NavParams) {
     this.suggestions = this.navParams.get('suggestions');
-    this.selectedItem = this.suggestions[0]
-    console.log(this.suggestions)
+    this.initialIndex = this.navParams.get('index')
   }
 
-  public ngOnInit() { this.slides.lockSwipes(true);}
+  ionViewDidEnter() {
+    this.slides.lockSwipes(true);
+    if (this.initialIndex > -1){
+      this.selectedItem = this.suggestions[this.initialIndex]
+      if (this.slides){
+        console.log('slides')
+        this.selectItem(this.suggestions[this.initialIndex],this.initialIndex )
+      }
+    }else{
+      this.selectedItem = this.suggestions[0]
+    }
+}
+
+  public ngOnInit() {
+    
+  }
+
 
   public ngAfterViewInit() {
     
@@ -34,7 +50,6 @@ export class DealsModalPage  implements OnInit {
   }
 
   getImgSrc(name:string){
-    console.log(name)
     if (name || name == '0'){
       return this.imgRoot + name.toString().toLowerCase() + '.jpg'
     }
