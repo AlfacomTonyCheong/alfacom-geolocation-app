@@ -15,4 +15,9 @@ page-deals-modal {
     .swiper-slide-active{
         overflow-y: auto;
     }
+    
+    .deals-list-buttons button{
+        width: 25px;
+        height: 25px;
+    }
 }

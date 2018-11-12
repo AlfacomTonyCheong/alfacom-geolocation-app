@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { NavController, IonicPage, AlertController, ModalController, Events, ToastController, Slides } from 'ionic-angular';
+import { NavController, IonicPage, AlertController, ModalController, Events, ToastController, Slides, PopoverController } from 'ionic-angular';
 import { VehiclesProvider } from '../../providers/vehicles/vehicles';
 import { GeolocationOptions, Geolocation } from '@ionic-native/geolocation';
 import { Subject } from 'rxjs';
@@ -32,6 +32,11 @@ export class HomePage {
   showSuggestions:boolean = false;
   canvasSrc;
   imgRoot:string = "assets/imgs/deals/"
+  shareObj = {
+    subject: "Parkir",
+    text: "Please check this out!",
+    link: window.location.href
+  }
 
   constructor(
     public navCtrl: NavController,
@@ -43,7 +48,8 @@ export class HomePage {
     private geolocation: Geolocation,
     private firebaseProvider: FirebaseProvider,
     private dealsProvider: DealsProvider,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    private popoverCtrl: PopoverController
   ) {
   }
 
@@ -365,6 +371,35 @@ export class HomePage {
 
         
       } 
+    }
+  }
+
+  share(){
+    let newVariable: any;
+
+    newVariable = window.navigator;
+
+    if(newVariable && newVariable.share) {
+      newVariable.share({
+        title: this.shareObj.subject,
+        text: this.shareObj.text,
+        url: this.shareObj.link
+      })
+      .then(() => console.log('Share complete'))
+      .error((error) => console.log('Could not share at this time ' +error))
+    }else{
+      var popover = this.popoverCtrl.create(
+        'ShareModalPage',
+        {
+          link: this.shareObj.link
+        },
+        {
+          showBackdrop: true,
+          enableBackdropDismiss: true
+        }
+      );
+  
+      popover.present();
     }
   }
 }

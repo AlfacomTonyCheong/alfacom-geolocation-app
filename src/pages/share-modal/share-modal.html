@@ -1,0 +1,40 @@
+
+<ion-header>
+        <ion-navbar color="primary" >
+            
+            <ion-title class="navbar-title-center">
+                Share
+            </ion-title>
+            <ion-buttons right>
+                <button ion-button icon-only class="disable-hover" (click)="closeModal()">
+                <ion-icon ios="ios-close" md="md-close"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-navbar>
+
+    
+</ion-header>
+<ion-content padding>
+        <div id="share-buttons"> 
+            <!-- Facebook --> 
+            <a href='{{"https://www.facebook.com/sharer.php?u="+shareObj.link}}' target="_blank">
+                <img src="https://4.bp.blogspot.com/-raFYZvIFUV0/UwNI2ek6i3I/AAAAAAAAGSA/zs-kwq0q58E/s1600/facebook.png" alt="Facebook" />
+            </a> 
+            <!-- Twitter --> 
+            <a href='{{"https://twitter.com/share?url="+shareObj.link+"&text="+shareObj.text}}' target="_blank">
+                <img src="https://4.bp.blogspot.com/--ISQEurz3aE/UwNI4hDaQMI/AAAAAAAAGS4/ZAgmPiM9Xpk/s1600/twitter.png" alt="Twitter" />
+            </a> 
+            <!-- Google+ --> 
+            <a href='{{"https://plus.google.com/share?url="+shareObj.link}}' target="_blank">
+                <img src="https://2.bp.blogspot.com/-9ijXNtKTaSk/UwNI3ANT4MI/AAAAAAAAGSY/Tu4kE8x9SnI/s1600/google.png" alt="Google" />
+            </a>
+            <!-- Email --> 
+            <a href='{{"mailto:?Subject="+shareObj.subject+"&Body="+shareObj.text+" "+shareObj.link}}' target="_blank">
+                <img src="https://4.bp.blogspot.com/-njgKtNLrPqI/UwNI2o-9WfI/AAAAAAAAGR4/f8da1gBgyLs/s1600/email.png" alt="Email" />
+            </a> 
+            <!-- <a href="https://api.whatsapp.com/send?phone=91XXXXXXXXXX&text=urlencodedtext" target="_blank">WA</a> -->
+            <a href='{{"https://api.whatsapp.com/send?text="+shareObj.text+" "+shareObj.link}}' target="_blank">
+                <img src="http://icons.iconarchive.com/icons/martz90/circle/64/whatsapp-icon.png" alt="Whatsapp" />
+            </a>
+        </div>
+</ion-content>

@@ -58,7 +58,7 @@
                 <ion-slides  #dealsSlides  loop="true" speed="1000" pager="true">
                     <ion-slide *ngFor="let item of suggestions;let i = index">
                           <ion-item class="card-title">
-                              <button ion-button icon-start round small class="deals-background" (click)="openDealsModal(i)">
+                              <button ion-button icon-start round small class="deals-background" (click)="share()">
                                   <ion-icon ios="ios-information-circle" md="md-information-circle"></ion-icon>
                                   {{item.venue.name}}
                                 </button>
