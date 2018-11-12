@@ -21,7 +21,7 @@ page-home {
     //Deals
 
     .swiper-slide{
-       // height: 150px;
+        height: 220px;
         // width:auto !important;
 
         .slide-zoom{
@@ -33,51 +33,47 @@ page-home {
         background-color: red;
     }
 
-    .card-background-page {
-        padding: 0px;
-        margin:auto;
+.card-background-page {
+    ion-slides{
+        margin: auto;
+    }
 
-        ion-card {
-            position: relative;
-            text-align: center;
-            width:100%; /*container-width*/
-            overflow: hidden; /*hide bounds of image */
-            margin:auto 0; /*reset margin of figure tag*/
-        }
 
-        ion-card-content{
-            background-color: lightgray;
-        }
+  ion-card {
+    position: relative;
+    text-align: center;
+    height: 200px;
+    margin: auto;
+  }
 
-        img.cropped-profile-pic{
+  .card-title {
+    position: absolute;
+    //top: 36%;
+    font-size: 1.0em;
+    //width: 100%;
+    font-weight: bold;
+    color: #fff;
+    display: block;
+    bottom: 0;
+  }
+
+  .card-subtitle {
+    font-size: 1.0em;
+    position: absolute;
+    top: 52%;
+    width: 100%;
+    color: #fff;
+  }
+
+  img.cropped-profile-pic{
             // display:block; /*remove inline-block spaces*/  
             width:100%;
-            border-radius: 15px;
+            height: 100%;
+            // border-radius: 15px;
             // margin:-10% 0 -70% 0;
         }
 
-      
-        .card-title {
-        //   position: absolute;
-        //   bottom: 10%;
-        //   right:10%;
-        //   font-size: 1em;
-        //   //width: 30%;
-        //   font-weight: bold;
-        //   color: #000;
-        text-align: center;
-        background-color:initial;
-        }
-      
-        .card-subtitle {
-          font-size: 1.0em;
-          position: absolute;
-          top: 52%;
-          width: 100%;
-          color: #fff;
-        }
-      
-      }
+}
 
       .deals-header h2{
         font-weight: bold;

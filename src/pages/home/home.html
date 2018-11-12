@@ -43,36 +43,22 @@
     </div>
   </ion-card>
   <ion-fab bottom right  *ngIf="showSuggestions">
-      <button ion-fab (click)="openDealsModal(-1)" class="deals-background" >
+      <button ion-fab (click)="openDealsModal(-1)"  >
           <ion-icon ios="ios-add" md="md-add"></ion-icon>
       </button>
   </ion-fab>
- 
-  <ion-row>
-      <ion-card col-md-4 col-sm-6 col-xs-12 color="red" class="card-button card-background-page " *ngIf="suggestions && suggestions.length">
-          
-            <ion-item class="deals-header deals-background">
-                <h2>Explore Nearby</h2>
-            </ion-item>
-            <ion-card-content>
-                <ion-slides  #dealsSlides  loop="true" speed="1000" pager="true">
-                    <ion-slide *ngFor="let item of suggestions;let i = index">
-                          <ion-item class="card-title">
-                              <button ion-button icon-start round small class="deals-background" (click)="share()">
-                                  <ion-icon ios="ios-information-circle" md="md-information-circle"></ion-icon>
-                                  {{item.venue.name}}
-                                </button>
-                          </ion-item>
-                          <figure>
-                              <img  class="cropped-profile-pic" [src]="getImgSrc(i)"/>
-                          </figure>
-                    </ion-slide>
-                  </ion-slides>
-            </ion-card-content>
-          
-        </ion-card>
+
+  <ion-row class="card-background-page" >
+      <ion-slides #dealsSlides  loop="true" speed="1000" pager="true" col-md-4 col-sm-6 col-xs-12>
+          <ion-slide *ngFor="let item of suggestions;let i = index">
+              <ion-card (click)="openDealsModal(i)">
+                  <img  class="cropped-profile-pic" [src]="getImgSrc(i)">
+                  <ion-badge class="card-title" text-wrap>{{item.venue.name}}</ion-badge>
+                </ion-card> 
+          </ion-slide>
+        </ion-slides>
+      
   </ion-row>
-  
   
   <!-- <button bottom right ion-button icon-end  (click)="openDealsModal()">
       There are 10 deals near you!
