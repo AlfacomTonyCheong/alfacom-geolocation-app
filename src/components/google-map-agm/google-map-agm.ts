@@ -122,6 +122,7 @@ export class GoogleMapAgmComponent {
     this.toast && this.toast.dismiss();
   }
 
+
   onMapReady(map) {
     console.log('Map Ready');
     this.map = map;
@@ -224,14 +225,12 @@ export class GoogleMapAgmComponent {
       this.map.panTo({ lat: pos.lat(), lng: pos.lng() });
       console.log('Confirm Location: ' + JSON.stringify(pos));
       this.events.publish('geolocationWatcher_start', pos);
-
-      let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + pos.lat() + ',' + pos.lng();
-      canvasSrc += '&size=600x250&zoom=18&maptype=' + google.maps.MapTypeId.ROADMAP + '&key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0';
-      canvasSrc += '&markers=color:red|' + pos.lat() + ',' + pos.lng();
-      this.events.publish('location_canvasImg', canvasSrc);
+      this.events.publish('geolocationWatcher_getCanvas', {lat:pos.lat(),lng:pos.lng()});
       this.dismissCallback && this.dismissCallback();
     }
   }
+
+  
 
 
   //===========================

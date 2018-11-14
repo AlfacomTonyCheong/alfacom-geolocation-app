@@ -105,6 +105,7 @@ export class GoogleMapComponent {
     this.placeSearchBarInputElement = this.placeSearchBarRef.nativeElement.querySelector('.searchbar-input');
     this.incidentWrapper = document.getElementById(this.canvasId + '_incident-info');
     this.mapCanvas = document.getElementById(this.canvasId);
+    
     this.initMap();
   }
 
@@ -307,13 +308,17 @@ export class GoogleMapComponent {
       this.panMapTo(pos.latitude, pos.longitude);
       console.log('Confirm Location: ' + JSON.stringify(pos));
       this.events.publish('geolocationWatcher_start', pos);
-
-      let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + pos.latitude + ',' + pos.longitude;
-      canvasSrc += '&size=600x250&zoom=18&maptype=' + google.maps.MapTypeId.ROADMAP + '&key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0';
-      canvasSrc += '&markers=color:red|' + pos.latitude + ',' + pos.longitude;
-      this.events.publish('location_canvasImg', canvasSrc);
+      this.getCanvas(pos);
+      
       this.callback && this.callback();
     }
+  }
+
+  getCanvas(pos){
+    let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + pos.latitude + ',' + pos.longitude;
+    canvasSrc += '&size=600x250&zoom=18&maptype=' + google.maps.MapTypeId.ROADMAP + '&key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0';
+    canvasSrc += '&markers=color:red|' + pos.latitude + ',' + pos.longitude;
+    this.events.publish('location_canvasImg', canvasSrc);
   }
 
   //===========================

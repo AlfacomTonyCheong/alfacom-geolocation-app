@@ -8,6 +8,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 import * as Quagga from 'quagga';
 import { DealsProvider } from '../../providers/deals/deals';
+import { GeolocationProvider } from '../../providers/geolocation/geolocation';
 
 @IonicPage()
 @Component({
@@ -39,6 +40,7 @@ export class HomePage {
   }
 
   constructor(
+    public geolocationProvider:GeolocationProvider,
     public navCtrl: NavController,
     private vehiclesProvider: VehiclesProvider,
     private alertCtrl: AlertController,
@@ -55,10 +57,26 @@ export class HomePage {
 
   ionViewDidLoad() {
     this.initParkingDetails();
+    this.events.publish('geolocationWatcher_start');
+    
+
     //this.initGeolocationWatcher();
     //this.firebaseDoc = this.firebaseProvider.getDocRef('temp/mANmENJSsGo6DZ0Xx8Hn').valueChanges();
     //this.firebaseCollection = this.firebaseProvider.getCollectionRef('temp').valueChanges();
+    // this.geolocationProvider.getPosition().subscribe((pos) => {
+    //   console.log('[Geolocation] Lat: ' + pos.coords.latitude + ' | Lng: ' + pos.coords.longitude + ' | Acc: ' + pos.coords.accuracy);
+    //   this.events.publish('geolocationWatcher_start');
+
+    //   let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + pos.coords.latitude + ',' + pos.coords.longitude;
+    //   canvasSrc += '&size=600x250&zoom=18&maptype=' + google.maps.MapTypeId.ROADMAP + '&key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0';
+    //   canvasSrc += '&markers=color:red|' + pos.coords.latitude + ',' + pos.coords.longitude;
+    //   this.events.publish('location_canvasImg', canvasSrc);
+    // }, (err) => {
+    //   console.error(err);
+    // })
   }
+
+  
 
   ionViewDidLeave() {
     this._unsubscribe();
@@ -74,6 +92,7 @@ export class HomePage {
       console.log(data)
       this.myPosAddress = data.address;
       var coordString = data.lat.toString() +","+data.lng.toString();
+      this.events.publish('geolocationWatcher_getCanvas',{ lat: data.lat.toString(), lng: data.lng.toString()});
       this.loadDeals(coordString)
     })
 

@@ -45,6 +45,8 @@ export class GeolocationWatcherComponent {
   ngAfterViewInit() {
     this.events.subscribe('geolocationWatcher_start', this.start);
     this.events.subscribe('geolocationWatcher_stop', this.stop);
+    this.events.subscribe('geolocationWatcher_getCanvas', this.getCanvas);
+    
     //this.showToast();
   }
 
@@ -62,7 +64,6 @@ export class GeolocationWatcherComponent {
 
   start = (pos?: google.maps.LatLng) => {
     console.log('[GeolocationWatcher] Start');
-
     if (pos) {
       this.getMyPosAddress(pos);
     }
@@ -102,6 +103,7 @@ export class GeolocationWatcherComponent {
 
   getMyPosAddress(latLng: google.maps.LatLng) {
     var geocoder = new google.maps.Geocoder;
+    console.log(latLng)
     geocoder.geocode({ 'location': latLng }, (results, status) => {
       console.log('Geocode status: ' + status);
       if (status.toString() === 'OK') {
@@ -137,6 +139,13 @@ export class GeolocationWatcherComponent {
   resetVariables() {
     this.success = false;
     this.locating = false;
+  }
+
+  getCanvas = (pos) =>{
+    let canvasSrc = 'https://maps.googleapis.com/maps/api/staticmap?center=' + pos.lat + ',' + pos.lng;
+    canvasSrc += '&size=600x250&zoom=18&maptype=' + google.maps.MapTypeId.ROADMAP + '&key=AIzaSyCYi-w3mNVhQgqdUtY5BTlUac9RsxAc1y0';
+    canvasSrc += '&markers=color:red|' + pos.lat + ',' + pos.lng;
+    this.events.publish('location_canvasImg', canvasSrc);
   }
 
   async showToast() {
