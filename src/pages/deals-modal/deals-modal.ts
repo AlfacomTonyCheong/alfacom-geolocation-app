@@ -19,6 +19,7 @@ export class DealsModalPage  implements OnInit {
   selectedItem:any;
   imgRoot:string = "assets/imgs/deals/"
   initialIndex: number= 0;
+  hideSlider:boolean = true;
   shareObj = {
     subject: "Parkir",
     text: "Please check this out!",
@@ -37,9 +38,11 @@ export class DealsModalPage  implements OnInit {
       if (this.slides){
         console.log('slides')
         this.selectItem(this.suggestions[this.initialIndex],this.initialIndex )
+        
       }
     }else{
-      this.selectedItem = this.suggestions[0]
+      this.selectedItem = this.suggestions[0];
+      this.showSlider();
     }
 }
 
@@ -70,6 +73,10 @@ export class DealsModalPage  implements OnInit {
     this.slides.lockSwipes(false);
     this.slides.slideNext();
     this.slides.lockSwipes(true);
+  }
+
+  showSlider(){
+    this.hideSlider = false;
   }
 
   prevSlide() {

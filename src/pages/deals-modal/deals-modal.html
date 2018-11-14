@@ -1,5 +1,5 @@
 
-<ion-header>
+<ion-header [ngStyle]="{'visibility': hideSlider ? 'hidden' : 'visible' }">
         <ion-navbar color="primary" >
             <ion-buttons left *ngIf="!slides.isBeginning()">
                     <button ion-button icon-only class="disable-hover" (click)="prevSlide()" >
@@ -18,8 +18,8 @@
 
     
 </ion-header>
-<ion-content padding>
-    <ion-slides #slides>
+<ion-content padding [ngStyle]="{'visibility': hideSlider ? 'hidden' : 'visible' }">
+    <ion-slides #slides (ionSlideDidChange)="showSlider()">
         <ion-slide >
             <ion-list>
                 <ion-item *ngFor="let item of suggestions ;let i = index">
