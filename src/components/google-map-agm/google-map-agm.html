@@ -44,10 +44,10 @@
             <div>{{currentComplaintSocialData?.likeCount || '0'}} Likes</div>
           </button>
         </ion-col>
-        <ion-col align-self-center text-center>
-            
-            <button ion-button icon-only small (click)="viewImages()" *ngIf="currentComplaintImages?.length > 0">
-                <ion-icon ios="ios-images" md="md-images" item-end></ion-icon>
+        <ion-col>
+            <button ion-button icon-start clear small (click)="share()">
+                <ion-icon ios="ios-share-alt" md="md-share-alt"></ion-icon>
+                <div>Share</div>
               </button>
           <!-- <ion-note>
             {{currentComplaint ? getMomentFromNow(currentComplaint.created) : ''}}

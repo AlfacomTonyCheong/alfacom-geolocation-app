@@ -9,7 +9,7 @@ import { first } from 'rxjs/operators';
 import { IComplaint, IComplaintComment, IComplaintLike } from '../../interface/complaint.interface';
 import { ComplaintCategory, ComplaintLikeType,ComplaintType } from '../../app/enums';
 import * as moment from 'moment';
-import { ModalController, ToastController, Toast, Events, Slides } from 'ionic-angular';
+import { ModalController, ToastController, Toast, Events, Slides, PopoverController } from 'ionic-angular';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { GalleryModal } from 'ionic-gallery-modal';
 
@@ -114,6 +114,7 @@ export class GoogleMapAgmComponent {
     private complaintsProvider: FirestoreProvider,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
+    private popoverCtrl: PopoverController,
     private events: Events
   ) {
   }
@@ -245,6 +246,11 @@ export class GoogleMapAgmComponent {
   currentComplaintComments: AngularFirestoreCollection<IComplaintComment>;
   currentComplaintLikes: AngularFirestoreCollection<IComplaintLike>;
   likeBtnDisabled: boolean;
+  shareObj = {
+    subject: "Parkir",
+    text: "Please check this out!",
+    link: window.location.href
+  }
   getComplaintPoints() {
     console.log('Get Complaints');
     this.points = this.complaintsProvider.GeoFireX_GetInRadiusObs(this.map.getCenter().lat(), this.map.getCenter().lng(), 5);
@@ -371,6 +377,35 @@ export class GoogleMapAgmComponent {
       }
     })
     setTimeout(() => { this.getComplaintSocialData();this.likeBtnDisabled = false }, 3000);
+  }
+
+  share(){
+    let newVariable: any;
+
+    newVariable = window.navigator;
+    if(newVariable && newVariable.share) {
+      
+      newVariable.share({
+        title: this.shareObj.subject,
+        text: this.shareObj.text,
+        url: this.shareObj.link
+      })
+      .then(() => console.log('Share complete'))
+      .error((error) => console.log('Could not share at this time ' +error))
+    }else{
+      var popover = this.popoverCtrl.create(
+        'ShareModalPage',
+        {
+          link: this.shareObj.link
+        },
+        {
+          showBackdrop: true,
+          enableBackdropDismiss: true
+        }
+      );
+  
+      popover.present();
+    }
   }
 
   //===========================

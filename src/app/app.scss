@@ -189,3 +189,14 @@ $helperClass-sizes:
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
 	filter: alpha(opacity=20);
   }
+
+
+  /* Popover
+-----------------------------------------------------------------*/
+  .popover-content{
+	width: 80% !important;
+	margin: auto;
+	position: relative;
+	top:auto !important;
+	left: auto !important;
+}
