@@ -1,4 +1,38 @@
 page-home {
+    .input-cards{
+
+        .slide{
+            ion-label{
+                max-width:300px;
+                margin: auto;
+            }
+
+            .input-wrapper{
+                max-width: 85%;
+            }
+        }
+
+        ion-label{
+            color: color($colors, primary);
+        }
+
+        .no-vehicle{
+            color: color($colors, unfocused);
+        }
+        
+        
+
+        .btn-container{
+            width: 15%;
+            text-align: right;
+            margin:0;
+        }
+
+        .swiper-slide{
+            width: 100% !important;
+        } 
+    }
+
     .location-canvas-container{
         height: 100px;
         overflow: hidden;
@@ -9,6 +43,11 @@ page-home {
     .card-button.selected > button {
         color: color($colors, primary);
     }
+
+    .card-button ion-item {
+        color: color($colors, primary);
+    }
+
     .location-image-container{
         max-height: 0;
         overflow: hidden;
@@ -18,8 +57,29 @@ page-home {
         max-height: 600px;
     }
 
+    .round-icon-btns {
+        border-radius: 50%;
+        width:35px !important;
+        height:35px !important;
+        margin: 0 !important;
+    }
+
+    .swiper-icon-btns-sm {
+        border-radius: 50%;
+        width:25px !important;
+        height:25px !important;
+        margin: 0 !important;
+        background-color: color($colors, unfocused);
+    }
+
     //Deals
 
+    
+
+.card-background-page {
+    ion-slides{
+        margin: auto;
+    }
     .swiper-slide{
         height: 220px;
         // width:auto !important;
@@ -32,12 +92,6 @@ page-home {
     .deals-background{
         background-color: red;
     }
-
-.card-background-page {
-    ion-slides{
-        margin: auto;
-    }
-
 
   ion-card {
     position: relative;

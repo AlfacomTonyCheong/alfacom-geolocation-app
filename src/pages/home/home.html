@@ -15,50 +15,110 @@
 </ion-header> -->
 
 <ion-content>
-  <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenVehicle">
-    <button ion-item (click)="chooseVehicle()" [attr.detail-none]="chosenVehicle">
-      <ion-icon name="car" item-start large></ion-icon>
-      {{chosenVehicle ? chosenVehicle.plateNumber : 'Choose Vehicle'}}
-      <ion-icon *ngIf="chosenVehicle" name="checkmark-circle-outline" item-end></ion-icon>
-    </button>
-  </ion-card>
+  <div class="input-cards">
+      <ion-card [color]="chosenVehicle? 'secondary' : 'surface'" class="card-button slide" [class.selected]="chosenVehicle">
+          <!-- <button ion-item (click)="chooseVehicle()" [attr.detail-none]="chosenVehicle">
+            <ion-icon name="car" item-start large></ion-icon>
+            {{chosenVehicle ? chosenVehicle.plateNumber : 'Choose Vehicle'}}
+            <ion-icon *ngIf="chosenVehicle" name="checkmark-circle-outline" item-end></ion-icon>
+          </button> -->
+          <ion-item>
+              <ion-icon name="car" item-start large></ion-icon>
 
-  <ion-card [color]="chosenDuration? 'secondary' : 'surface'" class="card-button" [class.selected]="chosenDuration">
-    <button ion-item (click)="chooseDuration()" [attr.detail-none]="chosenDuration">
-      <ion-icon name="time" item-start large></ion-icon>
-      {{chosenDuration ? getDurationLabel(chosenDuration) : 'Choose Duration'}}
-      <ion-icon *ngIf="chosenDuration" name="checkmark-circle-outline" item-end></ion-icon>
-    </button>
-  </ion-card>
+              <ion-item  >
+                <!-- <div [ngStyle]="{'visibility': !vehicleList || vehicleList.length < 1 ? 'hidden' : 'visible' }"> -->
+                    <button ion-button icon-only item-start (click)="prevSlide(vehicleSlides,1)" class="swiper-icon-btns-sm">
+                        <ion-icon name="ios-arrow-back" ></ion-icon>
+                      </button>
+                      <ion-slides #vehicleSlides>
+                              <ion-slide *ngFor="let v of vehicleList">
+                                  {{v.plateNumber}}
+                              </ion-slide>
+                              <ion-slide *ngIf="!vehicleList || vehicleList.length < 1" text-wrap class="no-vehicle">
+                                  Please add a vehicle plate number!
+                              </ion-slide>
+                      </ion-slides>
+                      <button ion-button icon-only item-end (click)="nextSlide(vehicleSlides,1)" class="swiper-icon-btns-sm">
+                        <ion-icon name="ios-arrow-forward" ></ion-icon>
+                      </button>
+                <!-- </div>
+                <p *ngIf="(!vehicleList || vehicleList.length < 1)">
+                    Please add a vehicle plate number!
+                </p> -->
+                
+              
+              </ion-item>
 
-  <ion-card [color]="myPosAddress? 'secondary' : 'surface'" class="card-button" [class.selected]="myPosAddress">
-    <button ion-item (click)="getLocation()" [attr.detail-none]="myPosAddress">
-      <ion-icon name="pin" item-start large></ion-icon>
-      {{myPosAddress ? myPosAddress : 'Choose Location'}}
-      <ion-icon *ngIf="myPosAddress" name="checkmark-circle-outline" item-end></ion-icon>
-    </button>
-    <div class="location-image-container" [class.expanded]="canvasSrc">
-      <img [src]="canvasSrc" />
+
+              
+                <div class="btn-container" item-end>
+                    <button ion-button icon-only  class="round-icon-btns" (click)="addVehicle()">
+                      <ion-icon ios="ios-add" md="md-add" ></ion-icon>
+                    </button>
+                </div>
+        </ion-item>
+        </ion-card>
       
-    </div>
-  </ion-card>
-  <ion-fab bottom right  *ngIf="showSuggestions">
-      <button ion-fab (click)="openDealsModal(-1)"  >
-          <ion-icon ios="ios-add" md="md-add"></ion-icon>
-      </button>
-  </ion-fab>
-
-  <ion-row class="card-background-page" >
-      <ion-slides #dealsSlides  loop="true" speed="1000" pager="true" col-md-4 col-sm-6 col-xs-12>
-          <ion-slide *ngFor="let item of suggestions;let i = index">
-              <ion-card (click)="openDealsModal(i)">
-                  <img  class="cropped-profile-pic" [src]="getImgSrc(i)">
-                  <ion-badge class="card-title" text-wrap>{{item.venue.name}}</ion-badge>
-                </ion-card> 
-          </ion-slide>
-        </ion-slides>
+        <ion-card [color]="chosenDuration? 'secondary' : 'surface'" class="card-button slide" [class.selected]="chosenDuration">
+          <!-- <button ion-item (click)="chooseDuration()" [attr.detail-none]="chosenDuration">
+            <ion-icon name="time" item-start large></ion-icon>
+            {{chosenDuration ? getDurationLabel(chosenDuration) : 'Choose Duration'}}
+            <ion-icon *ngIf="chosenDuration" name="checkmark-circle-outline" item-end></ion-icon>
+          </button> -->
+          <ion-item>
+              <ion-icon name="time" item-start large></ion-icon>
+              <ion-item >
+                  <button ion-button icon-only item-start (click)="prevSlide(durationSlides,2)" class="swiper-icon-btns-sm">
+                    <ion-icon name="ios-arrow-back" ></ion-icon>
+                  </button>
+                  <ion-slides #durationSlides>
+                          <ion-slide *ngFor="let d of durations">
+                              {{getDurationLabel(d)}}
+                          </ion-slide>
+                  </ion-slides>
+                  <button ion-button icon-only item-end (click)="nextSlide(durationSlides,2)" class="swiper-icon-btns-sm">
+                      <ion-icon name="ios-arrow-forward" ></ion-icon>
+                    </button>
+                  
+                  
+              </ion-item>
+        </ion-item>
+        </ion-card>
       
-  </ion-row>
+        <ion-card [color]="myPosAddress? 'secondary' : 'surface'" class="card-button" [class.selected]="myPosAddress">
+          <button ion-item (click)="getLocation()" [attr.detail-none]="myPosAddress">
+            <ion-icon name="pin" item-start large></ion-icon>
+            {{myPosAddress ? myPosAddress : 'Choose Location'}}
+            <ion-icon *ngIf="myPosAddress" name="checkmark-circle-outline" item-end></ion-icon>
+          </button>
+          <div class="location-image-container" [class.expanded]="canvasSrc">
+            <img [src]="canvasSrc" />
+            
+          </div>
+        </ion-card>
+  </div>
+  
+
+ 
+    <ion-fab bottom right  *ngIf="showSuggestions">
+        <button ion-fab (click)="openDealsModal(-1)"  >
+            <ion-icon ios="ios-add" md="md-add"></ion-icon>
+        </button>
+    </ion-fab>
+  
+    <ion-row class="card-background-page" >
+        <ion-slides #dealsSlides  loop="true" speed="1000" pager="true" col-md-4 col-sm-6 col-xs-12>
+            <ion-slide *ngFor="let item of suggestions;let i = index">
+                <ion-card (click)="openDealsModal(i)">
+                    <img  class="cropped-profile-pic" [src]="getImgSrc(i)">
+                    <ion-badge class="card-title" text-wrap>{{item.venue.name}}</ion-badge>
+                  </ion-card> 
+            </ion-slide>
+          </ion-slides>
+        
+    </ion-row>
+  
+ 
   
   <!-- <button bottom right ion-button icon-end  (click)="openDealsModal()">
       There are 10 deals near you!

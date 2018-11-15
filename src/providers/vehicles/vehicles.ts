@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
+import { Events } from 'ionic-angular';
 
 export interface IVehicle{
   plateNumber: string,
@@ -15,7 +16,7 @@ export class VehiclesProvider {
   private storageString = 'vehicle';
   private vehicleList : IVehicle[];
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage,private events: Events,) {
     this.loadVehicleList();
   }
 
@@ -23,6 +24,7 @@ export class VehiclesProvider {
     this.storage.get(this.storageString).then((storedVehicleList: IVehicle[]) => {
       if(!storedVehicleList) this.vehicleList = [];
       else this.vehicleList = storedVehicleList;
+      this.events.publish('vehiclesProvider_loaded',this.vehicleList);
     });
   }
 

@@ -17,11 +17,14 @@ import { GeolocationProvider } from '../../providers/geolocation/geolocation';
 })
 export class HomePage {
   @ViewChild('dealsSlides') slides: Slides;
+  @ViewChild('durationSlides') durationSlides: Slides;
+  @ViewChild('vehicleSlides') vehicleSlides: Slides;
   private unsubscribe$ = new Subject();
 
   chosenVehicle: any;
   chosenDuration: number;
-
+  durations = [1, 2, 3, 4, 5, 6, 7, 8];
+  vehicleList:any[];
   myPos: any;
   myPosResults: string[];
   myPosAddress: string;
@@ -55,10 +58,22 @@ export class HomePage {
   ) {
   }
 
+
+  ionViewDidEnter() {
+    this.durationSlides.lockSwipes(true);
+    this.vehicleSlides.lockSwipes(true);
+    //this.vehicleList = this.vehiclesProvider.getVehicleList();
+  }
+
+
   ionViewDidLoad() {
     this.initParkingDetails();
-    this.events.publish('geolocationWatcher_start');
     
+    this.events.publish('geolocationWatcher_start');
+    this.events.subscribe('vehiclesProvider_loaded',(data)=>{
+      console.log('subscribed')
+      this.vehicleList = data;
+    })
 
     //this.initGeolocationWatcher();
     //this.firebaseDoc = this.firebaseProvider.getDocRef('temp/mANmENJSsGo6DZ0Xx8Hn').valueChanges();
@@ -86,6 +101,7 @@ export class HomePage {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+  
 
   initParkingDetails() {
     this.events.subscribe('geolocationWatcher_update', (data) => {
@@ -270,6 +286,33 @@ export class HomePage {
         Quagga.start();
       }
     })
+  }
+
+  nextSlide(slide,type) {
+    //var slide = type ==1?this.vehicleSlides:this.durationSlides;
+    slide.lockSwipes(false);
+    slide.slideNext();
+    slide.lockSwipes(true);
+    this.bindData(slide,type)
+  }
+
+  prevSlide(slide,type) {
+    console.log(slide)
+    //var slide = type ==1?this.vehicleSlides:this.durationSlides;
+    slide.lockSwipes(false);
+    slide.slidePrev();
+    slide.lockSwipes(true);
+    this.bindData(slide,type)
+  }
+
+  bindData(slide,type){
+    if (type == 1){// vehicle
+      this.chosenVehicle = this.vehicleList[slide.getActiveIndex()];
+      console.log(this.chosenVehicle)
+    }else{
+      this.chosenDuration = this.durations[slide.getActiveIndex()]
+      console.log(this.chosenDuration)
+    }
   }
 
 
